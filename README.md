@@ -1,211 +1,213 @@
-# 📖 AI 互动小说生成器
+# 📖 AI Interactive Novel Generator
 
-这是一个基于大型语言模型（LLM）的动态互动小说游戏。它能够根据玩家选择的故事类型，实时生成独特的故事情节、人物、以及一个可视化的故事发展线路图，为玩家提供一个充满未知和选择的沉浸式阅读体验。
+This is a dynamic interactive novel game powered by large language models (LLMs). It generates unique story plots, characters, and a visualized story development map in real-time based on the player's chosen story type, offering an immersive reading experience filled with unknowns and choices.
 
-本项目是全栈 TypeScript 架构，使用 React Router v7 实现 SSR/SPA 混合模式。
-
----
-
-## ✨ 核心功能
-
-*   **🤖 动态故事生成**: 游戏的核心由 AI 驱动，能够根据预设的文学风格（如“东方玄幻”、“西方魔幻”）动态创作故事的开篇、发展和多重结局。
-*   **🎲 随机化作家与作品**: 每次开启新游戏，系统都会随机生成符合所选类型的“作家”和“书名”，增加游戏的趣味性和代入感。
-*   **🗺️ 可视化故事线路图**: 在游戏开始时，后端会预先生成整个故事的结构图（Story Map），并通过 [Mermaid.js](https://mermaid-js.github.io/mermaid/#/) 在前端渲染，让玩家可以直观地看到故事的潜在分支和结局。
-*   **🌿 分支叙事**: 玩家的每一个选择都会影响故事的走向，导向不同的情节分支和最终结局。
-*   **🎨 动态写作风格**: AI 会根据故事类型生成独特的写作风格描述，并应用于整个故事的叙述中，增强沉浸感。
-*   **🌐 SSR 与客户端水合**: 支持服务端渲染（SSR）与客户端水合，确保快速加载和一致的用户体验。
-*   **🔒 前后端分离**: 严格分离 server-only、shared 和 client 代码，避免泄露敏感信息。
+This project is migrating to a full-stack TypeScript architecture, utilizing React Router v7 for SSR/SPA hybrid mode, deployed on Cloudflare Workers.
 
 ---
 
-## 🛠️ 技术栈
+## ✨ Core Features
 
-| 分类          | 技术                                                                 |
-| :------------ | :------------------------------------------------------------------- |
-| **框架**      | [**React Router v7**](https://reactrouter.com/) - 同构路由，支持 SSR/SPA。 |
-| **构建工具**  | [**Vite 7**](https://vitejs.dev/) - 快速构建工具，支持 SSR 和客户端打包。 |
-| **样式**      | [**Tailwind CSS v4**](https://tailwindcss.com/) - 功能类优先的 CSS 框架。 |
-| **运行时**    | [**Bun**](https://bun.sh/) - 快速的 JavaScript 运行时和包管理器。     |
-| **数据库**    | [**Drizzle ORM**](https://orm.drizzle.team/) - 类型安全的 ORM，用于 Cloudflare D1。 |
-| **部署**      | [**Cloudflare Workers**](https://workers.cloudflare.com/) - 边缘计算平台，支持 D1 数据库。 |
-| **AI**        | [**OpenAI GPT**](https://openai.com/) - 作为故事生成的核心引擎。     |
-| **国际化**    | [**i18next**](https://www.i18next.com/) - 支持多语言切换。           |
-| **图表**      | [**Mermaid.js**](https://mermaid-js.github.io/mermaid/#/) - 用于渲染故事线路图。 |
+*   **🤖 Dynamic Story Generation**: The game's core is AI-driven, capable of dynamically creating story beginnings, developments, and multiple endings based on preset literary styles (e.g., "Eastern Fantasy," "Western Fantasy").
+*   **🎲 Randomized Authors and Works**: Each new game randomly generates an "author" and "title" that fit the selected type, enhancing the game's fun and immersion.
+*   **🗺️ Visualized Story Map**: At the start of the game, the backend pre-generates the entire story structure map (Story Map), rendered on the frontend via [Mermaid.js](https://mermaid-js.github.io/mermaid/#/), allowing players to visually see potential branches and endings.
+*   **🌿 Branching Narrative**: Each player choice influences the story's direction, leading to different plot branches and endings.
+*   **🎨 Dynamic Writing Style**: The AI generates unique writing style descriptions based on the story type and applies them to the entire narrative, enhancing immersion.
+*   **🌐 SSR and Client Hydration**: Supports server-side rendering (SSR) and client hydration for fast loading and consistent user experience.
+*   **🔒 Frontend-Backend Separation**: Strictly separates server-only, shared, and client code to prevent sensitive information leaks.
 
 ---
 
-## 📂 项目结构
+## 🛠️ Tech Stack
+
+| Category      | Technology                                                                 |
+| :------------ | :------------------------------------------------------------------------- |
+| **Framework** | [**React Router v7**](https://reactrouter.com/) - Isomorphic routing with SSR/SPA support. |
+| **Build Tool**| [**Vite 7**](https://vitejs.dev/) - Fast build tool supporting SSR and client bundling. |
+| **Styling**   | [**Tailwind CSS v4**](https://tailwindcss.com/) - Utility-first CSS framework. |
+| **Runtime**   | [**Bun**](https://bun.sh/) - Fast JavaScript runtime and package manager. |
+| **Database**  | [**Drizzle ORM**](https://orm.drizzle.team/) - Type-safe ORM for Cloudflare D1. |
+| **Deployment**| [**Cloudflare Workers**](https://workers.cloudflare.com/) - Edge computing platform with D1 database support. |
+| **AI**        | [**OpenAI GPT**](https://openai.com/) - Core engine for story generation. |
+| **i18n**      | [**i18next**](https://www.i18next.com/) - Supports multi-language switching. |
+| **Charts**    | [**Mermaid.js**](https://mermaid-js.github.io/mermaid/#/) - For rendering story maps. |
+
+---
+
+## 📂 Project Structure
 
 ```
 .
-├── app/                    # React Router 应用核心
-│   ├── root.tsx            # 主入口和布局
-│   ├── routes/             # 路由文件（loader/action/component）
-│   ├── components/         # 前端组件
-│   │   ├── ui/             # 基础 UI 组件
-│   │   └── views/          # 视图组件
-│   ├── pages/              # 页面组件
-│   ├── services/           # 业务逻辑服务（待迁移）
-│   └── models/             # 数据模型（待迁移）
-├── server/                 # 服务端专用代码
-│   ├── db/                 # 数据库 schema 和客户端
-│   ├── services/           # 核心业务逻辑
-│   └── config/             # 环境配置
-├── shared/                 # 共享类型和 schema
-│   ├── types/              # TypeScript 类型定义
-│   └── schemas/            # Zod schema
-├── scripts/                # 工具脚本
-│   └── seed.ts             # 数据库种子数据
-├── .env.example            # 环境变量示例
-├── drizzle.config.ts       # Drizzle 配置
-├── oxlint.json             # Oxlint 配置
-├── package.json            # 项目依赖和脚本
-├── tsconfig.json           # TypeScript 配置
-├── vite.config.ts          # Vite 配置
-└── README.md               # 本文档
+├── app/                    # React Router app core
+│   ├── root.tsx            # Main entry and layout
+│   ├── routes/             # Route files (loader/action/component)
+│   ├── components/         # Frontend components
+│   │   ├── ui/             # Basic UI components
+│   │   └── views/          # View components
+│   ├── pages/              # Page components
+│   ├── services/           # Business logic services (to be migrated)
+│   └── models/             # Data models (to be migrated)
+├── server/                 # Server-only code
+│   ├── db/                 # Database schema and client
+│   ├── services/           # Core business logic
+│   └── config/             # Environment configuration
+├── shared/                 # Shared types and schemas
+│   ├── types/              # TypeScript type definitions
+│   └── schemas/            # Zod schemas
+├── scripts/                # Utility scripts
+│   └── seed.ts             # Database seed data
+├── .env.example            # Environment variables example
+├── drizzle.config.ts       # Drizzle configuration
+├── oxlint.json             # Oxlint configuration
+├── package.json            # Project dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+├── vite.config.ts          # Vite configuration
+└── README.md               # This document
 ```
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-使用 Bun 作为运行时和包管理器，你可以轻松地在本地运行本项目。
+Using Bun as the runtime and package manager, you can easily run this project locally.
 
-**先决条件**:
-*   已安装 [Bun](https://bun.sh/docs/installation)。
+**Prerequisites**:
+*   [Bun](https://bun.sh/docs/installation) installed.
 
-**配置**:
+**Configuration**:
 
-1.  **安装依赖**:
+1.  **Install dependencies**:
     ```bash
     bun install
     ```
 
-2.  **创建环境变量文件**:
-    项目使用 `.env` 文件来管理敏感配置。我们提供了一个示例文件 `.env.example`，您可以复制它来创建自己的配置文件：
+2.  **Create environment variables file**:
+    The project uses `.env` files to manage sensitive configurations. We provide an example file `.env.example`; copy it to create your own config file:
     ```bash
     cp .env.example .env
     ```
 
-3.  **编辑 `.env` 文件**:
-    打开新创建的 `.env` 文件，并填入您的 OpenAI API 密钥、Cloudflare 账户信息等。
+3.  **Edit `.env` file**:
+    Open the newly created `.env` file and fill in your OpenAI API key, Cloudflare account info, etc.
 
-**启动步骤**:
+**Launch Steps**:
 
-1.  **本地开发**:
+1.  **Local development**:
     ```bash
     bun run dev
     ```
-    这将启动开发服务器，支持热重载。
+    This starts the development server with hot reloading.
 
-2.  **构建项目**:
+2.  **Build the project**:
     ```bash
     bun run build
     ```
 
-3.  **预览构建结果**:
+3.  **Preview build results**:
     ```bash
     bun run preview
     ```
 
-4.  **访问应用**:
-    打开浏览器，访问 `http://localhost:5173` 即可开始游戏。
+4.  **Access the app**:
+    Open your browser and visit `http://localhost:5173` to start playing.
 
-**数据库操作**:
+**Database Operations**:
 
-- 生成迁移文件: `bun run db:generate`
-- 本地迁移: `bun run db:migrate:local`
-- 远程迁移: `bun run db:migrate:remote`
-- 种子数据: `bun run db:seed`
+- Generate migration files: `bun run db:generate`
+- Local migration: `bun run db:migrate:local`
+- Remote migration: `bun run db:migrate:remote`
+- Seed data: `bun run db:seed`
 
 ---
 
-## 🤝 贡献指南
+## 🤝 Contributing
 
-本项目遵循严格的 Git 工作流程，确保代码质量和分支管理。
+This project follows a strict Git workflow to ensure code quality and branch management.
 
-### Git Workflow 规则
+### Git Workflow Rules
 
-1. **绝不直接提交到 main 分支**
-2. **绝不直接合并分支到 main**
-3. **绝不推送 main 分支**
-4. **禁止操作**:
-   - `git push origin main` 或 `git push main`
-   - `git merge feature-branch` 在 main 分支上
-   - 任何直接提交到 main 分支
+1. **NEVER commit directly to main branch**
+2. **NEVER merge branches into main directly**
+3. **NEVER push to main branch - EVER**
+4. **ABSOLUTELY FORBIDDEN ACTIONS:**
+   - `git push origin main` or `git push main`
+   - `git merge feature-branch` while on main
+   - Any direct commits to main branch
 
-所有更改必须通过 Pull Request (PR) 和代码审查流程进入 main。
+All changes to main MUST go through pull requests and code review process.
 
-### 工作流程
+### Workflow
 
-1. **创建功能分支**:
+1. **Create a feature branch**:
    ```bash
    git checkout main
    git pull origin main
    git checkout -b feature/your-branch-name
    ```
 
-2. **进行更改并提交**:
+2. **Make your changes and commit**:
    ```bash
    git add .
    git commit -m "feat: your commit message"
    ```
 
-   注意：不要盲目 `git add .`，确保只添加相关文件。
+   Note: NEVER blindly `git add .` - there might be other unrelated files lying around.
 
-   **禁止**：`git commit --amend` 或 `git push --force`（除非明确要求）。
+   **NEVER use `git commit --amend` or `git push --force` unless explicitly asked by the user.**
 
 3. **Lint**:
    ```bash
    bun run lint
    ```
-   如有错误，修复它们。
+   If there are lint errors, fix them.
 
 4. **Format**:
    ```bash
    bun run format
    ```
-   如有格式错误，修复它们。
+   If there are formatting errors, fix them.
 
-5. **推送并创建 PR**:
+5. **Push and create PR**:
    ```bash
    git push -u origin feature/your-branch-name
    gh pr create --title "Your PR Title" --body "PR description"
    ```
 
-6. **等待审查和 CI 检查**后再合并。
+6. **Wait for review and CI checks** before merging.
 
 ### Changelog
 
-所有面向用户的更改必须记录在 `CHANGELOG.md` 中。Changelog 通过 GitHub Actions 强制执行。
+All user-facing changes must be documented in `CHANGELOG.md`. The changelog is enforced via GitHub Actions.
 
-#### 更新时机
+#### When to Update
 
-**重要**：所有合并的 PR 必须记录在 changelog 中。
+**IMPORTANT: ALL merged PRs must be documented in the changelog.**
 
-更新每个 PR，包括：
-- 新功能
-- 错误修复
-- 重大更改
-- API 更改
-- 提供商添加或更新
-- 配置更改
-- 性能改进
-- 依赖更新
-- 测试更改
-- 构建配置更改
-- CI/CD 更改
-- 文档更新
+Update the changelog for EVERY pull request, including:
 
-#### 绕过标签
+- New features or functionality
+- Bug fixes
+- Breaking changes
+- API changes
+- Provider additions or updates
+- Configuration changes
+- Performance improvements
+- Dependency updates
+- Test changes
+- Build configuration changes
+- CI/CD changes
+- Documentation updates
 
-PR 可以使用以下标签绕过 changelog 要求：
-1. `no-changelog` - 适用于特殊情况（自动机器人 PR、未合并更改的还原）
-2. `dependencies` - 适用于自动依赖更新（Dependabot、Renovate 等）
+#### Bypass Labels
 
-#### Changelog 格式
+PRs can bypass changelog requirements with one of these labels:
 
-项目遵循 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 格式：
+1. `no-changelog` - For exceptional cases (automated bot PRs, reverts of unmerged changes)
+2. `dependencies` - For automated dependency updates (Dependabot, Renovate, etc.)
+
+#### Changelog Format
+
+This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format:
 
 ```markdown
 # Changelog
@@ -247,45 +249,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Feature that was added (#1234)
 ```
 
-#### 条目格式
+#### Entry Format
 
-每个条目应：
-1. **包含引用**：添加 PR 编号 `(#1234)`（可用时）；仅在无 PR 时使用短提交哈希 `(abc1234)`
-2. **使用传统提交前缀**：`feat:`、`fix:`、`chore:`、`docs:`、`test:`、`refactor:`
-3. **对重大更改使用 `!`**：在范围后添加 `!`：`feat(api)!:`、`chore(cli)!:`
-4. **包含贡献者归属**：在引用前添加 `by @username`（已知贡献者时）
-5. **保持简洁**：一行描述更改
-6. **面向用户**：描述更改内容而非方式
+Each entry should:
 
-#### 推荐范围
+1. **Include reference**: Add PR number `(#1234)` when available; use short commit hash `(abc1234)` only if no PR exists
+2. **Use conventional commit prefix**: `feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`
+3. **Use `!` for breaking changes**: Add `!` after scope: `feat(api)!:`, `chore(cli)!:`
+4. **Include contributor attribution**: Add `by @username` before reference when contributor is known
+5. **Be concise**: One line describing the change
+6. **Be user-focused**: Describe what changed, not how
 
-使用这些标准化范围以保持一致性（基于 git 历史分析）：
-- **providers** - 提供商实现（OpenAI、Anthropic、LocalAI 等）
-- **webui** - Web 界面和查看器
-- **cli** - 命令行界面
-- **assertions** - 断言类型和评分
-- **api** - 公共 API 更改
-- **config** - 配置处理
-- **deps** - 依赖项（或使用 Dependencies 部分）
-- **docs** - 文档
-- **tests** - 测试基础设施
-- **examples** - 示例配置
-- **redteam** - Red team 功能（较新版本）
-- **site** - 文档站点
+#### Recommended Scopes
 
-#### 类别
+Use these standardized scopes for consistency (based on git history analysis):
 
-- **Added**：新功能
-- **Changed**：现有功能更改（重构、改进、chore、CI/CD）
-- **Fixed**：错误修复
-- **Dependencies**：所有依赖更新
-- **Documentation**：文档添加或更新
-- **Tests**：所有测试添加或更改
-- **Removed**：移除功能（罕见，通常重大）
+- **providers** - Provider implementations (OpenAI, Anthropic, LocalAI, etc.)
+- **webui** - Web interface and viewer
+- **cli** - Command-line interface
+- **assertions** - Assertion types and grading
+- **api** - Public API changes
+- **config** - Configuration handling
+- **deps** - Dependencies (or use Dependencies section)
+- **docs** - Documentation
+- **tests** - Test infrastructure
+- **examples** - Example configurations
+- **redteam** - Red team features (newer versions)
+- **site** - Documentation site
 
-#### 示例
+#### Categories
 
-良好条目：
+- **Added**: New features
+- **Changed**: Changes to existing functionality (refactors, improvements, chores, CI/CD)
+- **Fixed**: Bug fixes
+- **Dependencies**: ALL dependency updates
+- **Documentation**: Documentation additions or updates
+- **Tests**: ALL test additions or changes
+- **Removed**: Removed features (rare, usually breaking)
+
+#### Examples
+
+Good entries:
+
 ```markdown
 ### Added
 
@@ -307,7 +312,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - refactor(webui): improve EvalOutputPromptDialog with grouped dependency injection (#5845)
 ```
 
-不良条目（缺少引用、过于模糊、不一致格式）：
+Bad entries (missing reference, too vague, inconsistent format):
+
 ```markdown
 ### Added
 
@@ -316,73 +322,80 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New feature here
 ```
 
-#### 添加条目
+#### Adding Entries
 
-1. **添加到 Unreleased 部分**：所有新条目进入 `## [Unreleased]` 顶部
-2. **选择正确类别**：Added、Changed、Fixed、Dependencies、Documentation、Tests
-3. **包含引用**：PR 编号 `(#1234)`（可用时），或短提交哈希 `(abc1234)`（无 PR 时）
-4. **保持传统提交前缀**：feat:、fix:、chore:、docs:、test:
-5. **每更改一行**：简短且描述性
+1. **Add to Unreleased section**: All new entries go under `## [Unreleased]` at the top of the file
+2. **Choose correct category**: Added, Changed, Fixed, Dependencies, Documentation, Tests
+3. **Include reference**: PR number `(#1234)` when available, or short commit hash `(abc1234)` if no PR
+4. **Keep conventional commit prefix**: feat:, fix:, chore:, docs:, test:
+5. **One line per change**: Brief and descriptive
 
-示例工作流程：
+Example workflow:
+
 ```bash
-# 1. 进行更改
-# 2. 创建 PR 前，更新 CHANGELOG.md
+# 1. Make your changes
+# 2. Before creating PR, update CHANGELOG.md
 
-# 在 ## [Unreleased] 的适当类别中添加条目：
+# Add entry under ## [Unreleased] in appropriate category:
 - feat(providers): add new provider for XYZ (#PR_NUMBER)
 
-# 3. 与更改一起提交 changelog
+# 3. Commit changelog with your changes
 git add CHANGELOG.md
 git commit -m "feat(providers): add new provider for XYZ"
 ```
 
-#### 注意事项
+#### Notes
 
-- 维护者会在发布期间将条目从 Unreleased 移动到版本化部分
-- 不要担心版本号 - 专注于 Unreleased 部分
-- 如不确定分类，使用 Changed
-- 所有依赖、测试、CI 更改必须包含（无例外）
+- Maintainers move entries from Unreleased to versioned sections during releases
+- Don't worry about version numbers - focus on the Unreleased section
+- If unsure about categorization, use Changed
+- ALL dependencies, tests, CI changes must be included (no exemptions)
 
 ---
 
-## ⚙️ 工作流程
+## ⚙️ Workflow
 
-下图简要描述了从玩家开始游戏到故事内容呈现的完整流程：
+The diagram below outlines the complete flow from player starting a game to story content presentation:
 
 ```mermaid
 sequenceDiagram
-    participant User as 用户
-    participant Client as 客户端 (React)
-    participant Server as 服务端 (Cloudflare Workers)
-    participant StoryGen as 故事生成服务
-    participant LLM as AI 大语言模型
+    participant User as User
+    participant Client as Client (React)
+    participant Server as Server (Cloudflare Workers)
+    participant StoryGen as Story Generation Service
+    participant LLM as AI Large Language Model
     participant DB as Cloudflare D1
 
-    User->>Client: 选择故事类型，点击“开始”
+    User->>Client: Select story type, click "Start"
     Client->>Server: POST /api/game (via React Router action)
     Server->>StoryGen: generate_initial_scene()
-    StoryGen->>LLM: 请求生成故事线路图 (JSON)
-    LLM-->>StoryGen: 返回完整故事结构
-    StoryGen->>DB: 保存故事元数据 (作者, 标题, 线路图)
-    StoryGen-->>Server: 返回初始场景数据
-    Server-->>Client: 返回 {game_id, scene, author, title, story_map}
-    Client->>Mermaid.js: 渲染故事线路图
-    Client->>User: 显示初始场景和线路图
+    StoryGen->>LLM: Request generation of story map (JSON)
+    LLM-->>StoryGen: Return complete story structure
+    StoryGen->>DB: Save story metadata (author, title, story map)
+    StoryGen-->>Server: Return initial scene data
+    Server-->>Client: Return {game_id, scene, author, title, story_map}
+    Client->>Mermaid.js: Render story map
+    Client->>User: Display initial scene and map
 
-    User->>Client: 选择分支
+    User->>Client: Choose branch
     Client->>Server: POST /api/game/{game_id}/choice (useFetcher)
     Server->>StoryGen: generate_next_scene()
-    StoryGen->>LLM: 请求生成下一场景
-    LLM-->>StoryGen: 返回新场景
-    StoryGen->>DB: 更新游戏状态
-    StoryGen-->>Server: 返回新场景数据
-    Server-->>Client: 返回更新数据 (乐观 UI 更新)
-    Client->>User: 显示新场景 (无页面重载)
+    StoryGen->>LLM: Request generation of next scene
+    LLM-->>StoryGen: Return new scene
+    StoryGen->>DB: Update game state
+    StoryGen-->>Server: Return new scene data
+    Server-->>Client: Return updated data (optimistic UI update)
+    Client->>User: Display new scene (no page reload)
 ```
 
 ---
 
-## 📜 许可证
+## 📜 License
 
-本项目采用 MIT 许可证。详情请见 [LICENSE](LICENSE) 文件。
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=xiamuceer-j/AI-Gamble&type=Date)](https://www.star-history.com/#xiamuceer-j/AI-Gamble&Date)
+
+![Alt](https://repobeats.axiom.co/api/embed/de78e4c6804998e61045cab53ad94f56ee6a9737.svg "Repobeats analytics image")

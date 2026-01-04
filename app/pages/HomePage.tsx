@@ -8,7 +8,7 @@
 
 import { useState, useEffect } from "react";
 import { Form } from "react-router";
-import { House, Play } from "@phosphor-icons/react";
+import { HouseIcon, PlayIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { Button } from "~/components/ui/Button";
 import { Card } from "~/components/ui/Card";
@@ -64,7 +64,7 @@ export function HomePage({ className = "" }: HomePageProps) {
       {/* Header */}
       <header className="mb-12 text-center">
         <h1 className="text-5xl font-bold tracking-tight mb-4 flex items-center justify-center gap-3 text-text-primary">
-          <House size={48} weight="duotone" className="text-accent" />
+          <HouseIcon size={48} weight="duotone" className="text-accent" />
           {t("app.title")}
         </h1>
         <p className="text-xl text-text-secondary max-w-lg">
@@ -104,7 +104,7 @@ export function HomePage({ className = "" }: HomePageProps) {
               variant="primary"
               size="lg"
               fullWidth
-              icon={<Play size={24} weight="fill" />}
+              icon={<PlayIcon size={24} weight="fill" />}
             >
               {t("home.generate_story")}
             </Button>

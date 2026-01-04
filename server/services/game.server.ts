@@ -1,51 +1,69 @@
 /**
  * @file game.server.ts
- * @description Core business logic service for the JustPlay adventure game.
- * Orchestrates AI generation with Vercel AI SDK, database persistence, and game state management.
- * @module GameService
+ * @description Server-only game service orchestrating AI generation and database operations.
+ * This file must NEVER be imported from client code.
+ * @module server/services/game
  *
  * @features
- * - createNewGame: Chains AI prompts to generate concept, story map, and initial scene.
- * - advanceGame: Handles user choices, maintains story history context, and generates next scenes.
- * - Integration: Bridges AIService (AI SDK + OpenRouter) and DB (D1) layers.
+ * - createNewGame: Chains AI prompts to generate concept, story map, and initial scene
+ * - advanceGame: Handles user choices and generates next scenes
+ * - Integration: Bridges AIService and Database layers
  *
- * @maintenance
- * - Ensure storyMap structure stays synced with Zod schemas in story.server.ts.
- * - Monitor AI response times; this service performs sequential await calls which can be slow.
- *
- * @author Claude Code (Migrated from legacy Python `story_generator.py`)
+ * @author Claude Code
  * @date 2025-01-26
  */
 
+import { eq } from "drizzle-orm";
+import { getDb } from "@server/db/client";
+import { games } from "@server/db/schema";
+import type { Env } from "@server/config/env";
+import { getLanguagePrompt } from "@server/i18n.server";
 import type { AIService } from "./ai.server";
-import * as db from "./db.server";
-import type { Env } from "../db/client";
+import type { SupportedLanguage } from "@shared/types/i18n";
+import type {
+  SceneData,
+  StoryMap,
+  StoryHistoryEntry,
+} from "@shared/types/game";
 import {
-  type StoryConcept,
-  type StoryMap,
-  type SceneData,
-  type Choice,
   StoryConceptSchema,
   StoryMapSchema,
   ChoicesResponseSchema,
   SceneDataSchema,
-} from "./story.server";
+} from "@shared/schemas/story.schema";
 
+/**
+ * Game service for managing game state and AI interactions.
+ */
 export class GameService {
   constructor(
     private ai: AIService,
     private env: Env,
   ) {}
 
+  /**
+   * Create a new game with AI-generated story.
+   *
+   * @param storyType - The genre/type of story to generate
+   * @param language - Language for content generation
+   * @param nodeNum - Number of story nodes to generate (default: 6)
+   * @returns The ID of the newly created game
+   */
   async createNewGame(
     storyType: string,
-    language: string,
+    language: SupportedLanguage,
     nodeNum: number = 6,
-  ) {
-    const gameId = await db.createGame(this.env, storyType);
-    const languagePrompt = language.startsWith("zh") ? "中文" : "English";
+  ): Promise<number> {
+    const db = getDb(this.env);
+    const languagePrompt = getLanguagePrompt(language);
 
-    // 1. Generate Concept
+    // 1. Create initial game record
+    const [{ id: gameId }] = await db
+      .insert(games)
+      .values({ storyType })
+      .returning({ id: games.id });
+
+    // 2. Generate Story Concept
     const conceptPrompt = `
       你需要为一个'${storyType}'类型的故事，生成一个包含作家、标题和写作风格的核心概念。
       请使用 ${languagePrompt} (language: ${language}) 创作内容。
@@ -61,7 +79,7 @@ export class GameService {
       0.8,
     );
 
-    // 2. Generate Story Map
+    // 3. Generate Story Map (blueprint)
     const mapPrompt = `
       你是一位顶级的游戏叙事设计师。请为一部名为《${concept.title}》、由'${concept.author}'创作的'${storyType}'风格的互动小说，设计一个结构丰富、引人入胜的"故事蓝图"。
       请使用 ${languagePrompt} (language: ${language}) 创作所有内容（包括label和details）。
@@ -80,7 +98,7 @@ export class GameService {
       0.7,
     );
 
-    // 3. Generate Initial Scene Choices
+    // 4. Generate Initial Scene Choices
     const startNode =
       storyMap.nodes.find((n) => n.id === "start") || storyMap.nodes[0];
     const choicesPrompt = `
@@ -106,44 +124,67 @@ export class GameService {
       0.9,
     );
 
+    // 5. Assemble initial scene
     const initialScene: SceneData = {
       content: startNode.details,
       choices: choicesResult.choices,
       current_node_id: startNode.id,
     };
 
-    const storyHistory: { role: "user" | "assistant"; content: string }[] = [
+    const storyHistory: StoryHistoryEntry[] = [
       { role: "assistant", content: startNode.details },
     ];
 
-    // 4. Update DB
-    await db.updateGame(this.env, gameId, {
-      writingStyle: concept.writing_style,
-      author: concept.author,
-      title: concept.title,
-      storyMap: storyMap,
-      storyHistory: storyHistory,
-      currentSceneJson: initialScene,
-      currentNodeId: startNode.id,
-    });
+    // 6. Update game record with generated content
+    await db
+      .update(games)
+      .set({
+        writingStyle: concept.writing_style,
+        author: concept.author,
+        title: concept.title,
+        storyMap: storyMap as unknown as Record<string, unknown>,
+        storyHistory: storyHistory,
+        currentSceneJson: initialScene as unknown as Record<string, unknown>,
+        currentNodeId: startNode.id,
+        updatedAt: new Date(),
+      })
+      .where(eq(games.id, gameId));
 
     return gameId;
   }
 
-  async advanceGame(gameId: number, choiceText: string, language: string) {
-    const game = await db.getGame(this.env, gameId);
-    if (!game) throw new Error("Game not found");
+  /**
+   * Advance the game by processing a player's choice.
+   *
+   * @param gameId - The ID of the game to advance
+   * @param choiceText - The text of the player's choice
+   * @param language - Language for content generation
+   * @returns The next scene data
+   */
+  async advanceGame(
+    gameId: number,
+    choiceText: string,
+    language: SupportedLanguage,
+  ): Promise<SceneData> {
+    const db = getDb(this.env);
+    const languagePrompt = getLanguagePrompt(language);
 
-    const languagePrompt = language.startsWith("zh") ? "中文" : "English";
-    const storyMap = game.storyMap as StoryMap;
-    const storyHistory = game.storyHistory as {
-      role: "user" | "assistant";
-      content: string;
-    }[];
+    // Fetch current game state
+    const game = await db.query.games.findFirst({
+      where: eq(games.id, gameId),
+    });
+
+    if (!game) {
+      throw new Error(`Game not found: ${gameId}`);
+    }
+
+    const storyMap = game.storyMap as unknown as StoryMap;
+    const storyHistory = (game.storyHistory as StoryHistoryEntry[]) || [];
 
     // Add user choice to history
     storyHistory.push({ role: "user", content: choiceText });
 
+    // Generate next scene
     const systemPrompt = `
       ${game.writingStyle} 你的任务是作为一名才华横溢的互动小说家，动态地推进故事并创造引人入胜的选择。
       请使用 ${languagePrompt} (language: ${language}) 进行创作。
@@ -168,14 +209,33 @@ export class GameService {
       0.9,
     );
 
+    // Add AI response to history
     storyHistory.push({ role: "assistant", content: nextScene.content });
 
-    await db.updateGame(this.env, gameId, {
-      storyHistory: storyHistory,
-      currentSceneJson: nextScene,
-      currentNodeId: nextScene.current_node_id,
-    });
+    // Update game state
+    await db
+      .update(games)
+      .set({
+        storyHistory: storyHistory,
+        currentSceneJson: nextScene as unknown as Record<string, unknown>,
+        currentNodeId: nextScene.current_node_id,
+        updatedAt: new Date(),
+      })
+      .where(eq(games.id, gameId));
 
     return nextScene;
+  }
+
+  /**
+   * Get a game by ID.
+   *
+   * @param gameId - The ID of the game to fetch
+   * @returns The game record or null if not found
+   */
+  async getGame(gameId: number) {
+    const db = getDb(this.env);
+    return await db.query.games.findFirst({
+      where: eq(games.id, gameId),
+    });
   }
 }

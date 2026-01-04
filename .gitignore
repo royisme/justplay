@@ -17,3 +17,11 @@ game.db
 
 # Node modules
 node_modules/
+
+# Build
+build/
+dist/
+.claude
+.react-router
+.wrangler
+.works

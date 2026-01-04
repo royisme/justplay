@@ -1,5 +1,6 @@
 /**
  * @file _index.tsx
+<<<<<<< HEAD
  * @description The landing page of the application. Allows users to start a new game session.
  * @module IndexRoute
  *
@@ -11,16 +12,27 @@
  * @maintenance
  * - Ensure `genreToTheme` map matches CSS theme definitions in `app.css`.
  * - Update genre options in i18n JSON files when adding new story types.
+=======
+ * @description Landing page route. Minimal route file delegating to HomePage component.
+ * @module routes/_index
+>>>>>>> feature/architecture-refactor
  *
  * @author Claude Code
  * @date 2025-01-26
  */
 
+<<<<<<< HEAD
 import { type MetaFunction } from "react-router";
 import { House, Play } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { setLanguageCookie } from "~/i18n";
+=======
+import type { MetaFunction } from "react-router";
+import { HomePage } from "~/pages/HomePage";
+
+// --- Meta ---
+>>>>>>> feature/architecture-refactor
 
 export const meta: MetaFunction = () => {
   return [
@@ -32,7 +44,10 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+// --- Component ---
+
 export default function Index() {
+<<<<<<< HEAD
   const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState("default");
 
@@ -139,4 +154,7 @@ export default function Index() {
       </footer>
     </div>
   );
+=======
+  return <HomePage />;
+>>>>>>> feature/architecture-refactor
 }

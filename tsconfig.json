@@ -6,6 +6,8 @@
     "moduleResolution": "Bundler",
     "paths": {
       "~/*": ["./app/*"],
+      "@server/*": ["./server/*"],
+      "@shared/*": ["./shared/*"],
     },
     "resolveJsonModule": true,
     "checkJs": true,
@@ -20,7 +22,10 @@
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
+    "server/**/*.ts",
+    "shared/**/*.ts",
     ".react-router/types/**/*.ts",
     "worker-configuration.d.ts",
   ],
+  "exclude": ["node_modules", "build", ".wrangler"],
 }

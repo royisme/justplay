@@ -1,3 +1,13 @@
+/**
+ * @file root.tsx
+ * @description Root layout component with i18n SSR synchronization.
+ * Uses Cookie-based language detection for hydration consistency.
+ * @module app/root
+ *
+ * @author Claude Code
+ * @date 2025-01-26
+ */
+
 import {
   isRouteErrorResponse,
   Links,
@@ -9,7 +19,12 @@ import {
 } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+<<<<<<< HEAD
 import i18n, { extractLanguageFromCookie, setLanguageCookie } from "./i18n";
+=======
+import i18n, { setLanguageCookie } from "~/config/i18n.client";
+import { extractLanguageFromCookie } from "@server/i18n.server";
+>>>>>>> feature/architecture-refactor
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -33,7 +48,11 @@ export const links: Route.LinksFunction = () => [
  */
 export async function loader({ request }: Route.LoaderArgs) {
   const cookieHeader = request.headers.get("Cookie");
+<<<<<<< HEAD
   const language = extractLanguageFromCookie(cookieHeader) || "zh";
+=======
+  const language = extractLanguageFromCookie(cookieHeader);
+>>>>>>> feature/architecture-refactor
 
   // Initialize i18n for SSR rendering
   // This happens server-side before component render
@@ -99,11 +118,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   return (
     <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
+      <h1 className="text-2xl font-bold text-text-primary mb-4">{message}</h1>
+      <p className="text-text-secondary mb-4">{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
+        <pre className="w-full p-4 overflow-x-auto bg-background-secondary rounded-lg border border-border">
+          <code className="text-sm text-text-secondary">{stack}</code>
         </pre>
       )}
     </main>

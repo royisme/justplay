@@ -1,5 +1,6 @@
 /**
  * @file game.$id.tsx
+<<<<<<< HEAD
  * @description The main game interface where users play the interactive novel.
  * Uses useFetcher for non-navigating form submissions to avoid full page reloads.
  * @module GameDetailRoute
@@ -15,11 +16,16 @@
  * - Mermaid rendering only runs when map is shown to save resources.
  * - useFetcher manages optimistic updates: choice added immediately, story continues after AI response.
  * - Language toggle persists to Cookie for SSR synchronization.
+=======
+ * @description Game detail route. Handles loader/action, delegates rendering to GamePage.
+ * @module routes/game.$id
+>>>>>>> feature/architecture-refactor
  *
  * @author Claude Code
  * @date 2025-01-26
  */
 
+<<<<<<< HEAD
 import { useLoaderData, useFetcher } from "react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
@@ -32,15 +38,26 @@ import { games } from "~/db/schema";
 import { setLanguageCookie } from "~/i18n";
 import { GameService } from "~/services/game.server";
 import { AIService } from "~/services/ai.server";
+=======
+import { useLoaderData } from "react-router";
+import { eq } from "drizzle-orm";
+import { GamePage } from "~/pages/GamePage";
+import { getDb } from "@server/db/client";
+import { games } from "@server/db/schema";
+import { getEnv, getAIConfig } from "@server/config/env";
+import { AIService, GameService } from "@server/services";
+import { getLanguageFromRequest } from "@server/i18n.server";
+import { normalizeLanguage } from "@shared/types/i18n";
+>>>>>>> feature/architecture-refactor
 import type { Route } from "./+types/game.$id";
-import type { SceneData, StoryMap } from "~/services/story.server";
+import type { Game, AdvanceGameResponse } from "@shared/types/game";
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 
 // --- Loader ---
+
 export async function loader({ params, context }: Route.LoaderArgs) {
-  const env =
-    (context as any).cloudflare?.env || (globalThis as any).process?.env;
+  const env = getEnv(context);
   const gameId = parseInt(params.id);
   const db = getDb(env);
 
@@ -52,9 +69,10 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     throw new Response("Game Not Found", { status: 404 });
   }
 
-  return { game };
+  return { game: game as Game };
 }
 
+<<<<<<< HEAD
 /**
  * Action: Handle game advancement (choice submission).
  * Returns JSON for useFetcher (no page navigation).
@@ -64,12 +82,25 @@ export async function action({ request, params, context }: Route.ActionArgs) {
     return new Response(
       JSON.stringify({ success: false, error: "Method not allowed" }),
       { status: 405, headers: { "Content-Type": "application/json" } },
+=======
+// --- Action ---
+
+export async function action({ request, params, context }: Route.ActionArgs) {
+  if (request.method !== "POST") {
+    return Response.json(
+      {
+        success: false,
+        error: "Method not allowed",
+      } satisfies AdvanceGameResponse,
+      { status: 405 },
+>>>>>>> feature/architecture-refactor
     );
   }
 
   try {
     const formData = await request.formData();
     const choiceText = formData.get("choice") as string;
+<<<<<<< HEAD
     const language = (formData.get("lng") as string) || "zh";
     const gameId = parseInt(params.id);
 
@@ -88,6 +119,28 @@ export async function action({ request, params, context }: Route.ActionArgs) {
       env.OPENROUTER_BASE_URL || env.OPENAI_BASE_URL,
       env.OPENROUTER_MODEL || env.OPENAI_MODEL || "openai/gpt-4o",
     );
+=======
+    const languageParam = formData.get("lng") as string | null;
+    const gameId = parseInt(params.id);
+
+    if (!choiceText) {
+      return Response.json(
+        {
+          success: false,
+          error: "Missing choice",
+        } satisfies AdvanceGameResponse,
+        { status: 400 },
+      );
+    }
+
+    const env = getEnv(context);
+    const language = normalizeLanguage(
+      languageParam || getLanguageFromRequest(request),
+    );
+
+    const aiConfig = getAIConfig(env);
+    const aiService = new AIService(aiConfig);
+>>>>>>> feature/architecture-refactor
     const gameService = new GameService(aiService, env);
 
     const nextScene = await gameService.advanceGame(
@@ -96,6 +149,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
       language,
     );
 
+<<<<<<< HEAD
     // Return JSON (useFetcher will not navigate)
     return new Response(
       JSON.stringify({
@@ -112,11 +166,26 @@ export async function action({ request, params, context }: Route.ActionArgs) {
         error: "Failed to generate next scene. Please try again.",
       }),
       { status: 500, headers: { "Content-Type": "application/json" } },
+=======
+    return Response.json({
+      success: true,
+      nextScene,
+    } satisfies AdvanceGameResponse);
+  } catch (error) {
+    console.error("[game.$id action] Failed to advance game:", error);
+    return Response.json(
+      {
+        success: false,
+        error: "Failed to generate next scene. Please try again.",
+      } satisfies AdvanceGameResponse,
+      { status: 500 },
+>>>>>>> feature/architecture-refactor
     );
   }
 }
 
 // --- Component ---
+<<<<<<< HEAD
 export default function GameDetail() {
   const { game: initialGame } = useLoaderData<LoaderData>();
   const { t, i18n } = useTranslation();
@@ -415,4 +484,11 @@ export default function GameDetail() {
       </div>
     </div>
   );
+=======
+
+export default function GameDetailRoute() {
+  const { game } = useLoaderData<typeof loader>();
+
+  return <GamePage game={game} />;
+>>>>>>> feature/architecture-refactor
 }

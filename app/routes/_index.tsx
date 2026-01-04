@@ -5,7 +5,7 @@
  *
  * @features
  * - Genre selection (updates visual theme via data-theme attribute).
- * - Language toggle (i18n integration).
+ * - Language toggle (i18n integration with Cookie persistence).
  * - Form submission to `game.new` action.
  *
  * @maintenance
@@ -20,6 +20,7 @@ import { type MetaFunction } from "react-router";
 import { House, Play } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
+import { setLanguageCookie } from "~/i18n";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,6 +38,7 @@ export default function Index() {
 
   const toggleLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    setLanguageCookie(lng); // Persist to Cookie for SSR sync
   };
 
   const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -5,9 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "react-router";
 import { useTranslation } from "react-i18next";
-import "./i18n";
+import { useEffect } from "react";
+import i18n, { extractLanguageFromCookie, setLanguageCookie } from "./i18n";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -25,11 +27,40 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+/**
+ * Root loader: Extract language from Cookie for SSR synchronization.
+ * This ensures the server renders with the same language as the client will use.
+ */
+export async function loader({ request }: Route.LoaderArgs) {
+  const cookieHeader = request.headers.get("Cookie");
+  const language = extractLanguageFromCookie(cookieHeader) || "zh";
+
+  // Initialize i18n for SSR rendering
+  // This happens server-side before component render
+  if (typeof i18n.changeLanguage === "function") {
+    await i18n.changeLanguage(language);
+  }
+
+  return { language };
+}
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { i18n } = useTranslation();
+  const { language } = useLoaderData<LoaderData>();
+  const { i18n: i18nInstance } = useTranslation();
+
+  // Client-side hydration sync:
+  // After SSR, ensure client i18n matches server language
+  useEffect(() => {
+    if (i18nInstance.language !== language) {
+      i18nInstance.changeLanguage(language);
+      setLanguageCookie(language);
+    }
+  }, [language, i18nInstance]);
 
   return (
-    <html lang={i18n.language}>
+    <html lang={language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

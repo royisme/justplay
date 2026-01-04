@@ -21,7 +21,9 @@
     "generating_map": "正在构建世界地图...",
     "starting": "故事即将开始...",
     "choices": "选择",
-    "back_to_home": "返回首页"
+    "back_to_home": "返回首页",
+    "toggle_map": "查看故事地图",
+    "generating": "AI 正在书写下一章..."
   },
   "common": {
     "error": "故事生成失败，请稍后再试。",

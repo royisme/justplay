@@ -1,42 +1,71 @@
-export interface Game {
-  id: number;
-  story_type: string;
-  writing_style: string | null;
-  author: string | null;
-  title: string | null;
-  story_map: string | null;
-  story_history: string | null;
-  current_scene_json: string | null;
-  current_node_id: string;
-  created_at: string;
-  updated_at: string;
-}
+/**
+ * @file db.server.ts
+ * @description Database service layer utilizing Drizzle ORM. Handles CRUD operations for the Game entity.
+ * @module DBService
+ *
+ * @features
+ * - Type-safe queries using Drizzle Query Builder.
+ * - Automatic timestamp management (updatedAt).
+ * - Partial update support with undefined filtering.
+ *
+ * @maintenance
+ * - Ensure schema.ts changes are reflected here if new complex types are added.
+ * - D1 limits write operations; optimize batch updates if traffic scales.
+ *
+ * @author Claude Code
+ * @date 2025-01-26
+ */
 
-export async function createGame(db: D1Database, storyType: string): Promise<number> {
+import { eq } from "drizzle-orm";
+import { getDb } from "../db/client";
+import { games } from "../db/schema";
+import type { Env } from "../db/client";
+
+// Re-export getDb and types for route access
+export { getDb };
+export type { Env };
+export type { Game } from "../db/schema";
+
+export async function createGame(env: Env, storyType: string) {
+  const db = getDb(env);
+
   const result = await db
-    .prepare("INSERT INTO games (story_type) VALUES (?)")
-    .bind(storyType)
-    .run();
-  return result.meta.last_row_id;
+    .insert(games)
+    .values({
+      storyType,
+    })
+    .returning({ id: games.id });
+
+  return result[0].id;
 }
 
-export async function getGame(db: D1Database, id: number): Promise<Game | null> {
-  return await db.prepare("SELECT * FROM games WHERE id = ?").bind(id).first<Game>();
+export async function getGame(env: Env, id: number) {
+  const db = getDb(env);
+
+  return await db.query.games.findFirst({
+    where: eq(games.id, id),
+  });
 }
 
 export async function updateGame(
-  db: D1Database,
+  env: Env,
   id: number,
-  data: Partial<Omit<Game, "id" | "created_at" | "updated_at">>
-): Promise<void> {
-  const keys = Object.keys(data);
-  if (keys.length === 0) return;
+  data: Partial<typeof games.$inferInsert>,
+) {
+  const db = getDb(env);
 
-  const setClause = keys.map((key) => `${key} = ?`).join(", ");
-  const values = Object.values(data);
+  // Filter out undefined values to avoid overwriting with NULL if not intended
+  const updateData = Object.fromEntries(
+    Object.entries(data).filter(([_, v]) => v !== undefined),
+  );
+
+  if (Object.keys(updateData).length === 0) return;
 
   await db
-    .prepare(`UPDATE games SET ${setClause}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`)
-    .bind(...values, id)
-    .run();
+    .update(games)
+    .set({
+      ...updateData,
+      updatedAt: new Date(),
+    })
+    .where(eq(games.id, id));
 }

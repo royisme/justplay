@@ -21,7 +21,9 @@
     "generating_map": "Constructing the world map...",
     "starting": "Story is about to begin...",
     "choices": "Choices",
-    "back_to_home": "Back to Home"
+    "back_to_home": "Back to Home",
+    "toggle_map": "Toggle Story Map",
+    "generating": "AI is writing the next chapter..."
   },
   "common": {
     "error": "Failed to generate story, please try again later.",

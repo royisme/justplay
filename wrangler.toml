@@ -4,14 +4,18 @@ compatibility_date = "2024-11-01"
 assets = { directory = "./build/client" }
 
 [vars]
-OPENAI_MODEL = "gpt-4o"
+# OpenRouter configuration (supports multiple LLM providers)
+# Model format: "provider/model-name" e.g., "openai/gpt-4o", "anthropic/claude-3.5-sonnet"
+OPENROUTER_MODEL = "openai/gpt-4o"
 NODE_NUM = "6"
+
+# Legacy OpenAI vars (kept for backward compatibility)
+# OPENAI_MODEL = "gpt-4o"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "just-play-db"
-database_id = "your-database-id-here"
-
+database_id = "5264151b-3b5b-4e47-b2d4-ab8c74d1e321"
 [[kv_namespaces]]
 binding = "GAME_STATE"
-id = "your-kv-namespace-id"
+id = "0df818293a244408adb920e3bd704462"

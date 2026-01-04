@@ -1,0 +1,34 @@
+{
+  "app": {
+    "title": "JustPlay",
+    "description": "Dive into infinite possibilities. Your choices shape the world."
+  },
+  "home": {
+    "start_adventure": "Start a New Adventure",
+    "select_genre": "Select Genre",
+    "generate_story": "Generate Story",
+    "genres": {
+      "xuanhuan": "Eastern Fantasy",
+      "magic": "Western Magic",
+      "cyberpunk": "Cyberpunk",
+      "mystery": "Mystery Solving",
+      "scifi": "Apocalyptic Sci-Fi"
+    }
+  },
+  "game": {
+    "loading": "Building the thread of destiny...",
+    "generating_concept": "Conceiving the story core...",
+    "generating_map": "Constructing the world map...",
+    "starting": "Story is about to begin...",
+    "choices": "Choices",
+    "back_to_home": "Back to Home"
+  },
+  "common": {
+    "error": "Failed to generate story, please try again later.",
+    "error_title": "Oops!",
+    "error_details": "An unexpected error occurred.",
+    "not_found": "The requested page could not be found.",
+    "retry": "Retry",
+    "powered_by": "Powered by AI & React Router v7"
+  }
+}

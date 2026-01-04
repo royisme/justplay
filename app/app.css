@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@plugin "tailwind-scrollbar";
+
+@theme {
+  --color-background-primary: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--foreground-secondary);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-border: var(--border);
+}
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --background-secondary: #f4f4f5;
+    --foreground: #18181b;
+    --foreground-secondary: #71717a;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --border: #e4e4e7;
+  }
+
+  /* 东方玄幻 */
+  [data-theme='xuanhuan'] {
+    --background: #fdf6e3;
+    --background-secondary: #eee8d5;
+    --foreground: #586e75;
+    --foreground-secondary: #93a1a1;
+    --accent: #b58900;
+    --accent-hover: #a57900;
+    --border: #dcd3b6;
+  }
+
+  /* 西方魔幻 */
+  [data-theme='magic'] {
+    --background: #1a1a2e;
+    --background-secondary: #16213e;
+    --foreground: #e94560;
+    --foreground-secondary: #cfcfcf;
+    --accent: #0f3460;
+    --accent-hover: #1a4a80;
+    --border: #30475e;
+  }
+
+  /* 赛博朋克 */
+  [data-theme='cyberpunk'] {
+    --background: #0d0221;
+    --background-secondary: #190b28;
+    --foreground: #00ffc8;
+    --foreground-secondary: #ff00ff;
+    --accent: #ff00ff;
+    --accent-hover: #d400d4;
+    --border: #2d004d;
+  }
+
+  /* 悬疑解谜 */
+  [data-theme='mystery'] {
+    --background: #121212;
+    --background-secondary: #1c1c1c;
+    --foreground: #cfcfcf;
+    --foreground-secondary: #888888;
+    --accent: #800000;
+    --accent-hover: #600000;
+    --border: #333333;
+  }
+
+  /* 末世科幻 */
+  [data-theme='scifi'] {
+    --background: #2b2b2b;
+    --background-secondary: #1d3557;
+    --foreground: #f1faee;
+    --foreground-secondary: #a8dadc;
+    --accent: #457b9d;
+    --accent-hover: #1d3557;
+    --border: #3d3d3d;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', system-ui, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}

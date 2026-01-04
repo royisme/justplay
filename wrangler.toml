@@ -1,0 +1,17 @@
+name = "just-play-game"
+main = "./build/server/index.js"
+compatibility_date = "2024-11-01"
+assets = { directory = "./build/client" }
+
+[vars]
+OPENAI_MODEL = "gpt-4o"
+NODE_NUM = "6"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "just-play-db"
+database_id = "your-database-id-here"
+
+[[kv_namespaces]]
+binding = "GAME_STATE"
+id = "your-kv-namespace-id"

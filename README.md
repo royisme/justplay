@@ -2,7 +2,7 @@
 
 这是一个基于大型语言模型（LLM）的动态互动小说游戏。它能够根据玩家选择的故事类型，实时生成独特的故事情节、人物、以及一个可视化的故事发展线路图，为玩家提供一个充满未知和选择的沉浸式阅读体验。
 
-本项目正在迁移到全栈 TypeScript 架构，使用 React Router v7 实现 SSR/SPA 混合模式，部署至 Cloudflare Workers。
+本项目是全栈 TypeScript 架构，使用 React Router v7 实现 SSR/SPA 混合模式。
 
 ---
 

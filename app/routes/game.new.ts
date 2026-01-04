@@ -1,57 +1,47 @@
 /**
  * @file game.new.ts
  * @description Action route to handle the creation of a new game session.
- * @module GameNewRoute
- *
- * @features
- * - Form submission handling from Index page.
- * - Environment variable injection (Cloudflare bindings).
- * - Service instantiation (AIService, GameService).
- * - Error handling and redirection.
- *
- * @maintenance
- * - Ensure environment bindings are correctly typed in `Env` interface.
- * - Add form validation (e.g., z.object) if inputs become more complex.
+ * Uses server-isolated modules for AI and database operations.
+ * @module routes/game.new
  *
  * @author Claude Code
  * @date 2025-01-26
  */
 
-import { redirect, type ActionFunctionArgs } from "react-router";
-import { AIService } from "~/services/ai.server";
-import { GameService } from "~/services/game.server";
+import { redirect } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { getEnv, getAIConfig, getNodeNum } from "@server/config/env";
+import { AIService, GameService } from "@server/services";
+import { normalizeLanguage } from "@shared/types/i18n";
+
+// --- Action ---
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
   const storyType = formData.get("story_type") as string;
-  const language = (formData.get("lng") as string) || "zh";
+  const languageParam = formData.get("lng") as string | null;
 
-  // Access Cloudflare bindings from context
-  const env =
-    (context as any).cloudflare?.env || (globalThis as any).process?.env;
+  // Normalize language
+  const language = normalizeLanguage(languageParam);
 
-  // OpenRouter uses OPENROUTER_API_KEY env var by default,
-  // but we support custom configuration via env vars
-  const aiService = new AIService(
-    env.OPENROUTER_API_KEY || env.OPENAI_API_KEY,
-    env.OPENROUTER_BASE_URL || env.OPENAI_BASE_URL,
-    env.OPENROUTER_MODEL || env.OPENAI_MODEL || "openai/gpt-4o",
-  );
+  // Get environment and configuration
+  const env = getEnv(context);
+  const aiConfig = getAIConfig(env);
+  const nodeNum = getNodeNum(env);
 
-  // Pass the entire env to GameService, as it now needs it for getDb(env)
+  // Initialize services
+  const aiService = new AIService(aiConfig);
   const gameService = new GameService(aiService, env);
 
   try {
-    const nodeNum = parseInt(env.NODE_NUM || "6");
     const gameId = await gameService.createNewGame(
       storyType,
       language,
       nodeNum,
     );
-
     return redirect(`/game/${gameId}`);
   } catch (error) {
-    console.error("Failed to create new game:", error);
+    console.error("[game.new action] Failed to create new game:", error);
     return redirect("/?error=true");
   }
 }

@@ -19,7 +19,6 @@ import type {
   StoryMap,
   StoryHistoryEntry,
   AdvanceGameResponse,
-  GENRE_THEME_MAP,
 } from "@shared/types/game";
 
 // --- Types ---
@@ -50,10 +49,14 @@ export function GamePage({ game, className = "" }: GamePageProps) {
   // Local state
   const [showMap, setShowMap] = useState(false);
   const [storyHistory, setStoryHistory] = useState<StoryHistoryEntry[]>(
-    (game.storyHistory as StoryHistoryEntry[]) || []
+    (game.storyHistory as StoryHistoryEntry[]) || [],
   );
   const [currentScene, setCurrentScene] = useState<SceneData>(
-    (game.currentSceneJson as SceneData) || { content: "", choices: [], current_node_id: "start" }
+    (game.currentSceneJson as SceneData) || {
+      content: "",
+      choices: [],
+      current_node_id: "start",
+    },
   );
   const [lastError, setLastError] = useState<string | null>(null);
 
@@ -72,7 +75,10 @@ export function GamePage({ game, className = "" }: GamePageProps) {
   const handleChoiceSelect = useCallback(
     (choiceText: string) => {
       // Optimistic: immediately add user choice to visible history
-      setStoryHistory((prev) => [...prev, { role: "user", content: choiceText }]);
+      setStoryHistory((prev) => [
+        ...prev,
+        { role: "user", content: choiceText },
+      ]);
       setLastError(null);
 
       // Submit to action (same route)
@@ -82,7 +88,7 @@ export function GamePage({ game, className = "" }: GamePageProps) {
 
       fetcher.submit(formData, { method: "post" });
     },
-    [i18n.language, fetcher]
+    [i18n.language, fetcher],
   );
 
   /**
@@ -143,13 +149,15 @@ export function GamePage({ game, className = "" }: GamePageProps) {
 
           {/* Choices Footer */}
           <div className="p-4 bg-background-primary border-t border-border shrink-0">
-            {!isLoading && currentScene.choices && currentScene.choices.length > 0 && (
-              <ChoiceList
-                choices={currentScene.choices}
-                onChoiceSelect={handleChoiceSelect}
-                disabled={isLoading}
-              />
-            )}
+            {!isLoading &&
+              currentScene.choices &&
+              currentScene.choices.length > 0 && (
+                <ChoiceList
+                  choices={currentScene.choices}
+                  onChoiceSelect={handleChoiceSelect}
+                  disabled={isLoading}
+                />
+              )}
           </div>
         </div>
 

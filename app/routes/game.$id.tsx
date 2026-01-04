@@ -17,7 +17,7 @@ import { AIService, GameService } from "@server/services";
 import { getLanguageFromRequest } from "@server/i18n.server";
 import { normalizeLanguage } from "@shared/types/i18n";
 import type { Route } from "./+types/game.$id";
-import type { Game, SceneData, AdvanceGameResponse } from "@shared/types/game";
+import type { Game, AdvanceGameResponse } from "@shared/types/game";
 
 // --- Loader ---
 

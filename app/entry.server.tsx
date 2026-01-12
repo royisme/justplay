@@ -12,6 +12,9 @@ import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
 
+// Initialize i18n for SSR - must be imported before rendering
+import "~/i18n";
+
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,

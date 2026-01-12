@@ -5,10 +5,11 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { changeLanguage } from "~/config/i18n.client";
+import { setLanguageCookie } from "~/i18n";
 import {
   SUPPORTED_LANGUAGES,
   LANGUAGE_LABELS,
+  DEFAULT_LANGUAGE,
   type SupportedLanguage,
 } from "@shared/types/i18n";
 
@@ -32,18 +33,19 @@ const sizeStyles = {
 
 export function LanguageToggle({ size = "sm", className = "" }: LanguageToggleProps) {
   const { i18n } = useTranslation();
-  const currentLanguage = i18n.language as SupportedLanguage;
+  const currentLanguage = (i18n.language || DEFAULT_LANGUAGE) as SupportedLanguage;
 
-  const handleLanguageChange = (lng: SupportedLanguage) => {
+  const handleLanguageChange = async (lng: SupportedLanguage) => {
     if (lng !== currentLanguage) {
-      changeLanguage(lng);
+      await i18n.changeLanguage(lng);
+      setLanguageCookie(lng);
     }
   };
 
   return (
     <div className={`flex gap-1 border border-border rounded-lg p-1 ${className}`}>
       {SUPPORTED_LANGUAGES.map((lng) => {
-        const isActive = currentLanguage.startsWith(lng);
+        const isActive = currentLanguage?.startsWith(lng) ?? false;
 
         return (
           <button

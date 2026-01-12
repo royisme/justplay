@@ -1,38 +1,16 @@
 /**
  * @file _index.tsx
-<<<<<<< HEAD
- * @description The landing page of the application. Allows users to start a new game session.
- * @module IndexRoute
- *
- * @features
- * - Genre selection (updates visual theme via data-theme attribute).
- * - Language toggle (i18n integration with Cookie persistence).
- * - Form submission to `game.new` action.
- *
- * @maintenance
- * - Ensure `genreToTheme` map matches CSS theme definitions in `app.css`.
- * - Update genre options in i18n JSON files when adding new story types.
-=======
  * @description Landing page route. Minimal route file delegating to HomePage component.
  * @module routes/_index
->>>>>>> feature/architecture-refactor
  *
  * @author Claude Code
  * @date 2025-01-26
  */
 
-<<<<<<< HEAD
-import { type MetaFunction } from "react-router";
-import { House, Play } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
-import { setLanguageCookie } from "~/i18n";
-=======
 import type { MetaFunction } from "react-router";
 import { HomePage } from "~/pages/HomePage";
 
 // --- Meta ---
->>>>>>> feature/architecture-refactor
 
 export const meta: MetaFunction = () => {
   return [
@@ -47,114 +25,5 @@ export const meta: MetaFunction = () => {
 // --- Component ---
 
 export default function Index() {
-<<<<<<< HEAD
-  const { t, i18n } = useTranslation();
-  const [theme, setTheme] = useState("default");
-
-  const toggleLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-    setLanguageCookie(lng); // Persist to Cookie for SSR sync
-  };
-
-  const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const genreToTheme: Record<string, string> = {
-      东方玄幻: "xuanhuan",
-      西方魔幻: "magic",
-      赛博朋克: "cyberpunk",
-      悬疑解谜: "mystery",
-      末世科幻: "scifi",
-    };
-    setTheme(genreToTheme[e.target.value] || "default");
-  };
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 transition-colors duration-500">
-      <nav className="absolute top-4 right-4">
-        <div className="flex gap-2">
-          <button
-            onClick={() => toggleLanguage("zh")}
-            className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-              i18n.language.startsWith("zh")
-                ? "bg-accent text-white"
-                : "bg-background-secondary text-text-secondary hover:bg-border"
-            }`}
-          >
-            中文
-          </button>
-          <button
-            onClick={() => toggleLanguage("en")}
-            className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-              i18n.language.startsWith("en")
-                ? "bg-accent text-white"
-                : "bg-background-secondary text-text-secondary hover:bg-border"
-            }`}
-          >
-            EN
-          </button>
-        </div>
-      </nav>
-
-      <header className="mb-12 text-center">
-        <h1 className="text-5xl font-bold tracking-tight mb-4 flex items-center justify-center gap-3">
-          <House size={48} weight="duotone" className="text-accent" />
-          {t("app.title")}
-        </h1>
-        <p className="text-xl text-text-secondary max-w-lg">
-          {t("app.description")}
-        </p>
-      </header>
-
-      <main className="w-full max-w-md space-y-4">
-        <div className="bg-background-secondary p-8 rounded-2xl border border-border shadow-sm">
-          <h2 className="text-2xl font-semibold mb-6">
-            {t("home.start_adventure")}
-          </h2>
-
-          <form method="post" action="/game/new" className="space-y-6">
-            <input type="hidden" name="lng" value={i18n.language} />
-            <div className="space-y-2">
-              <label
-                htmlFor="story_type"
-                className="text-sm font-medium text-text-secondary"
-              >
-                {t("home.select_genre")}
-              </label>
-              <select
-                id="story_type"
-                name="story_type"
-                onChange={handleGenreChange}
-                className="w-full p-3 bg-background-primary border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all"
-                defaultValue="东方玄幻"
-              >
-                <option value="东方玄幻">{t("home.genres.xuanhuan")}</option>
-                <option value="西方魔幻">{t("home.genres.magic")}</option>
-                <option value="赛博朋克">{t("home.genres.cyberpunk")}</option>
-                <option value="悬疑解谜">{t("home.genres.mystery")}</option>
-                <option value="末世科幻">{t("home.genres.scifi")}</option>
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-lg shadow-accent/20"
-            >
-              <Play size={24} weight="fill" />
-              {t("home.generate_story")}
-            </button>
-          </form>
-        </div>
-      </main>
-
-      <footer className="mt-20 text-text-secondary text-sm">
-        {t("common.powered_by")}
-      </footer>
-    </div>
-  );
-=======
   return <HomePage />;
->>>>>>> feature/architecture-refactor
 }

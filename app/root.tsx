@@ -19,12 +19,9 @@ import {
 } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
-<<<<<<< HEAD
-import i18n, { extractLanguageFromCookie, setLanguageCookie } from "./i18n";
-=======
-import i18n, { setLanguageCookie } from "~/config/i18n.client";
+import { setLanguageCookie } from "~/i18n";
 import { extractLanguageFromCookie } from "@server/i18n.server";
->>>>>>> feature/architecture-refactor
+import { DEFAULT_LANGUAGE } from "@shared/types/i18n";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -48,17 +45,7 @@ export const links: Route.LinksFunction = () => [
  */
 export async function loader({ request }: Route.LoaderArgs) {
   const cookieHeader = request.headers.get("Cookie");
-<<<<<<< HEAD
-  const language = extractLanguageFromCookie(cookieHeader) || "zh";
-=======
   const language = extractLanguageFromCookie(cookieHeader);
->>>>>>> feature/architecture-refactor
-
-  // Initialize i18n for SSR rendering
-  // This happens server-side before component render
-  if (typeof i18n.changeLanguage === "function") {
-    await i18n.changeLanguage(language);
-  }
 
   return { language };
 }
@@ -66,7 +53,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { language } = useLoaderData<LoaderData>();
+  const loaderData = useLoaderData<LoaderData>();
+  const language = loaderData?.language ?? DEFAULT_LANGUAGE;
   const { i18n: i18nInstance } = useTranslation();
 
   // Client-side hydration sync:

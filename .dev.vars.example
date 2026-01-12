@@ -1,0 +1,12 @@
+# OpenRouter API Key (required for AI story generation)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+# OpenRouter model configuration
+OPENROUTER_MODEL=openai/gpt-4o
+
+# Node number for story generation (optional)
+NODE_NUM=6
+
+# Legacy OpenAI configuration (if using OpenAI directly)
+# OPENAI_API_KEY=your_openai_api_key_here
+# OPENAI_MODEL=gpt-4o

@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 import { GamePage } from "~/pages/GamePage";
 import { getDb } from "@server/db/client";
 import { games } from "@server/db/schema";
-import { getEnv, getAIConfig } from "@server/config/env";
+import { getEnv } from "@server/config/env";
 import { AIService, GameService } from "@server/services";
 import { getLanguageFromRequest } from "@server/i18n.server";
 import { normalizeLanguage } from "@shared/types/i18n";
@@ -73,8 +73,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
       languageParam || getLanguageFromRequest(request),
     );
 
-    const aiConfig = getAIConfig(env);
-    const aiService = new AIService(aiConfig);
+    const aiService = await AIService.createDefault(env);
     const gameService = new GameService(aiService, env);
 
     const nextScene = await gameService.advanceGame(

@@ -7,6 +7,13 @@ OPENROUTER_MODEL=openai/gpt-4o
 # Node number for story generation (optional)
 NODE_NUM=6
 
+# Better Auth configuration (required for admin panel)
+BETTER_AUTH_SECRET=your_32_character_or_longer_secret_key_here
+BETTER_AUTH_URL=http://localhost:5173
+
+# Admin email - user with this email gets admin role on signup
+ADMIN_EMAIL=admin@example.com
+
 # Legacy OpenAI configuration (if using OpenAI directly)
 # OPENAI_API_KEY=your_openai_api_key_here
 # OPENAI_MODEL=gpt-4o

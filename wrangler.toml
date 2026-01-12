@@ -1,6 +1,7 @@
 name = "just-play-game"
 main = "./build/server/index.js"
 compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_als"]
 assets = { directory = "./build/client" }
 
 [vars]
@@ -9,8 +10,10 @@ assets = { directory = "./build/client" }
 OPENROUTER_MODEL = "openai/gpt-4o"
 NODE_NUM = "6"
 
-# Legacy OpenAI vars (kept for backward compatibility)
-# OPENAI_MODEL = "gpt-4o"
+# Better Auth configuration
+# BETTER_AUTH_SECRET must be set in .dev.vars or Cloudflare secrets (min 32 chars)
+# BETTER_AUTH_URL = "http://localhost:5173" (set in .dev.vars for local dev)
+# ADMIN_EMAIL = "admin@example.com" (email that gets admin role on signup)
 
 [[d1_databases]]
 binding = "DB"

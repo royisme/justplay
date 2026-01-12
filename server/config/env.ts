@@ -17,6 +17,11 @@ export const EnvSchema = z.object({
     message: "DB binding is required",
   }),
 
+  // Better Auth Configuration
+  BETTER_AUTH_SECRET: z.string().min(32),
+  BETTER_AUTH_URL: z.string().url().optional(),
+  ADMIN_EMAIL: z.string().email().optional(), // Admin user binding
+
   // AI Provider Configuration
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_BASE_URL: z.string().url().optional(),
@@ -36,6 +41,7 @@ export const EnvSchema = z.object({
 });
 
 export type Env = z.infer<typeof EnvSchema>;
+export type AppEnv = Env; // Alias for better-auth compatibility
 
 // --- Cloudflare Context Type ---
 

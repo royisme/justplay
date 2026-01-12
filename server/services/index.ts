@@ -5,5 +5,11 @@
  * @module server/services
  */
 
-export { AIService } from "./ai.server";
+export {
+  AIService,
+  getDefaultProviderConfig,
+  getProviderConfig,
+  type AIServiceConfig,
+} from "./ai.server";
 export { GameService } from "./game.server";
+// Auth is now handled by Better Auth - see server/auth/auth.ts

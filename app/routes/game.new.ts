@@ -10,7 +10,7 @@
 
 import { redirect } from "react-router";
 import type { ActionFunctionArgs } from "react-router";
-import { getEnv, getAIConfig, getNodeNum } from "@server/config/env";
+import { getEnv, getNodeNum } from "@server/config/env";
 import { AIService, GameService } from "@server/services";
 import { normalizeLanguage } from "@shared/types/i18n";
 
@@ -26,11 +26,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
   // Get environment and configuration
   const env = getEnv(context);
-  const aiConfig = getAIConfig(env);
   const nodeNum = getNodeNum(env);
 
-  // Initialize services
-  const aiService = new AIService(aiConfig);
+  // Initialize services using default provider from database/env
+  const aiService = await AIService.createDefault(env);
   const gameService = new GameService(aiService, env);
 
   try {

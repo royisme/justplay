@@ -15,6 +15,13 @@
       "when": 1768264060258,
       "tag": "0001_famous_punisher",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1768313096772,
+      "tag": "0002_add_scenarios_update_games",
+      "breakpoints": true
     }
   ]
 }

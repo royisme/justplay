@@ -14,10 +14,30 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/login": {
+    params: {};
+  };
+  "/auth/login": {
+    params: {};
+  };
+  "/auth/logout": {
+    params: {};
+  };
+  "/dashboard": {
+    params: {};
+  };
   "/game/new": {
     params: {};
   };
   "/game/:id": {
+    params: {
+      "id": string;
+    };
+  };
+  "/library": {
+    params: {};
+  };
+  "/library/:id": {
     params: {
       "id": string;
     };
@@ -27,22 +47,19 @@ type Pages = {
       "*": string;
     };
   };
-  "/auth/login": {
-    params: {};
-  };
-  "/auth/logout": {
-    params: {};
-  };
   "/admin": {
+    params: {};
+  };
+  "/admin/scenarios": {
+    params: {};
+  };
+  "/admin/users": {
     params: {};
   };
   "/admin/providers": {
     params: {};
   };
-  "/admin/prompts": {
-    params: {};
-  };
-  "/admin/playground": {
+  "/admin/audit": {
     params: {};
   };
 };
@@ -50,23 +67,15 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/game/new" | "/game/:id" | "/api/auth/*" | "/auth/login" | "/auth/logout" | "/admin" | "/admin/providers" | "/admin/prompts" | "/admin/playground";
+    page: "/" | "/login" | "/auth/login" | "/auth/logout" | "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id" | "/api/auth/*" | "/admin" | "/admin/scenarios" | "/admin/users" | "/admin/providers" | "/admin/audit";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
     page: "/";
   };
-  "routes/game.new.ts": {
-    id: "routes/game.new";
-    page: "/game/new";
-  };
-  "routes/game.$id.tsx": {
-    id: "routes/game.$id";
-    page: "/game/:id";
-  };
-  "routes/api.auth.$.ts": {
-    id: "routes/api.auth.$";
-    page: "/api/auth/*";
+  "routes/login.tsx": {
+    id: "routes/login";
+    page: "/login";
   };
   "routes/auth.login.tsx": {
     id: "routes/auth.login";
@@ -76,39 +85,77 @@ type RouteFiles = {
     id: "routes/auth.logout";
     page: "/auth/logout";
   };
+  "routes/_app/layout.tsx": {
+    id: "routes/_app/layout";
+    page: "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id";
+  };
+  "routes/_app/dashboard.tsx": {
+    id: "routes/_app/dashboard";
+    page: "/dashboard";
+  };
+  "routes/_app/game.new.tsx": {
+    id: "routes/_app/game.new";
+    page: "/game/new";
+  };
+  "routes/_app/game.$id.tsx": {
+    id: "routes/_app/game.$id";
+    page: "/game/:id";
+  };
+  "routes/_app/library.tsx": {
+    id: "routes/_app/library";
+    page: "/library";
+  };
+  "routes/_app/library.$id.tsx": {
+    id: "routes/_app/library.$id";
+    page: "/library/:id";
+  };
+  "routes/api.auth.$.ts": {
+    id: "routes/api.auth.$";
+    page: "/api/auth/*";
+  };
   "routes/admin/layout.tsx": {
     id: "routes/admin/layout";
-    page: "/admin" | "/admin/providers" | "/admin/prompts" | "/admin/playground";
+    page: "/admin" | "/admin/scenarios" | "/admin/users" | "/admin/providers" | "/admin/audit";
   };
   "routes/admin/_index.tsx": {
     id: "routes/admin/_index";
     page: "/admin";
   };
+  "routes/admin/scenarios.tsx": {
+    id: "routes/admin/scenarios";
+    page: "/admin/scenarios";
+  };
+  "routes/admin/users.tsx": {
+    id: "routes/admin/users";
+    page: "/admin/users";
+  };
   "routes/admin/providers.tsx": {
     id: "routes/admin/providers";
     page: "/admin/providers";
   };
-  "routes/admin/prompts.tsx": {
-    id: "routes/admin/prompts";
-    page: "/admin/prompts";
-  };
-  "routes/admin/playground.tsx": {
-    id: "routes/admin/playground";
-    page: "/admin/playground";
+  "routes/admin/audit.tsx": {
+    id: "routes/admin/audit";
+    page: "/admin/audit";
   };
 };
 
 type RouteModules = {
   "root": typeof import("./app/root.tsx");
   "routes/_index": typeof import("./app/routes/_index.tsx");
-  "routes/game.new": typeof import("./app/routes/game.new.ts");
-  "routes/game.$id": typeof import("./app/routes/game.$id.tsx");
-  "routes/api.auth.$": typeof import("./app/routes/api.auth.$.ts");
+  "routes/login": typeof import("./app/routes/login.tsx");
   "routes/auth.login": typeof import("./app/routes/auth.login.tsx");
   "routes/auth.logout": typeof import("./app/routes/auth.logout.ts");
+  "routes/_app/layout": typeof import("./app/routes/_app/layout.tsx");
+  "routes/_app/dashboard": typeof import("./app/routes/_app/dashboard.tsx");
+  "routes/_app/game.new": typeof import("./app/routes/_app/game.new.tsx");
+  "routes/_app/game.$id": typeof import("./app/routes/_app/game.$id.tsx");
+  "routes/_app/library": typeof import("./app/routes/_app/library.tsx");
+  "routes/_app/library.$id": typeof import("./app/routes/_app/library.$id.tsx");
+  "routes/api.auth.$": typeof import("./app/routes/api.auth.$.ts");
   "routes/admin/layout": typeof import("./app/routes/admin/layout.tsx");
   "routes/admin/_index": typeof import("./app/routes/admin/_index.tsx");
+  "routes/admin/scenarios": typeof import("./app/routes/admin/scenarios.tsx");
+  "routes/admin/users": typeof import("./app/routes/admin/users.tsx");
   "routes/admin/providers": typeof import("./app/routes/admin/providers.tsx");
-  "routes/admin/prompts": typeof import("./app/routes/admin/prompts.tsx");
-  "routes/admin/playground": typeof import("./app/routes/admin/playground.tsx");
+  "routes/admin/audit": typeof import("./app/routes/admin/audit.tsx");
 };

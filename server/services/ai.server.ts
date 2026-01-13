@@ -139,51 +139,6 @@ function extractJson(text: string): string {
   return text.trim();
 }
 
-// --- JSON Example Generator ---
-
-/**
- * Generate a concrete JSON example from a Zod schema.
- * This helps LLMs understand the exact format expected.
- */
-function generateJsonExample(schema: z.ZodType): unknown {
-  if (schema instanceof z.ZodObject) {
-    const shape = schema._def.shape();
-    const result: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(shape)) {
-      result[key] = generateJsonExample(value as z.ZodType);
-    }
-    return result;
-  }
-  if (schema instanceof z.ZodArray) {
-    return [generateJsonExample(schema._def.type)];
-  }
-  if (schema instanceof z.ZodString) {
-    const desc = schema._def.description;
-    return desc ? `<${desc}>` : "<string>";
-  }
-  if (schema instanceof z.ZodNumber) {
-    return 1;
-  }
-  if (schema instanceof z.ZodBoolean) {
-    return true;
-  }
-  if (schema instanceof z.ZodOptional) {
-    return generateJsonExample(schema._def.innerType);
-  }
-  if (schema instanceof z.ZodDefault) {
-    return schema._def.defaultValue();
-  }
-  if (schema instanceof z.ZodUnion) {
-    // Return first option as example
-    return generateJsonExample(schema._def.options[0]);
-  }
-  if (schema instanceof z.ZodEffects) {
-    // For transformed schemas, use the inner schema
-    return generateJsonExample(schema._def.schema);
-  }
-  return "<value>";
-}
-
 // --- AI Service Class ---
 
 /**

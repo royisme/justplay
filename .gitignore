@@ -28,3 +28,6 @@ dist/
 worker-configuration.d.ts
 .env
 .dev.vars
+*.tsbuildinfo
+.tldr
+thoughts

@@ -111,8 +111,63 @@ export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
 
 CardFooter.displayName = "CardFooter";
 
+export interface CardContentProps extends HTMLAttributes<HTMLDivElement> {
+  children?: ReactNode;
+}
+
+export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn("p-6 pt-0", className)} {...props}>
+        {children}
+      </div>
+    );
+  }
+);
+
+CardContent.displayName = "CardContent";
+
+export interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
+  children?: ReactNode;
+}
+
+export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <h3
+        ref={ref}
+        className={cn("font-semibold leading-none tracking-tight", className)}
+        {...props}
+      >
+        {children}
+      </h3>
+    );
+  }
+);
+
+CardTitle.displayName = "CardTitle";
+
+export interface CardDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
+  children?: ReactNode;
+}
+
+export const CardDescription = forwardRef<HTMLParagraphElement, CardDescriptionProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <p ref={ref} className={cn("text-sm text-text-muted", className)} {...props}>
+        {children}
+      </p>
+    );
+  }
+);
+
+CardDescription.displayName = "CardDescription";
+
 export default Object.assign(Card, {
   Header: CardHeader,
   Body: CardBody,
   Footer: CardFooter,
+  Content: CardContent,
+  Title: CardTitle,
+  Description: CardDescription,
 });

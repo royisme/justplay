@@ -5,9 +5,17 @@
  */
 
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "choice";
-export type ButtonSize = "sm" | "md" | "lg";
+// Utility for merging tailwind classes
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "choice" | "outline" | "link";
+export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -16,6 +24,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ReactNode;
   iconPosition?: "left" | "right";
   fullWidth?: boolean;
+  asChild?: boolean;
   children?: ReactNode;
 }
 
@@ -33,12 +42,16 @@ const variantStyles: Record<ButtonVariant, string> = {
     "bg-red-500 hover:bg-red-600 text-white shadow-md shadow-red-500/20",
   choice:
     "w-full text-left justify-start border border-border bg-surface hover:bg-accent/5 hover:border-accent hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group font-serif text-lg py-4 px-6 text-text-primary",
+  outline:
+    "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+  link: "text-primary underline-offset-4 hover:underline",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
   sm: "px-3 py-1.5 text-sm gap-1.5",
   md: "px-4 py-2.5 text-base gap-2",
   lg: "px-6 py-4 text-lg gap-2.5",
+  icon: "h-10 w-10",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -50,6 +63,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       icon,
       iconPosition = "left",
       fullWidth = false,
+      asChild = false,
       disabled,
       className = "",
       children,
@@ -57,30 +71,29 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const Comp = asChild ? Slot : "button";
     const isDisabled = disabled || loading;
 
     const appliedSize = variant === "choice" ? "" : sizeStyles[size];
 
-    const classes = [
+    const classes = cn(
       baseStyles,
       variantStyles[variant],
       appliedSize,
       fullWidth ? "w-full" : "",
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+      className
+    );
 
     return (
-      <button
+      <Comp
         ref={ref}
         disabled={isDisabled}
         className={classes}
         {...props}
       >
-        {loading && (
+        {loading && !asChild && (
           <svg
-            className="animate-spin h-4 w-4"
+            className="animate-spin h-4 w-4 mr-2"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -101,16 +114,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
 
-        {!loading && icon && iconPosition === "left" && icon}
+        {!loading && icon && iconPosition === "left" && !asChild && icon}
 
-        {variant === "choice" && (
+        {variant === "choice" && !asChild && (
           <span className="absolute left-0 top-0 bottom-0 w-1 bg-accent opacity-0 transition-opacity group-hover:opacity-100" />
         )}
 
         {children}
 
-        {!loading && icon && iconPosition === "right" && icon}
-      </button>
+        {!loading && icon && iconPosition === "right" && !asChild && icon}
+      </Comp>
     );
   }
 );

@@ -18,7 +18,7 @@ export default defineConfig({
   schema: "./server/db/schema.ts",
 
   // Output directory for migrations
-  out: "./drizzle",
+  out: "./migrations",
 
   // Database dialect
   dialect: "sqlite",

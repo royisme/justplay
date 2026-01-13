@@ -6,10 +6,8 @@
 
 import { forwardRef, type HTMLAttributes, type ReactNode } from "react";
 
-// --- Types ---
-
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "outlined" | "elevated";
+  variant?: "default" | "outlined" | "elevated" | "paper";
   padding?: "none" | "sm" | "md" | "lg";
   children: ReactNode;
 }
@@ -26,18 +24,16 @@ export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-// --- Utility ---
-
 function cn(...classes: (string | undefined | false)[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
-// --- Card Component ---
-
 const variantStyles: Record<NonNullable<CardProps["variant"]>, string> = {
-  default: "bg-background-secondary border border-border",
+  default: "bg-surface border border-border/60 shadow-sm",
   outlined: "bg-transparent border border-border",
-  elevated: "bg-background-secondary shadow-lg",
+  elevated: "bg-surface shadow-lg border border-border/20",
+  paper:
+    "bg-background-primary border border-border shadow-sm relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/40 before:to-transparent before:pointer-events-none",
 };
 
 const paddingStyles: Record<NonNullable<CardProps["padding"]>, string> = {
@@ -53,7 +49,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-2xl transition-colors",
+          "rounded-2xl transition-all duration-300",
           variantStyles[variant],
           paddingStyles[padding],
           className
@@ -68,14 +64,15 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 
 Card.displayName = "Card";
 
-// --- Card.Header ---
-
 export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <div
         ref={ref}
-        className={cn("mb-4 border-b border-border pb-4", className)}
+        className={cn(
+          "mb-4 border-b border-border/40 pb-4 font-serif text-lg font-semibold text-text-primary",
+          className
+        )}
         {...props}
       >
         {children}
@@ -86,12 +83,10 @@ export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
 
 CardHeader.displayName = "CardHeader";
 
-// --- Card.Body ---
-
 export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn("flex-1", className)} {...props}>
+      <div ref={ref} className={cn("flex-1 text-text-secondary leading-relaxed", className)} {...props}>
         {children}
       </div>
     );
@@ -100,14 +95,12 @@ export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
 
 CardBody.displayName = "CardBody";
 
-// --- Card.Footer ---
-
 export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <div
         ref={ref}
-        className={cn("mt-4 border-t border-border pt-4", className)}
+        className={cn("mt-6 border-t border-border/40 pt-4 flex items-center", className)}
         {...props}
       >
         {children}
@@ -117,8 +110,6 @@ export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
 );
 
 CardFooter.displayName = "CardFooter";
-
-// --- Compound Export ---
 
 export default Object.assign(Card, {
   Header: CardHeader,

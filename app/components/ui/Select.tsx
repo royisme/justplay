@@ -4,7 +4,7 @@
  * @module app/components/ui/Select
  */
 
-import { forwardRef, type SelectHTMLAttributes, type ReactNode } from "react";
+import { forwardRef, useId, type SelectHTMLAttributes, type ReactNode } from "react";
 
 // --- Types ---
 
@@ -72,7 +72,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     },
     ref
   ) => {
-    const selectId = id || `select-${Math.random().toString(36).slice(2, 9)}`;
+    const generatedId = useId();
+    const selectId = id || `select-${generatedId}`;
 
     const selectClasses = cn(
       baseStyles,

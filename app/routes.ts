@@ -7,13 +7,16 @@ import {
 
 export default [
   index("routes/_index.tsx"),
+  route("play", "routes/play.tsx"),
+  route("login", "routes/login.tsx"),
   route("game/new", "routes/game.new.ts"),
   route("game/:id", "routes/game.$id.tsx"),
 
-  // Better Auth API routes
+  // API routes
   route("api/auth/*", "routes/api.auth.$.ts"),
+  route("api/game/stream", "routes/api.game.stream.ts"),
 
-  // Auth UI routes
+  // Auth UI routes (admin)
   route("auth/login", "routes/auth.login.tsx"),
   route("auth/logout", "routes/auth.logout.ts"),
 

@@ -50,6 +50,7 @@ export class GameService {
    * @returns The ID of the newly created game
    */
   async createNewGame(
+    userId: string,
     storyType: string,
     language: SupportedLanguage,
     nodeNum: number = 6,
@@ -60,7 +61,10 @@ export class GameService {
     // 1. Create initial game record
     const [{ id: gameId }] = await db
       .insert(games)
-      .values({ storyType })
+      .values({
+        storyType,
+        userId,
+      })
       .returning({ id: games.id });
 
     // 2. Generate Story Concept

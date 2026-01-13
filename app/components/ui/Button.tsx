@@ -6,9 +6,7 @@
 
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
-// --- Types ---
-
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "choice";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -21,20 +19,20 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
 }
 
-// --- Styles ---
-
 const baseStyles =
   "inline-flex items-center justify-center font-medium rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-accent hover:bg-accent-hover text-white shadow-lg shadow-accent/20 focus:ring-accent",
+    "bg-primary hover:bg-primary/90 text-background-primary shadow-md border border-transparent font-sans",
   secondary:
-    "bg-background-secondary hover:bg-border text-text-primary border border-border focus:ring-border",
+    "bg-secondary/10 hover:bg-secondary/20 text-text-primary border border-secondary/20 font-sans",
   ghost:
-    "bg-transparent hover:bg-background-secondary text-text-secondary hover:text-text-primary focus:ring-border",
+    "bg-transparent hover:bg-accent/5 text-text-secondary hover:text-text-primary",
   danger:
-    "bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/20 focus:ring-red-500",
+    "bg-red-500 hover:bg-red-600 text-white shadow-md shadow-red-500/20",
+  choice:
+    "w-full text-left justify-start border border-border bg-surface hover:bg-accent/5 hover:border-accent hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group font-serif text-lg py-4 px-6 text-text-primary",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -42,8 +40,6 @@ const sizeStyles: Record<ButtonSize, string> = {
   md: "px-4 py-2.5 text-base gap-2",
   lg: "px-6 py-4 text-lg gap-2.5",
 };
-
-// --- Component ---
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -63,10 +59,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const isDisabled = disabled || loading;
 
+    const appliedSize = variant === "choice" ? "" : sizeStyles[size];
+
     const classes = [
       baseStyles,
       variantStyles[variant],
-      sizeStyles[size],
+      appliedSize,
       fullWidth ? "w-full" : "",
       className,
     ]
@@ -80,7 +78,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={classes}
         {...props}
       >
-        {/* Loading spinner */}
         {loading && (
           <svg
             className="animate-spin h-4 w-4"
@@ -104,13 +101,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
 
-        {/* Left icon */}
         {!loading && icon && iconPosition === "left" && icon}
 
-        {/* Children */}
+        {variant === "choice" && (
+          <span className="absolute left-0 top-0 bottom-0 w-1 bg-accent opacity-0 transition-opacity group-hover:opacity-100" />
+        )}
+
         {children}
 
-        {/* Right icon */}
         {!loading && icon && iconPosition === "right" && icon}
       </button>
     );

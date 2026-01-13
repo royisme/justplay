@@ -25,3 +25,6 @@ dist/
 .react-router
 .wrangler
 .works
+worker-configuration.d.ts
+.env
+.dev.vars

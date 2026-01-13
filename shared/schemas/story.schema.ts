@@ -18,7 +18,7 @@ export const StoryConceptSchema = z.object({
   writing_style: z
     .string()
     .describe(
-      "A concise and imaginative writing style description that can be used directly in AI instructions"
+      "A concise and imaginative writing style description that can be used directly in AI instructions",
     ),
 });
 
@@ -52,27 +52,61 @@ export type StoryMap = z.infer<typeof StoryMapSchema>;
 // --- Scene and Choices ---
 
 export const ChoiceSchema = z.object({
-  id: z.number().describe("Choice identifier"),
+  id: z
+    .union([z.number(), z.string()])
+    .transform((val) =>
+      typeof val === "string" ? parseInt(val, 10) || 0 : val,
+    )
+    .describe("Choice identifier"),
   text: z.string().describe("Choice text displayed to player"),
 });
 
 export type Choice = z.infer<typeof ChoiceSchema>;
 
-export const SceneDataSchema = z.object({
-  current_node_id: z
-    .string()
-    .describe("Current node ID from the story map blueprint"),
-  content: z.string().describe("Story content for this scene"),
-  choices: z.array(ChoiceSchema).describe("Available choices for the player"),
-});
+export const SceneDataSchema = z
+  .object({
+    current_node_id: z
+      .string()
+      .optional()
+      .default("unknown")
+      .describe("Current node ID from the story map blueprint"),
+    content: z.string().optional().describe("Story content for this scene"),
+    story: z
+      .string()
+      .optional()
+      .describe("Alternative field for story content"),
+    choices: z
+      .array(ChoiceSchema)
+      .optional()
+      .describe("Available choices for the player"),
+    options: z
+      .array(ChoiceSchema)
+      .optional()
+      .describe("Alternative field for choices"),
+  })
+  .transform((data) => ({
+    current_node_id: data.current_node_id || "unknown",
+    content: data.content || data.story || "",
+    choices: data.choices || data.options || [],
+  }));
 
-export type SceneData = z.infer<typeof SceneDataSchema>;
+export type SceneData = {
+  current_node_id: string;
+  content: string;
+  choices: Choice[];
+};
 
-export const ChoicesResponseSchema = z.object({
-  choices: z.array(ChoiceSchema),
-});
+export const ChoicesResponseSchema = z
+  .object({
+    choices: z.array(ChoiceSchema).optional(),
+    options: z.array(ChoiceSchema).optional(),
+  })
+  .transform((data) => ({
+    // Normalize: prefer 'choices', fallback to 'options'
+    choices: data.choices || data.options || [],
+  }));
 
-export type ChoicesResponse = z.infer<typeof ChoicesResponseSchema>;
+export type ChoicesResponse = { choices: Choice[] };
 
 // --- Story History ---
 

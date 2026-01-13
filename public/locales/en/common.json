@@ -3,6 +3,26 @@
     "title": "JustPlay",
     "description": "Dive into infinite possibilities. Your choices shape the world."
   },
+  "landing": {
+    "hero_description": "Experience AI-generated interactive stories where every choice you make shapes a unique adventure. Choose your genre and let the AI craft your personal epic.",
+    "play_now": "Play Now",
+    "how_it_works": "How It Works",
+    "admin_login": "Admin",
+    "features": {
+      "ai": {
+        "title": "AI-Powered Stories",
+        "desc": "Advanced AI generates unique narratives that adapt to your choices in real-time."
+      },
+      "genres": {
+        "title": "Multiple Genres",
+        "desc": "From Eastern fantasy to cyberpunk, choose the world you want to explore."
+      },
+      "choices": {
+        "title": "Your Choices Matter",
+        "desc": "Every decision branches the story into new possibilities. No two adventures are the same."
+      }
+    }
+  },
   "home": {
     "start_adventure": "Start a New Adventure",
     "select_genre": "Select Genre",
@@ -14,6 +34,19 @@
       "mystery": "Mystery Solving",
       "scifi": "Apocalyptic Sci-Fi"
     }
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to continue your adventure.",
+    "email": "Email",
+    "email_placeholder": "your@email.com",
+    "password": "Password",
+    "password_placeholder": "Enter password",
+    "sign_in": "Sign In",
+    "signing_in": "Signing in...",
+    "no_account": "Don't have an account?",
+    "create_account": "Create one",
+    "back_home": "Back to Home"
   },
   "game": {
     "loading": "Building the thread of destiny...",

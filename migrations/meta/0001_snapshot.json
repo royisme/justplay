@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "47a9b978-56c4-4302-b821-043004c7b759",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "b4e7a6b3-2dae-4dff-bd25-da2143af9d3e",
+  "prevId": "81b800b9-dc95-4bd8-8f25-c0adc93ef0cd",
   "tables": {
     "account": {
       "name": "account",
@@ -131,6 +131,13 @@
           "notNull": true,
           "autoincrement": true
         },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "story_type": {
           "name": "story_type",
           "type": "text",
@@ -207,7 +214,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "games_user_id_user_id_fk": {
+          "name": "games_user_id_user_id_fk",
+          "tableFrom": "games",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

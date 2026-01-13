@@ -16,6 +16,10 @@ import { sql } from "drizzle-orm";
 export const games = sqliteTable("games", {
   id: integer("id").primaryKey({ autoIncrement: true }),
 
+  userId: text("user_id")
+    .references(() => user.id)
+    .notNull(),
+
   // Core fields
   storyType: text("story_type").notNull(),
   writingStyle: text("writing_style"),

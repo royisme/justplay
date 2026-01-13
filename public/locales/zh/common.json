@@ -3,6 +3,26 @@
     "title": "JustPlay",
     "description": "进入无限可能的世界。你的选择决定故事的走向。"
   },
+  "landing": {
+    "hero_description": "体验由 AI 生成的互动故事，每一个选择都将塑造属于你的独特冒险。选择你喜欢的类型，让 AI 为你创作专属史诗。",
+    "play_now": "开始游戏",
+    "how_it_works": "游戏玩法",
+    "admin_login": "管理员",
+    "features": {
+      "ai": {
+        "title": "AI 驱动故事",
+        "desc": "先进的 AI 实时生成独特叙事，根据你的选择动态调整剧情。"
+      },
+      "genres": {
+        "title": "多种题材",
+        "desc": "从东方玄幻到赛博朋克，选择你想探索的世界。"
+      },
+      "choices": {
+        "title": "你的选择很重要",
+        "desc": "每个决定都会将故事引向新的可能。没有两次冒险是相同的。"
+      }
+    }
+  },
   "home": {
     "start_adventure": "开始新的冒险",
     "select_genre": "选择故事类型",
@@ -14,6 +34,19 @@
       "mystery": "悬疑解谜",
       "scifi": "末世科幻"
     }
+  },
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "登录以继续你的冒险。",
+    "email": "邮箱",
+    "email_placeholder": "your@email.com",
+    "password": "密码",
+    "password_placeholder": "输入密码",
+    "sign_in": "登录",
+    "signing_in": "登录中...",
+    "no_account": "还没有账号？",
+    "create_account": "创建账号",
+    "back_home": "返回首页"
   },
   "game": {
     "loading": "正在构建命运的脉络...",

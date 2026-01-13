@@ -1,18 +1,20 @@
 /**
  * @file game.$id.tsx
  * @description Game detail route. Handles loader/action, delegates rendering to GamePage.
+ * Protected route - requires authentication.
  * @module routes/game.$id
  *
  * @author Claude Code
  * @date 2025-01-26
  */
 
-import { useLoaderData } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import { eq } from "drizzle-orm";
 import { GamePage } from "~/pages/GamePage";
 import { getDb } from "@server/db/client";
 import { games } from "@server/db/schema";
 import { getEnv } from "@server/config/env";
+import { createAuth } from "@server/auth/auth";
 import { AIService, GameService } from "@server/services";
 import { getLanguageFromRequest } from "@server/i18n.server";
 import { normalizeLanguage } from "@shared/types/i18n";
@@ -23,10 +25,21 @@ type LoaderData = Awaited<ReturnType<typeof loader>>;
 
 // --- Loader ---
 
-export async function loader({ params, context }: Route.LoaderArgs) {
+export async function loader({ request, params, context }: Route.LoaderArgs) {
   const env = getEnv(context);
-  const gameId = parseInt(params.id);
   const db = getDb(env);
+  const auth = createAuth(db, env);
+
+  // Auth guard
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+
+  if (!session?.user) {
+    return redirect(`/login?returnTo=/game/${params.id}`);
+  }
+
+  const gameId = parseInt(params.id);
 
   const game = await db.query.games.findFirst({
     where: eq(games.id, gameId),
@@ -34,6 +47,11 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 
   if (!game) {
     throw new Response("Game Not Found", { status: 404 });
+  }
+
+  // Verify user owns this game
+  if (game.userId !== session.user.id) {
+    throw new Response("Forbidden", { status: 403 });
   }
 
   return { game: game as Game };

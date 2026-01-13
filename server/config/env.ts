@@ -23,6 +23,11 @@ export const EnvSchema = z.object({
   ADMIN_EMAIL: z.string().email().optional(), // Admin user binding
 
   // AI Provider Configuration
+  // Custom Provider (Highest Priority)
+  CUSTOM_API_KEY: z.string().optional(),
+  CUSTOM_BASE_URL: z.string().url().optional(),
+  CUSTOM_MODEL: z.string().optional(),
+
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_BASE_URL: z.string().url().optional(),
   OPENROUTER_MODEL: z.string().optional(),

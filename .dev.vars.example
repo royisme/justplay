@@ -1,19 +1,45 @@
-# OpenRouter API Key (required for AI story generation)
-OPENROUTER_API_KEY=your_openrouter_api_key_here
+# ================================================
+# JustPlay Environment Configuration
+# ================================================
+# Copy this file to .dev.vars and fill in your values
+# For production, set these in Cloudflare dashboard
 
-# OpenRouter model configuration
-OPENROUTER_MODEL=openai/gpt-4o
+# ================================================
+# Better Auth (Required for Admin Panel)
+# ================================================
 
-# Node number for story generation (optional)
-NODE_NUM=6
-
-# Better Auth configuration (required for admin panel)
+# Secret key for session encryption (minimum 32 characters)
+# Generate with: openssl rand -base64 32
 BETTER_AUTH_SECRET=your_32_character_or_longer_secret_key_here
+
+# Base URL for auth callbacks (use your deployment URL in production)
 BETTER_AUTH_URL=http://localhost:5173
 
-# Admin email - user with this email gets admin role on signup
+# Admin email - user who signs up with this email gets admin role
 ADMIN_EMAIL=admin@example.com
 
-# Legacy OpenAI configuration (if using OpenAI directly)
+# ================================================
+# AI Provider Configuration
+# ================================================
+# The system uses OpenAI-compatible API format.
+# You can use OpenRouter, OpenAI, or any compatible provider.
+
+# Option 1: OpenRouter (Recommended - access to multiple models)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=openai/gpt-4o
+
+# Option 2: OpenAI Direct
 # OPENAI_API_KEY=your_openai_api_key_here
 # OPENAI_MODEL=gpt-4o
+
+# Option 3: Custom OpenAI-compatible provider
+# OPENAI_API_KEY=your_api_key
+# OPENAI_BASE_URL=https://your-provider.com/v1
+# OPENAI_MODEL=your-model-name
+
+# ================================================
+# Game Configuration (Optional)
+# ================================================
+
+# Number of story nodes to generate (3-20, default: 6)
+NODE_NUM=6

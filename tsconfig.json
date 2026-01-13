@@ -10,7 +10,7 @@
       "@shared/*": ["./shared/*"],
     },
     "resolveJsonModule": true,
-    "checkJs": true,
+    "checkJs": false,
     "allowJs": true,
     "noEmit": true,
     "strict": true,
@@ -26,6 +26,7 @@
     "shared/**/*.ts",
     ".react-router/types/**/*.ts",
     "worker-configuration.d.ts",
+    "worker.ts"
   ],
   "exclude": ["node_modules", "build", ".wrangler"],
 }

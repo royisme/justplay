@@ -1,5 +1,5 @@
 name = "just-play-game"
-main = "./build/server/index.js"
+main = "./worker.ts"
 compatibility_date = "2025-11-01"
 compatibility_flags = ["nodejs_compat"]
 assets = { directory = "./build/client" }

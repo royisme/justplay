@@ -1,9 +1,51 @@
 # PRD: 系统问题与功能缺失修复
 
-**文档版本**: 1.0
+**文档版本**: 1.1
 **创建日期**: 2026-01-13
-**状态**: Draft
+**更新日期**: 2026-01-14
+**状态**: ✅ Resolved
 **优先级**: P0 (Critical)
+
+---
+
+## 0. 修复总结 (2026-01-14)
+
+> ⚠️ **注意**: 本文档创建时描述的大部分问题在代码审计后发现**已经被实现**。文档与代码不同步。
+
+### 已确认实现的功能
+
+| 问题 | 状态 | 实现位置 |
+|------|------|----------|
+| P0-2.1 AI 响应系统 | ✅ 已实现 | `GameService.advanceGame()` 调用 `DMAgent.generateResponse()` |
+| P0-2.2 游戏开场白 | ✅ 已实现 | `GameService.createGame()` 调用 `DMAgent.generateOpening()` |
+| P0-2.3 动态标题 | ✅ 已实现 | `GameService.createGame()` 调用 `DMAgent.generateTitle()` |
+| P0-2.4 场景渲染区 | ✅ 已实现 | `game.$id.tsx` 显示标题、章节、元数据统计 |
+| P0-2.5 故事元数据 | ✅ 已实现 | `GameService.updateStoryMetadata()` 后台更新 |
+| P1-3.1 Sidebar 用户信息 | ✅ 已实现 | 完整传递链 layout→SidebarLayout→Sidebar→SidebarFooter |
+| P1-3.2 登出功能 | ✅ 已实现 | `/auth/logout` action 存在 |
+| P1-3.3 路由重定向 | ✅ 已修复 | 统一为 `/login` |
+| P2-4.1 设置页面 | ✅ 已实现 | 主题切换、字体大小调节功能完整 |
+| P2-4.2 Dashboard i18n | ✅ 已实现 | 使用 `useTranslation()` |
+| P2-4.3 游戏输入框 i18n | ✅ 已实现 | 使用 `t("game.input_placeholder")` |
+
+### 本次修复的代码更改
+
+1. `auth.logout.ts` - 统一重定向到 `/login`
+2. `game.new.tsx` - 添加 i18n 支持
+3. `settings.tsx` - 添加 i18n 支持
+4. `public/locales/*/common.json` - 添加 new_game, settings 翻译键
+5. `app/locales/*/new_game.ts` - 新建翻译模块
+6. `app/locales/*/settings.ts` - 扩展翻译键
+7. `app/types/i18next.d.ts` - 添加 new_game 类型
+
+### Agent 文件审计结果
+
+| Agent | 状态 |
+|-------|------|
+| `dm.agent.ts` | ✅ 完整实现并被使用 |
+| `writer.agent.ts` | ⚠️ Stub 实现，未使用 |
+| `scribe.agent.ts` | ⚠️ Stub 实现，功能已在 DMAgent 中 |
+| `renderer.agent.ts` | ⚠️ Stub 实现，未使用 |
 
 ---
 
@@ -466,17 +508,17 @@ P2 UI 完善
 
 ### P0 验收标准
 
-- [ ] 用户创建游戏后，能看到 AI 生成的开场白
-- [ ] 用户输入动作后，能收到 AI 生成的故事响应
-- [ ] 故事响应与用户输入相关，具有叙事连贯性
-- [ ] 场景区域显示当前状态（至少是文字描述）
-- [ ] 游戏标题在某个阶段变为动态生成
+- [x] 用户创建游戏后，能看到 AI 生成的开场白
+- [x] 用户输入动作后，能收到 AI 生成的故事响应
+- [x] 故事响应与用户输入相关，具有叙事连贯性
+- [x] 场景区域显示当前状态（至少是文字描述）
+- [x] 游戏标题在某个阶段变为动态生成
 
 ### P1 验收标准
 
-- [ ] Sidebar 显示真实的用户名和邮箱
-- [ ] 点击登出按钮能成功登出并跳转
-- [ ] 所有未认证重定向指向同一路由
+- [x] Sidebar 显示真实的用户名和邮箱
+- [x] 点击登出按钮能成功登出并跳转
+- [x] 所有未认证重定向指向同一路由
 
 ---
 
@@ -484,23 +526,24 @@ P2 UI 完善
 
 ### A. 关键文件清单
 
-| 文件 | 问题 | 优先级 |
-|------|------|--------|
-| `server/services/game.server.ts` | AI 未集成、开场白缺失、标题硬编码 | P0 |
-| `server/agents/dm.agent.ts` | 已实现但未使用 | P0 |
-| `app/routes/_app/game.$id.tsx` | 场景区占位符 | P0 |
-| `app/routes/_app/layout.tsx` | user 数据未传递 | P1 |
-| `app/components/layout/UserSidebar.tsx` | 缺少 user prop | P1 |
-| `app/components/layout/SidebarFooter.tsx` | 硬编码用户信息、登出缺失 | P1 |
-| `app/routes/_app/dashboard.tsx` | 硬编码中文文本 | P2 |
-| `app/routes/_app/settings.tsx` | 功能未实现 | P2 |
+| 文件 | 问题 | 优先级 | 状态 |
+|------|------|--------|------|
+| `server/services/game.server.ts` | AI 未集成、开场白缺失、标题硬编码 | P0 | ✅ 已实现 |
+| `server/agents/dm.agent.ts` | 已实现但未使用 | P0 | ✅ 已使用 |
+| `app/routes/_app/game.$id.tsx` | 场景区占位符 | P0 | ✅ 已实现 |
+| `app/routes/_app/layout.tsx` | user 数据未传递 | P1 | ✅ 已实现 |
+| `app/components/layout/UserSidebar.tsx` | 缺少 user prop | P1 | ✅ 已实现 |
+| `app/components/layout/SidebarFooter.tsx` | 硬编码用户信息、登出缺失 | P1 | ✅ 已实现 |
+| `app/routes/_app/dashboard.tsx` | 硬编码中文文本 | P2 | ✅ 已 i18n |
+| `app/routes/_app/settings.tsx` | 功能未实现 | P2 | ✅ 已实现 |
+| `app/routes/_app/game.new.tsx` | 硬编码中文文本 | P2 | ✅ 已 i18n |
 
 ### B. 相关 Agent 文件
 
 ```
 server/agents/
-├── dm.agent.ts      # Dungeon Master - 主叙事 AI (已实现)
-├── writer.agent.ts  # Writer - 待审计
-├── scribe.agent.ts  # Scribe - 元数据提取 (待审计)
-└── renderer.agent.ts # Renderer - 场景渲染 (待审计)
+├── dm.agent.ts      # Dungeon Master - 主叙事 AI (✅ 完整实现并使用)
+├── writer.agent.ts  # Writer - (⚠️ Stub 实现)
+├── scribe.agent.ts  # Scribe - 元数据提取 (⚠️ Stub，功能在 DMAgent)
+└── renderer.agent.ts # Renderer - 场景渲染 (⚠️ Stub 实现)
 ```

@@ -14,6 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/com
 import { Button } from "~/components/ui/Button";
 import { useTheme } from "~/components/theme-provider";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const env = getEnv(context);
@@ -31,10 +32,11 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 export default function SettingsPage() {
   const { user } = useLoaderData<typeof loader>();
   const { theme, setTheme } = useTheme();
-  
+  const { t } = useTranslation();
+
   // Font scale state (local for now, could be moved to context)
   const [fontScale, setFontScale] = useState(1);
-  
+
   // Initialize font scale from CSS var if possible, or default to 1
   useEffect(() => {
     const root = document.documentElement;
@@ -54,9 +56,9 @@ export default function SettingsPage() {
       <header className="mb-10 animate-fade-in">
         <div className="flex items-center gap-3 mb-2">
           <SettingsIcon className="h-8 w-8 text-accent" strokeWidth={1.5} />
-          <h1 className="text-4xl font-serif font-bold text-text-primary">设置</h1>
+          <h1 className="text-4xl font-serif font-bold text-text-primary">{t("settings.title")}</h1>
         </div>
-        <p className="text-text-secondary text-lg ml-11 font-serif">配置你的个人偏好与阅读体验</p>
+        <p className="text-text-secondary text-lg ml-11 font-serif">{t("settings.subtitle")}</p>
       </header>
 
       <div className="space-y-8 animate-slide-up stagger-1">
@@ -65,15 +67,15 @@ export default function SettingsPage() {
           <CardHeader>
             <div className="flex items-center gap-2">
                 <User className="h-5 w-5 text-accent" />
-                <CardTitle>个人资料</CardTitle>
+                <CardTitle>{t("settings.profile")}</CardTitle>
             </div>
-            <CardDescription>你的账户基本信息（只读）</CardDescription>
+            <CardDescription>{t("settings.profile_desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-1">
                 <label className="text-sm font-medium text-text-secondary font-serif">
-                  用户名
+                  {t("settings.username")}
                 </label>
                 <div className="text-lg font-serif font-medium text-text-primary bg-surface/50 p-3 rounded-md border border-border/50">
                     {user.name}
@@ -81,7 +83,7 @@ export default function SettingsPage() {
               </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium text-text-secondary font-serif">
-                  邮箱
+                  {t("settings.email")}
                 </label>
                 <div className="text-lg font-serif font-medium text-text-primary bg-surface/50 p-3 rounded-md border border-border/50">
                     {user.email}
@@ -96,9 +98,9 @@ export default function SettingsPage() {
           <CardHeader>
              <div className="flex items-center gap-2">
                 <Moon className="h-5 w-5 text-accent" />
-                <CardTitle>显示主题</CardTitle>
+                <CardTitle>{t("settings.theme")}</CardTitle>
             </div>
-            <CardDescription>选择最适合你的阅读环境</CardDescription>
+            <CardDescription>{t("settings.theme_desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-3">
@@ -109,7 +111,7 @@ export default function SettingsPage() {
               >
                 <div className="flex flex-col items-center gap-3 py-2">
                   <Moon className="h-6 w-6" />
-                  <span className="font-serif">深色漆器</span>
+                  <span className="font-serif">{t("settings.theme_dark")}</span>
                 </div>
               </Button>
               <Button
@@ -119,7 +121,7 @@ export default function SettingsPage() {
               >
                  <div className="flex flex-col items-center gap-3 py-2">
                   <Sun className="h-6 w-6" />
-                  <span className="font-serif">暖色宣纸</span>
+                  <span className="font-serif">{t("settings.theme_light")}</span>
                 </div>
               </Button>
               <Button
@@ -129,7 +131,7 @@ export default function SettingsPage() {
               >
                  <div className="flex flex-col items-center gap-3 py-2">
                   <Monitor className="h-6 w-6" />
-                  <span className="font-serif">跟随系统</span>
+                  <span className="font-serif">{t("settings.theme_system")}</span>
                 </div>
               </Button>
             </div>
@@ -141,28 +143,28 @@ export default function SettingsPage() {
           <CardHeader>
             <div className="flex items-center gap-2">
                 <Type className="h-5 w-5 text-accent" />
-                <CardTitle>字体大小</CardTitle>
+                <CardTitle>{t("settings.font_size")}</CardTitle>
             </div>
-            <CardDescription>调整全局文字大小以提升阅读体验</CardDescription>
+            <CardDescription>{t("settings.font_size_desc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
                 <div className="flex items-center gap-4">
-                    <span className="text-sm font-serif text-text-secondary">小</span>
-                    <input 
-                        type="range" 
-                        min="0.8" 
-                        max="1.2" 
-                        step="0.05" 
+                    <span className="text-sm font-serif text-text-secondary">{t("settings.font_small")}</span>
+                    <input
+                        type="range"
+                        min="0.8"
+                        max="1.2"
+                        step="0.05"
                         value={fontScale}
                         onChange={(e) => handleFontScaleChange(parseFloat(e.target.value))}
                         className="flex-1 h-2 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
                     />
-                    <span className="text-lg font-serif text-text-primary">大</span>
+                    <span className="text-lg font-serif text-text-primary">{t("settings.font_large")}</span>
                 </div>
                 <div className="p-4 bg-bg-secondary rounded-lg border border-border/50">
                     <p className="text-text-primary font-serif leading-relaxed">
-                        “智者乐水，仁者乐山。” —— 这是一段预览文本。调整滑块以查看字体大小在阅读界面的实际效果。
+                        {t("settings.font_preview")}
                         (Current Scale: {fontScale.toFixed(2)}x)
                     </p>
                 </div>
@@ -172,7 +174,7 @@ export default function SettingsPage() {
 
         <div className="mt-12 text-center">
             <p className="text-sm text-text-secondary font-serif italic opacity-60">
-                PixelWeaver v1.0 • Ink & Gold Edition
+                {t("settings.version")}
             </p>
         </div>
       </div>

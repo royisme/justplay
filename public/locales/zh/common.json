@@ -56,7 +56,37 @@
     "choices": "选择",
     "back_to_home": "返回首页",
     "toggle_map": "查看故事地图",
-    "generating": "AI 正在书写下一章..."
+    "generating": "AI 正在书写下一章...",
+    "complete_story": "完结故事",
+    "abandon_game": "放弃游戏",
+    "abandon_confirm": "确定要放弃这个游戏吗？进度将会丢失。",
+    "input_placeholder": "你想做什么？"
+  },
+  "new_game": {
+    "title": "开始新的冒险",
+    "subtitle": "选择一个世界设定来开启你的旅程。每个世界都有独特的规则、风格和故事背景。",
+    "select_world": "选择此世界",
+    "no_scenarios": "暂无可用世界",
+    "no_scenarios_desc": "管理员尚未发布任何游戏剧本。"
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "配置你的个人偏好与阅读体验",
+    "profile": "个人资料",
+    "profile_desc": "你的账户基本信息（只读）",
+    "username": "用户名",
+    "email": "邮箱",
+    "theme": "显示主题",
+    "theme_desc": "选择最适合你的阅读环境",
+    "theme_dark": "深色漆器",
+    "theme_light": "暖色宣纸",
+    "theme_system": "跟随系统",
+    "font_size": "字体大小",
+    "font_size_desc": "调整全局文字大小以提升阅读体验",
+    "font_small": "小",
+    "font_large": "大",
+    "font_preview": ""智者乐水，仁者乐山。" —— 这是一段预览文本。调整滑块以查看字体大小在阅读界面的实际效果。",
+    "version": "PixelWeaver v1.0 • Ink & Gold Edition"
   },
   "common": {
     "error": "故事生成失败，请稍后再试。",

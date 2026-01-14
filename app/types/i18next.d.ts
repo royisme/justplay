@@ -18,6 +18,7 @@ import type zhAdmin from "~/locales/zh/admin";
 import type zhCommon from "~/locales/zh/common";
 import type zhDashboard from "~/locales/zh/dashboard";
 import type zhSettings from "~/locales/zh/settings";
+import type zhNewGame from "~/locales/zh/new_game";
 
 /**
  * Flattened translation resources for the "common" namespace.
@@ -34,6 +35,7 @@ interface CommonNamespace {
   common: typeof zhCommon;
   dashboard: typeof zhDashboard;
   settings: typeof zhSettings;
+  new_game: typeof zhNewGame;
 }
 
 // Resources structure for i18next

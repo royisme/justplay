@@ -9,6 +9,7 @@ import type { Route } from "./+types/game.new";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/Card";
 import { Button } from "~/components/ui/Button";
 import { Badge } from "~/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const env = getEnv(context);
@@ -51,11 +52,12 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export default function NewGamePage() {
   const { scenarios } = useLoaderData<typeof loader>();
+  const { t } = useTranslation();
 
   return (
     <div className="container mx-auto max-w-4xl py-10 px-4">
-      <h1 className="text-3xl font-bold mb-2">开始新的冒险</h1>
-      <p className="text-muted-foreground mb-8">选择一个世界设定来开启你的旅程。每个世界都有独特的规则、风格和故事背景。</p>
+      <h1 className="text-3xl font-bold mb-2">{t("new_game.title")}</h1>
+      <p className="text-muted-foreground mb-8">{t("new_game.subtitle")}</p>
 
       <div className="grid gap-6 md:grid-cols-2">
         {scenarios.map((scenario) => (
@@ -80,7 +82,7 @@ export default function NewGamePage() {
               <Form method="post" className="w-full">
                 <input type="hidden" name="scenario_id" value={scenario.id} />
                 <Button type="submit" className="w-full">
-                  选择此世界
+                  {t("new_game.select_world")}
                 </Button>
               </Form>
             </CardFooter>
@@ -90,8 +92,8 @@ export default function NewGamePage() {
 
       {scenarios.length === 0 && (
           <div className="text-center py-20 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-dashed">
-              <h3 className="text-lg font-medium">暂无可用世界</h3>
-              <p className="text-muted-foreground">管理员尚未发布任何游戏剧本。</p>
+              <h3 className="text-lg font-medium">{t("new_game.no_scenarios")}</h3>
+              <p className="text-muted-foreground">{t("new_game.no_scenarios_desc")}</p>
           </div>
       )}
     </div>

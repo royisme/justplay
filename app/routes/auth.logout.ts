@@ -20,15 +20,15 @@ export async function action({ request, context }: Route.ActionArgs) {
       headers: request.headers,
       asResponse: true,
     });
-    return redirect("/auth/login", {
+    return redirect("/login", {
       headers: result.headers,
     });
   } catch (error) {
     console.error("[auth.logout] Error:", error);
-    return redirect("/auth/login");
+    return redirect("/login");
   }
 }
 
 export async function loader() {
-  return redirect("/auth/login");
+  return redirect("/login");
 }

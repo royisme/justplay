@@ -56,7 +56,37 @@
     "choices": "Choices",
     "back_to_home": "Back to Home",
     "toggle_map": "Toggle Story Map",
-    "generating": "AI is writing the next chapter..."
+    "generating": "AI is writing the next chapter...",
+    "complete_story": "Complete Story",
+    "abandon_game": "Abandon Game",
+    "abandon_confirm": "Are you sure you want to abandon this game? Progress will be lost.",
+    "input_placeholder": "What do you want to do?"
+  },
+  "new_game": {
+    "title": "Start a New Adventure",
+    "subtitle": "Choose a world setting to begin your journey. Each world has unique rules, style, and story background.",
+    "select_world": "Select This World",
+    "no_scenarios": "No Worlds Available",
+    "no_scenarios_desc": "The administrator has not published any game scenarios yet."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure your personal preferences and reading experience",
+    "profile": "Profile",
+    "profile_desc": "Your account information (read-only)",
+    "username": "Username",
+    "email": "Email",
+    "theme": "Display Theme",
+    "theme_desc": "Choose the best reading environment for you",
+    "theme_dark": "Dark Lacquer",
+    "theme_light": "Warm Parchment",
+    "theme_system": "Follow System",
+    "font_size": "Font Size",
+    "font_size_desc": "Adjust global text size to enhance reading experience",
+    "font_small": "Small",
+    "font_large": "Large",
+    "font_preview": "\"The wise delight in water, the benevolent delight in mountains.\" — This is preview text. Adjust the slider to see how font size affects the reading interface.",
+    "version": "PixelWeaver v1.0 • Ink & Gold Edition"
   },
   "common": {
     "error": "Failed to generate story, please try again later.",

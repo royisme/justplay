@@ -19,8 +19,8 @@ export function SidebarNavItem({ to, icon, children, end }: SidebarNavItemProps)
       end={end}
       className={({ isActive }) =>
         cn(
-          "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800",
-          isActive ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50" : "text-zinc-500 dark:text-zinc-400",
+          "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bg-secondary",
+          isActive ? "bg-bg-secondary text-accent" : "text-text-secondary",
           isCollapsed && "justify-center px-2"
         )
       }

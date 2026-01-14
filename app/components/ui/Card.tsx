@@ -1,6 +1,6 @@
 /**
  * @file Card.tsx
- * @description Base UI Card component with variants and slots.
+ * @description Base UI Card component with "Ink & Gold" aesthetic.
  * @module app/components/ui/Card
  */
 
@@ -29,11 +29,11 @@ function cn(...classes: (string | undefined | false)[]): string {
 }
 
 const variantStyles: Record<NonNullable<CardProps["variant"]>, string> = {
-  default: "bg-surface border border-border/60 shadow-sm",
+  default: "bg-surface border border-border shadow-sm",
   outlined: "bg-transparent border border-border",
-  elevated: "bg-surface shadow-lg border border-border/20",
+  elevated: "bg-surface shadow-md border border-border/50",
   paper:
-    "bg-background-primary border border-border shadow-sm relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/40 before:to-transparent before:pointer-events-none",
+    "bg-bg-primary border border-border shadow-sm relative overflow-hidden before:absolute before:inset-0 before:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] before:pointer-events-none",
 };
 
 const paddingStyles: Record<NonNullable<CardProps["padding"]>, string> = {
@@ -49,7 +49,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-2xl transition-all duration-300",
+          "rounded-xl transition-all duration-300",
           variantStyles[variant],
           paddingStyles[padding],
           className
@@ -70,7 +70,7 @@ export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
       <div
         ref={ref}
         className={cn(
-          "mb-4 border-b border-border/40 pb-4 font-serif text-lg font-semibold text-text-primary",
+          "mb-4 border-b border-border/60 pb-4 font-serif text-lg font-bold tracking-tight text-text-primary",
           className
         )}
         {...props}
@@ -100,7 +100,7 @@ export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
     return (
       <div
         ref={ref}
-        className={cn("mt-6 border-t border-border/40 pt-4 flex items-center", className)}
+        className={cn("mt-6 border-t border-border/60 pt-4 flex items-center justify-end gap-3", className)}
         {...props}
       >
         {children}
@@ -118,7 +118,7 @@ export interface CardContentProps extends HTMLAttributes<HTMLDivElement> {
 export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn("p-6 pt-0", className)} {...props}>
+      <div ref={ref} className={cn("space-y-4", className)} {...props}>
         {children}
       </div>
     );
@@ -136,7 +136,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
     return (
       <h3
         ref={ref}
-        className={cn("font-semibold leading-none tracking-tight", className)}
+        className={cn("font-serif text-xl font-bold tracking-tight text-text-primary", className)}
         {...props}
       >
         {children}
@@ -154,7 +154,7 @@ export interface CardDescriptionProps extends HTMLAttributes<HTMLParagraphElemen
 export const CardDescription = forwardRef<HTMLParagraphElement, CardDescriptionProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <p ref={ref} className={cn("text-sm text-text-muted", className)} {...props}>
+      <p ref={ref} className={cn("text-sm text-text-secondary mt-1", className)} {...props}>
         {children}
       </p>
     );

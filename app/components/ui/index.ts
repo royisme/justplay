@@ -19,3 +19,9 @@ export { Select, type SelectProps } from "./Select";
 
 // --- LanguageToggle ---
 export { LanguageToggle } from "./LanguageToggle";
+
+// --- FontSizeControl ---
+export { FontSizeControl } from "./FontSizeControl";
+
+// --- ThemeToggle ---
+export { ThemeToggle } from "./ThemeToggle";

@@ -114,7 +114,7 @@ export function SidebarFooter({ user }: SidebarFooterProps) {
   const userInitial = userName.charAt(0).toUpperCase();
 
   return (
-    <div className="border-t p-3 dark:border-zinc-800">
+    <div className="border-t p-3 border-border">
       {isCollapsed ? (
         <div className="flex flex-col items-center gap-2">
           <LanguageSwitcher collapsed />
@@ -133,15 +133,14 @@ export function SidebarFooter({ user }: SidebarFooterProps) {
           <LanguageSwitcher />
 
           {/* Divider */}
-          <div className="mx-3 my-1 h-px bg-zinc-100 dark:bg-zinc-800" />
+          <div className="mx-3 my-1 h-px bg-border" />
 
           {/* Settings Link */}
           <Link
             to="/settings"
             className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium
-              text-zinc-500 transition-colors
-              hover:bg-zinc-100 hover:text-zinc-900
-              dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+              text-text-secondary transition-colors
+              hover:bg-bg-secondary hover:text-text-primary"
           >
             <Settings className="h-4 w-4" />
             <span>{t("sidebar.settings", "设置")}</span>
@@ -156,8 +155,8 @@ export function SidebarFooter({ user }: SidebarFooterProps) {
                 {userInitial}
               </div>
               <div className="flex flex-col text-xs overflow-hidden">
-                <span className="font-medium text-zinc-900 dark:text-zinc-50 truncate">{userName}</span>
-                <span className="text-zinc-500 dark:text-zinc-400 truncate max-w-[100px]" title={userEmail}>{userEmail}</span>
+                <span className="font-medium text-text-primary truncate">{userName}</span>
+                <span className="text-text-secondary truncate max-w-[100px]" title={userEmail}>{userEmail}</span>
               </div>
             </div>
             <Form action="/auth/logout" method="post">
@@ -165,8 +164,7 @@ export function SidebarFooter({ user }: SidebarFooterProps) {
                 variant="ghost"
                 size="icon"
                 type="submit"
-                className="h-8 w-8 flex-shrink-0 text-zinc-500 hover:text-zinc-900
-                  dark:text-zinc-400 dark:hover:text-zinc-50"
+                className="h-8 w-8 flex-shrink-0 text-text-secondary hover:text-text-primary"
                 title={t("sidebar.logout", "退出登录")}
               >
                 <LogOut className="h-4 w-4" />

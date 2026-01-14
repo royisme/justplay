@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import { setLanguageCookie } from "~/i18n";
 import { extractLanguageFromCookie } from "@server/i18n.server";
 import { DEFAULT_LANGUAGE } from "@shared/types/i18n";
+import { ThemeProvider } from "~/components/theme-provider";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -35,7 +36,7 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Serif+SC:wght@200..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap",
   },
 ];
 
@@ -75,7 +76,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="antialiased">
-        {children}
+        <ThemeProvider defaultTheme="system" storageKey="pixelweaver-theme">
+          {children}
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

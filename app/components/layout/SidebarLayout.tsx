@@ -1,5 +1,6 @@
 import { SidebarProvider } from "./SidebarContext";
 import { Sidebar } from "./Sidebar";
+import { TopNav } from "./TopNav";
 import type { ReactNode } from "react";
 
 interface UserData {
@@ -18,13 +19,16 @@ interface SidebarLayoutProps {
 export function SidebarLayout({ sidebar, children, user }: SidebarLayoutProps) {
   return (
     <SidebarProvider>
-      <div className="flex h-screen overflow-hidden bg-zinc-50 dark:bg-zinc-900">
+      <div className="flex h-screen overflow-hidden bg-bg-primary">
         <Sidebar user={user}>
             {sidebar}
         </Sidebar>
-        <main className="flex-1 overflow-auto">
-          {children}
-        </main>
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <TopNav />
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
+        </div>
       </div>
     </SidebarProvider>
   );

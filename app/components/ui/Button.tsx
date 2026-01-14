@@ -1,7 +1,7 @@
 /**
  * @file Button.tsx
- * @description Base UI Button component with variants and sizes.
- * Supports polymorphic rendering via the `as` prop (BaseUI style).
+ * @description Base UI Button component with "Ink & Gold" aesthetic.
+ * Supports polymorphic rendering via the `as` prop.
  * @module app/components/ui/Button
  */
 
@@ -22,7 +22,7 @@ function cn(...inputs: ClassValue[]) {
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "choice" | "outline" | "link";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
-// Base props for Button (without element-specific attributes)
+// Base props for Button
 export interface ButtonOwnProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -39,29 +39,29 @@ export type ButtonProps<E extends ElementType = "button"> = ButtonOwnProps &
   Omit<ComponentPropsWithRef<E>, keyof ButtonOwnProps>;
 
 const baseStyles =
-  "inline-flex items-center justify-center font-medium rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95";
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary hover:bg-primary/90 text-background-primary shadow-md border border-transparent font-sans",
+    "bg-text-primary text-bg-primary hover:bg-text-secondary hover:shadow-lg hover:shadow-accent/20 border border-transparent font-serif tracking-wide",
   secondary:
-    "bg-secondary/10 hover:bg-secondary/20 text-text-primary border border-secondary/20 font-sans",
+    "bg-bg-secondary text-text-primary border border-border hover:border-accent hover:text-accent font-sans",
   ghost:
-    "bg-transparent hover:bg-accent/5 text-text-secondary hover:text-text-primary",
+    "bg-transparent hover:bg-accent/5 text-text-secondary hover:text-accent",
   danger:
-    "bg-red-500 hover:bg-red-600 text-white shadow-md shadow-red-500/20",
+    "bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-500/10",
   choice:
-    "w-full text-left justify-start border border-border bg-surface hover:bg-accent/5 hover:border-accent hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group font-serif text-lg py-4 px-6 text-text-primary",
+    "w-full text-left justify-start border border-border bg-surface hover:border-accent hover:shadow-md hover:shadow-accent/10 hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group font-serif text-lg py-4 px-6 text-text-primary active:scale-[0.99]",
   outline:
-    "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-  link: "text-primary underline-offset-4 hover:underline",
+    "border border-border bg-transparent hover:border-accent hover:text-accent text-text-primary",
+  link: "text-accent underline-offset-4 hover:underline p-0 h-auto font-serif",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
   sm: "px-3 py-1.5 text-sm gap-1.5",
-  md: "px-4 py-2.5 text-base gap-2",
-  lg: "px-6 py-4 text-lg gap-2.5",
-  icon: "h-10 w-10",
+  md: "px-5 py-2.5 text-base gap-2",
+  lg: "px-8 py-3.5 text-lg gap-2.5",
+  icon: "h-10 w-10 p-0",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,7 +82,7 @@ export const Button = forwardRef<any, ButtonProps<any>>(function Button(
   ref
 ) {
   const isDisabled = disabled || loading;
-  const appliedSize = variant === "choice" ? "" : sizeStyles[size as ButtonSize];
+  const appliedSize = variant === "choice" || variant === "link" ? "" : sizeStyles[size as ButtonSize];
 
   const classes = cn(
     baseStyles,
@@ -128,7 +128,10 @@ export const Button = forwardRef<any, ButtonProps<any>>(function Button(
       {!loading && icon && iconPosition === "left" && icon}
 
       {variant === "choice" && (
-        <span className="absolute left-0 top-0 bottom-0 w-1 bg-accent opacity-0 transition-opacity group-hover:opacity-100" />
+        <>
+          <span className="absolute left-0 top-0 bottom-0 w-1 bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+           <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </>
       )}
 
       {children}

@@ -1,323 +1,112 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: var(--color-primary);
-  --color-secondary: var(--color-secondary);
-  --color-accent: var(--color-accent);
-  --color-background-primary: var(--color-background-primary);
-  --color-background-secondary: var(--color-background-secondary);
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-border: var(--color-border);
-  --color-surface: var(--color-surface);
+  /* Ink & Gold Color Palette - Modern Chinese Luxury (OKLCH) */
+  
+  /* Ink Scale (Neutral Warm Greys) */
+  --color-ink-50:  oklch(0.98 0.01 90);  /* Warm Rice Paper (Background) */
+  --color-ink-100: oklch(0.96 0.01 90);
+  --color-ink-200: oklch(0.90 0.01 90);  /* Divider */
+  --color-ink-300: oklch(0.85 0.01 90);
+  --color-ink-400: oklch(0.70 0.01 90);
+  --color-ink-500: oklch(0.55 0.01 90);
+  --color-ink-600: oklch(0.40 0.02 90);  /* Secondary Text */
+  --color-ink-700: oklch(0.35 0.02 90);
+  --color-ink-800: oklch(0.20 0.02 90);  /* Primary Text */
+  --color-ink-900: oklch(0.15 0.02 50);  /* Deep Ink */
+  --color-ink-950: oklch(0.10 0.02 50);  /* Deep Lacquer (Dark Mode Bg) */
 
-  --font-serif:
-    "Songti SC", "STSong", "SimSun", "Noto Serif SC", "Merriweather",
-    "Times New Roman", serif;
-  --font-sans: "PingFang SC", "Microsoft YaHei", "Inter", system-ui, sans-serif;
+  /* Gold Scale (Luxury Accents) */
+  --color-gold-50:  oklch(0.98 0.02 85);
+  --color-gold-100: oklch(0.95 0.04 85);
+  --color-gold-200: oklch(0.90 0.08 85);
+  --color-gold-300: oklch(0.82 0.12 85);
+  --color-gold-400: oklch(0.75 0.15 85); /* Standard Gold */
+  --color-gold-500: oklch(0.65 0.16 85); 
+  --color-gold-600: oklch(0.55 0.16 80); /* Darker Gold for Text */
+  --color-gold-700: oklch(0.45 0.14 75);
+  --color-gold-800: oklch(0.35 0.12 70);
+  --color-gold-900: oklch(0.25 0.10 65);
+
+  /* Semantic Aliases - Mapped in :root */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+
+  /* Typography */
+  --font-serif: "Noto Serif SC", "Songti SC", "SimSun", "Noto Serif", serif;
+  --font-sans: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
+/* Light Mode (Warm Sepia - 护眼米纸) */
 :root {
-  --color-primary: #18181b;
-  --color-secondary: #71717a;
-  --color-accent: #2563eb;
-  --color-background-primary: #fdfbf7;
-  --color-background-secondary: #f4f1ea;
-  --color-text-primary: #1c1917;
-  --color-text-secondary: #57534e;
-  --color-border: #e7e5e4;
-  --color-surface: #ffffff;
+  --text-scale: 1;
+
+  /* 阅读优化变量 */
+  --reading-line-height: 1.875;
+  --reading-max-width: 42rem;
+  --reading-font-size: 1.125rem;
+
+  /* 护眼配色 - 暖米色调 */
+  --bg-primary: oklch(0.96 0.015 80);      /* 暖米背景，非纯白 */
+  --bg-secondary: oklch(0.98 0.012 85);    /* 浅米 */
+  --text-primary: oklch(0.25 0.02 60);     /* 柔和深灰，非纯黑 */
+  --text-secondary: oklch(0.50 0.015 70);  /* 中灰 */
+  --accent: oklch(0.55 0.12 75);           /* 雅金强调 */
+  --accent-hover: oklch(0.45 0.10 70);     /* 深金悬停 */
+  --border: oklch(0.85 0.015 75);          /* 暖灰边框 */
+  --surface: oklch(0.985 0.01 85);         /* 温暖米白卡片，非纯白 */
+  
+  font-size: calc(100% * var(--text-scale));
 }
 
+/* Dark Mode (Deep Ink - 柔和深墨) */
 [data-theme="dark"] {
-  --color-primary: #f4f4f5;
-  --color-secondary: #a1a1aa;
-  --color-accent: #3b82f6;
-  --color-background-primary: #0c0a09;
-  --color-background-secondary: #1c1917;
-  --color-text-primary: #fafaf9;
-  --color-text-secondary: #a8a29e;
-  --color-border: #292524;
-  --color-surface: #1c1917;
-}
-
-/* Xuanhuan / Eastern Fantasy Theme */
-[data-theme="xuanhuan"] {
-  --color-primary: #4a3b32;
-  --color-secondary: #8c7b70;
-  --color-accent: #b45309;
-  --color-background-primary: #f7f5f0;
-  --color-background-secondary: #ebe5dd;
-  --color-text-primary: #292524;
-  --color-text-secondary: #57534e;
-  --color-border: #d6d3d1;
-  --color-surface: #fffefc;
-}
-
-/* Cyberpunk / Sci-Fi Theme */
-[data-theme="cyberpunk"] {
-  --color-primary: #22d3ee;
-  --color-secondary: #94a3b8;
-  --color-accent: #f472b6;
-  --color-background-primary: #0f172a;
-  --color-background-secondary: #1e293b;
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-border: #334155;
-  --color-surface: #1e293b;
+  /* 护眼配色 - 深墨色调 */
+  --bg-primary: oklch(0.12 0.015 50);      /* 深墨背景，非纯黑 */
+  --bg-secondary: oklch(0.15 0.015 55);    /* 次要背景 */
+  --text-primary: oklch(0.92 0.008 85);    /* 柔和雾白，非纯白 */
+  --text-secondary: oklch(0.65 0.010 80);  /* 淡灰 */
+  --accent: oklch(0.75 0.10 78);           /* 淡金强调 */
+  --accent-hover: oklch(0.65 0.12 75);     /* 雅金悬停 */
+  --border: oklch(0.25 0.015 55);          /* 深灰边框 */
+  --surface: oklch(0.15 0.015 55);         /* 深墨卡片 */
 }
 
 body {
-  @apply bg-background-primary text-text-primary font-serif antialiased transition-colors duration-300;
-  background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M0 0h64v64H0V0zm32 32h32v32H32V32zM0 32h32v32H0V32zm32-32h32v32H32V0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-serif);
+  /* font-size is now handled by :root scaling */
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  
+  /* Subtle Texture Overlay for Paper Feel */
+  background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath d='M0 0h64v64H0V0zm32 32h32v32H32V32zM0 32h32v32H0V32zm32-32h32v32H32V0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-serif font-bold tracking-tight;
-}
+/* Heading Sizes Scale - Refined/Reduced */
+h1 { @apply text-3xl font-bold tracking-tight mb-4; }
+h2 { @apply text-2xl font-bold tracking-tight mb-3; }
+h3 { @apply text-xl font-semibold mb-2; }
+h4 { @apply text-lg font-semibold mb-2; }
 
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-border rounded-full hover:bg-secondary/50;
+  background-color: var(--color-border);
+  border-radius: 9999px;
 }
-
-/* === Custom Animations === */
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-delayed {
-  0%,
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(5deg);
-  }
-}
-
-@keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes spin-reverse {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-}
-
-@keyframes orbit {
-  from {
-    transform: rotate(0deg) translateX(60px) rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg) translateX(60px) rotate(-360deg);
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(var(--color-accent-rgb, 37, 99, 235), 0.3);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(var(--color-accent-rgb, 37, 99, 235), 0.6);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-@keyframes typewriter {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(1);
-    opacity: 0.4;
-  }
-  100% {
-    transform: scale(2.5);
-    opacity: 0;
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes bounce-subtle {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
-}
-
-.animate-fade-in-delayed {
-  animation: fade-in-delayed 2s ease-out forwards;
-}
-
-.animate-float {
-  animation: float 10s ease-in-out infinite;
-}
-
-.animate-spin-slow {
-  animation: spin-slow 8s linear infinite;
-}
-
-.animate-spin-reverse {
-  animation: spin-reverse 6s linear infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.4s ease-out forwards;
-}
-
-.animate-bounce-subtle {
-  animation: bounce-subtle 2s ease-in-out infinite;
-}
-
-/* Staggered animation delays for lists */
-.stagger-1 {
-  animation-delay: 0.1s;
-}
-.stagger-2 {
-  animation-delay: 0.2s;
-}
-.stagger-3 {
-  animation-delay: 0.3s;
-}
-.stagger-4 {
-  animation-delay: 0.4s;
-}
-.stagger-5 {
-  animation-delay: 0.5s;
-}
-
-/* Choice button enhancements */
-.choice-button {
-  position: relative;
-  overflow: hidden;
-}
-
-.choice-button::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(var(--color-accent-rgb, 37, 99, 235), 0.1);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.6s ease,
-    height 0.6s ease;
-}
-
-.choice-button:active::before {
-  width: 300%;
-  height: 300%;
-}
-
-.choice-button.selected {
-  background: rgba(var(--color-accent-rgb, 37, 99, 235), 0.15);
-  border-color: var(--color-accent);
-}
-
-.choice-button.selected::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  animation: ripple 0.6s ease-out forwards;
-  border: 2px solid var(--color-accent);
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-ink-400);
 }

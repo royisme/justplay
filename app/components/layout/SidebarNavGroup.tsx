@@ -33,7 +33,7 @@ export function SidebarNavGroup({ title, icon, children, defaultOpen = true }: S
     <div className="py-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+        className="flex w-full items-center justify-between px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary"
       >
         <div className="flex items-center gap-2">
           {icon}

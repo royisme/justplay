@@ -26,7 +26,7 @@ export function Sidebar({ children, user }: SidebarProps) {
       initial={false}
       animate={{ width: isCollapsed ? "4rem" : "16rem" }}
       className={cn(
-        "flex h-screen flex-col border-r bg-white text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50 dark:border-zinc-800",
+        "flex h-screen flex-col border-r bg-surface text-text-primary border-border",
         "transition-all duration-300 ease-in-out"
       )}
     >

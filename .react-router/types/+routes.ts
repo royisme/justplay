@@ -42,6 +42,9 @@ type Pages = {
       "id": string;
     };
   };
+  "/settings": {
+    params: {};
+  };
   "/api/auth/*": {
     params: {
       "*": string;
@@ -52,6 +55,14 @@ type Pages = {
   };
   "/admin/scenarios": {
     params: {};
+  };
+  "/admin/scenarios/new": {
+    params: {};
+  };
+  "/admin/scenarios/:id/edit": {
+    params: {
+      "id": string;
+    };
   };
   "/admin/users": {
     params: {};
@@ -67,7 +78,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login" | "/auth/login" | "/auth/logout" | "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id" | "/api/auth/*" | "/admin" | "/admin/scenarios" | "/admin/users" | "/admin/providers" | "/admin/audit";
+    page: "/" | "/login" | "/auth/login" | "/auth/logout" | "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id" | "/settings" | "/api/auth/*" | "/admin" | "/admin/scenarios" | "/admin/scenarios/new" | "/admin/scenarios/:id/edit" | "/admin/users" | "/admin/providers" | "/admin/audit";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
@@ -87,7 +98,7 @@ type RouteFiles = {
   };
   "routes/_app/layout.tsx": {
     id: "routes/_app/layout";
-    page: "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id";
+    page: "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id" | "/settings";
   };
   "routes/_app/dashboard.tsx": {
     id: "routes/_app/dashboard";
@@ -109,13 +120,17 @@ type RouteFiles = {
     id: "routes/_app/library.$id";
     page: "/library/:id";
   };
+  "routes/_app/settings.tsx": {
+    id: "routes/_app/settings";
+    page: "/settings";
+  };
   "routes/api.auth.$.ts": {
     id: "routes/api.auth.$";
     page: "/api/auth/*";
   };
   "routes/admin/layout.tsx": {
     id: "routes/admin/layout";
-    page: "/admin" | "/admin/scenarios" | "/admin/users" | "/admin/providers" | "/admin/audit";
+    page: "/admin" | "/admin/scenarios" | "/admin/scenarios/new" | "/admin/scenarios/:id/edit" | "/admin/users" | "/admin/providers" | "/admin/audit";
   };
   "routes/admin/_index.tsx": {
     id: "routes/admin/_index";
@@ -124,6 +139,14 @@ type RouteFiles = {
   "routes/admin/scenarios.tsx": {
     id: "routes/admin/scenarios";
     page: "/admin/scenarios";
+  };
+  "routes/admin/scenarios.new.tsx": {
+    id: "routes/admin/scenarios.new";
+    page: "/admin/scenarios/new";
+  };
+  "routes/admin/scenarios.$id.edit.tsx": {
+    id: "routes/admin/scenarios.$id.edit";
+    page: "/admin/scenarios/:id/edit";
   };
   "routes/admin/users.tsx": {
     id: "routes/admin/users";
@@ -151,10 +174,13 @@ type RouteModules = {
   "routes/_app/game.$id": typeof import("./app/routes/_app/game.$id.tsx");
   "routes/_app/library": typeof import("./app/routes/_app/library.tsx");
   "routes/_app/library.$id": typeof import("./app/routes/_app/library.$id.tsx");
+  "routes/_app/settings": typeof import("./app/routes/_app/settings.tsx");
   "routes/api.auth.$": typeof import("./app/routes/api.auth.$.ts");
   "routes/admin/layout": typeof import("./app/routes/admin/layout.tsx");
   "routes/admin/_index": typeof import("./app/routes/admin/_index.tsx");
   "routes/admin/scenarios": typeof import("./app/routes/admin/scenarios.tsx");
+  "routes/admin/scenarios.new": typeof import("./app/routes/admin/scenarios.new.tsx");
+  "routes/admin/scenarios.$id.edit": typeof import("./app/routes/admin/scenarios.$id.edit.tsx");
   "routes/admin/users": typeof import("./app/routes/admin/users.tsx");
   "routes/admin/providers": typeof import("./app/routes/admin/providers.tsx");
   "routes/admin/audit": typeof import("./app/routes/admin/audit.tsx");

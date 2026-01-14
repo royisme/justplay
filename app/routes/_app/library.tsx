@@ -59,8 +59,8 @@ export default function LibraryPage() {
                </div>
             </CardContent>
             <CardFooter className="p-4 pt-0">
-               <Button asChild className="w-full" variant="secondary">
-                   <Link to={`/library/${game.id}`}>阅读故事</Link>
+               <Button as={Link} to={`/library/${game.id}`} className="w-full" variant="secondary">
+                   阅读故事
                </Button>
             </CardFooter>
           </Card>

@@ -1,0 +1,21 @@
+export default {
+  loading: "Weaving the threads of fate...",
+  generating_concept: "Crafting the story core...",
+  generating_map: "Building the world map...",
+  starting: "The story is about to begin...",
+  choices: "Choices",
+  back_to_home: "Back to Home",
+  toggle_map: "View Story Map",
+  generating: "AI is writing the next chapter...",
+  story_map: {
+    title: "Story Map",
+    volume: "Volume {{volume}}",
+    chapter: "Chapter {{chapter}}",
+    current: "Current",
+    message_count: "{{count}} messages",
+    not_started: "Not Started",
+    characters: "Characters",
+    more: "more",
+    progress: "Progress",
+  },
+};

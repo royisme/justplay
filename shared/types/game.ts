@@ -5,14 +5,121 @@
  * @module shared/types/game
  */
 
-// --- Story History ---
+// --- Story Metadata (Agent-maintained) ---
+
+export interface GameCharacter {
+  id: string;
+  name: string;
+  role: string;
+  traits: string[];
+}
+
+export interface GameRelationship {
+  from: string;
+  to: string;
+  type: string;
+}
+
+export interface StoryMetadata {
+  outline: string;
+  characters: GameCharacter[];
+  relationships: GameRelationship[];
+  inventory: Record<string, number>;
+  plotSummary: string[];
+}
+
+// --- Book Metadata (after completion) ---
+
+export interface BookMetadata {
+  coverImage: string;
+  wordCount: number;
+  endingType: string;
+}
+
+// --- Game Entity ---
+
+export type GameStatus = "active" | "completed" | "abandoned";
+
+export interface Game {
+  id: string;
+  userId: string;
+  scenarioId: string;
+  title: string;
+  status: GameStatus;
+  slotIndex: number | null;
+  currentChapter: number;
+  currentVolume: number;
+  storyMetadata: StoryMetadata | null;
+  bookMetadata: BookMetadata | null;
+  createdAt: Date;
+  completedAt: Date | null;
+
+  // Legacy fields for backward compatibility with old GamePage
+  // @deprecated - these will be removed in a future version
+  storyType?: string;
+  storyHistory?: StoryHistoryEntry[];
+  currentSceneJson?: SceneData | null;
+  storyMap?: StoryMap | null;
+  author?: string | null;
+  currentNodeId?: string;
+}
+
+// --- Message (Tree Structure) ---
+
+export type MessageRole = "system" | "user" | "assistant";
+
+export interface GameMessage {
+  id: string;
+  gameId: string;
+  parentId: string | null;
+  role: MessageRole;
+  content: string;
+  depth: number;
+  slotId: number | null;
+  isActivePath: boolean;
+  chapterNumber: number | null;
+  renderData: Record<string, unknown> | null;
+  createdAt: Date;
+}
+
+// --- Game Scenario (World Builder) ---
+
+export interface ModelConfig {
+  dmModel: string;
+  writerModel: string;
+  summaryModel: string;
+}
+
+export interface GameScenario {
+  id: string;
+  name: string;
+  description: string | null;
+  storyType: string;
+  dmSystemPrompt: string;
+  writerSystemPrompt: string;
+  visualStylePrompt: string;
+  modelConfig: ModelConfig;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+// --- API Response Types ---
+
+export interface AdvanceGameResponse {
+  success: boolean;
+  error?: string;
+  userMessageId?: string;
+  assistantMessageId?: string;
+  // Legacy field for backward compatibility
+  nextScene?: SceneData;
+}
+
+// --- Legacy Types (for compatibility) ---
 
 export interface StoryHistoryEntry {
   role: "user" | "assistant";
   content: string;
 }
-
-// --- Story Map ---
 
 export interface StoryNode {
   id: string;
@@ -31,8 +138,6 @@ export interface StoryMap {
   edges: StoryEdge[];
 }
 
-// --- Scene & Choices ---
-
 export interface Choice {
   id: number;
   text: string;
@@ -42,38 +147,6 @@ export interface SceneData {
   current_node_id: string;
   content: string;
   choices: Choice[];
-}
-
-// --- Story Concept ---
-
-export interface StoryConcept {
-  author: string;
-  title: string;
-  writing_style: string;
-}
-
-// --- Game Entity ---
-
-export interface Game {
-  id: number;
-  storyType: string;
-  writingStyle: string | null;
-  author: string | null;
-  title: string | null;
-  storyMap: StoryMap | null;
-  storyHistory: StoryHistoryEntry[];
-  currentSceneJson: SceneData | null;
-  currentNodeId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-// --- API Response Types ---
-
-export interface AdvanceGameResponse {
-  success: boolean;
-  error?: string;
-  nextScene?: SceneData;
 }
 
 // --- Genre Types ---

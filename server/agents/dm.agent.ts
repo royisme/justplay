@@ -48,6 +48,20 @@ export class DMAgent {
     return result.text;
   }
 
+  async generateOpening(): Promise<string> {
+    const systemPrompt = this.buildSystemPrompt();
+    const openingInstruction = "The user has just started a new game. Provide an engaging opening narrative that sets the scene and asks the user to introduce their character or take their first action. Keep it immersive and true to the scenario style.";
+
+    const result = await generateText({
+      model: this.model,
+      system: systemPrompt,
+      prompt: openingInstruction,
+      maxOutputTokens: 1000,
+    });
+
+    return result.text;
+  }
+
   private buildSystemPrompt(): string {
     const { scenario, game } = this.context;
 

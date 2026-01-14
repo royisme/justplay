@@ -10,6 +10,19 @@ import { getDb } from "@server/db/client";
 import { providers } from "@server/db/schema";
 import { eq } from "drizzle-orm";
 import type { Route } from "./+types/providers";
+import { Button } from "~/components/ui/Button";
+import { Input } from "~/components/ui/Input";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/Card";
+import { Badge } from "~/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
+import { useTranslation } from "react-i18next";
 
 // --- Types ---
 
@@ -116,223 +129,197 @@ export async function action({ request, context }: Route.ActionArgs) {
 // --- Component ---
 
 export default function ProvidersPage() {
+  const { t } = useTranslation();
   const { providers: providerList } = useLoaderData<typeof loader>();
   const actionData = useActionData<{ error?: string; success?: string }>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-text-primary mb-6">
-        LLM Providers
-      </h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-text-primary">{t("admin.providers.title")}</h1>
+        <p className="text-muted-foreground">{t("admin.providers.subtitle")}</p>
+      </div>
 
       {/* Status Messages */}
       {actionData?.error && (
-        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-600 text-sm">
+        <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-600 text-sm">
           {actionData.error}
         </div>
       )}
       {actionData?.success && (
-        <div className="mb-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-600 text-sm">
+        <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-600 text-sm">
           {actionData.success}
         </div>
       )}
 
       {/* Add Provider Form */}
-      <div className="bg-background-secondary rounded-xl border border-border p-6 mb-6">
-        <h2 className="text-lg font-semibold text-text-primary mb-4">
-          Add New Provider
-        </h2>
-        <Form method="post" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="hidden" name="intent" value="create" />
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("admin.providers.add_new")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form method="post" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="hidden" name="intent" value="create" />
 
-          <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">
-              Provider Name
-            </label>
-            <input
-              name="name"
-              required
-              placeholder="e.g., OpenRouter, DeepSeek"
-              className="w-full px-3 py-2 bg-background-primary border border-border rounded-lg text-text-primary outline-none focus:ring-2 focus:ring-accent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">
-              Base URL
-            </label>
-            <input
-              name="baseURL"
-              type="url"
-              required
-              placeholder="https://api.provider.com/v1"
-              className="w-full px-3 py-2 bg-background-primary border border-border rounded-lg text-text-primary outline-none focus:ring-2 focus:ring-accent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">
-              API Key
-            </label>
-            <input
-              name="apiKey"
-              type="password"
-              required
-              placeholder="sk-..."
-              className="w-full px-3 py-2 bg-background-primary border border-border rounded-lg text-text-primary outline-none focus:ring-2 focus:ring-accent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1">
-              Models (comma separated)
-            </label>
-            <input
-              name="models"
-              required
-              placeholder="gpt-4o, gpt-4o-mini, claude-3-5-sonnet"
-              className="w-full px-3 py-2 bg-background-primary border border-border rounded-lg text-text-primary outline-none focus:ring-2 focus:ring-accent"
-            />
-          </div>
-
-          <div className="md:col-span-2 flex items-center justify-between">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="isDefault"
-                value="true"
-                className="rounded border-border"
+            <div>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
+                {t("admin.providers.name")}
+              </label>
+              <Input
+                name="name"
+                required
+                placeholder="e.g., OpenRouter, DeepSeek"
               />
-              <span className="text-sm text-text-secondary">
-                Set as default provider
-              </span>
-            </label>
+            </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="px-4 py-2 bg-accent hover:bg-accent-hover text-white rounded-lg transition-colors disabled:opacity-50"
-            >
-              {isSubmitting ? "Adding..." : "Add Provider"}
-            </button>
-          </div>
-        </Form>
-      </div>
+            <div>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
+                {t("admin.providers.base_url")}
+              </label>
+              <Input
+                name="baseURL"
+                type="url"
+                required
+                placeholder="https://api.provider.com/v1"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
+                {t("admin.providers.api_key")}
+              </label>
+              <Input
+                name="apiKey"
+                type="password"
+                required
+                placeholder="sk-..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
+                {t("admin.providers.models")}
+              </label>
+              <Input
+                name="models"
+                required
+                placeholder="gpt-4o, claude-3-5-sonnet"
+              />
+            </div>
+
+            <div className="md:col-span-2 flex items-center justify-between">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  name="isDefault"
+                  value="true"
+                  className="rounded border-border"
+                />
+                <span className="text-sm text-muted-foreground">
+                  {t("admin.providers.is_default")}
+                </span>
+              </label>
+
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? t("admin.providers.adding") : t("admin.providers.add_button")}
+              </Button>
+            </div>
+          </Form>
+        </CardContent>
+      </Card>
 
       {/* Provider List */}
-      <div className="bg-background-secondary rounded-xl border border-border overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-border bg-background-primary">
-              <th className="px-4 py-3 text-left text-sm font-medium text-text-secondary">
-                Name
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-text-secondary">
-                Base URL
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-text-secondary">
-                Models
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-text-secondary">
-                Status
-              </th>
-              <th className="px-4 py-3 text-right text-sm font-medium text-text-secondary">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {providerList.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="px-4 py-8 text-center text-text-secondary"
-                >
-                  No providers configured. Add one above.
-                </td>
-              </tr>
-            ) : (
-              providerList.map((provider: Provider) => (
-                <tr key={provider.id} className="border-b border-border">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-text-primary">
-                        {provider.name}
-                      </span>
-                      {provider.isDefault && (
-                        <span className="text-xs px-2 py-0.5 bg-accent/10 text-accent rounded-full">
-                          Default
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-text-secondary text-sm font-mono">
-                    {provider.baseURL}
-                  </td>
-                  <td className="px-4 py-3 text-text-secondary text-sm">
-                    {provider.models.slice(0, 3).join(", ")}
-                    {provider.models.length > 3 && "..."}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`text-xs px-2 py-0.5 rounded-full ${
-                        provider.isActive
-                          ? "bg-green-500/10 text-green-600"
-                          : "bg-gray-500/10 text-gray-500"
-                      }`}
-                    >
-                      {provider.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      {!provider.isDefault && provider.isActive && (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("admin.providers.list_title")}</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t("admin.providers.name")}</TableHead>
+                <TableHead>{t("admin.providers.base_url")}</TableHead>
+                <TableHead>{t("admin.providers.models_short")}</TableHead>
+                <TableHead>{t("admin.common.status")}</TableHead>
+                <TableHead className="text-right">{t("admin.common.actions")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {providerList.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    {t("admin.providers.no_providers")}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                providerList.map((provider: Provider) => (
+                  <TableRow key={provider.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{provider.name}</span>
+                        {provider.isDefault && (
+                          <Badge variant="default" className="text-xs">{t("admin.common.default")}</Badge>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm font-mono">
+                      {provider.baseURL}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {provider.models.slice(0, 2).join(", ")}
+                      {provider.models.length > 2 && `... +${provider.models.length - 2}`}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={provider.isActive ? "default" : "secondary"}>
+                        {provider.isActive ? t("admin.common.active") : t("admin.common.inactive")}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        {!provider.isDefault && provider.isActive && (
+                          <Form method="post" className="inline">
+                            <input type="hidden" name="intent" value="setDefault" />
+                            <input type="hidden" name="id" value={provider.id} />
+                            <Button type="submit" variant="ghost" size="sm">
+                              {t("admin.common.set_default")}
+                            </Button>
+                          </Form>
+                        )}
                         <Form method="post" className="inline">
-                          <input type="hidden" name="intent" value="setDefault" />
+                          <input type="hidden" name="intent" value="toggle" />
                           <input type="hidden" name="id" value={provider.id} />
-                          <button
-                            type="submit"
-                            className="text-xs text-accent hover:underline"
-                          >
-                            Set Default
-                          </button>
+                          <Button type="submit" variant="ghost" size="sm">
+                            {provider.isActive ? t("admin.common.inactive") : t("admin.common.active")}
+                          </Button>
                         </Form>
-                      )}
-                      <Form method="post" className="inline">
-                        <input type="hidden" name="intent" value="toggle" />
-                        <input type="hidden" name="id" value={provider.id} />
-                        <button
-                          type="submit"
-                          className="text-xs text-text-secondary hover:text-text-primary"
-                        >
-                          {provider.isActive ? "Disable" : "Enable"}
-                        </button>
-                      </Form>
-                      <Form method="post" className="inline">
-                        <input type="hidden" name="intent" value="delete" />
-                        <input type="hidden" name="id" value={provider.id} />
-                        <button
-                          type="submit"
-                          className="text-xs text-red-500 hover:underline"
-                          onClick={(e) => {
-                            if (!confirm("Delete this provider?")) {
-                              e.preventDefault();
-                            }
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </Form>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+                        <Form method="post" className="inline">
+                          <input type="hidden" name="intent" value="delete" />
+                          <input type="hidden" name="id" value={provider.id} />
+                          <Button
+                            type="submit"
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-600"
+                            onClick={(e: React.MouseEvent) => {
+                              if (!confirm(t("admin.common.confirm_delete"))) {
+                                e.preventDefault();
+                              }
+                            }}
+                          >
+                            {t("admin.common.delete")}
+                          </Button>
+                        </Form>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

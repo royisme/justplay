@@ -65,7 +65,7 @@ export function LandingPage() {
         </p>
 
         <Link
-          to="/play"
+          to="/dashboard"
           className="inline-flex items-center justify-center gap-2.5 px-6 py-4 text-lg font-medium rounded-xl bg-primary hover:bg-primary/90 text-background-primary shadow-md transition-all"
         >
           <PlayIcon size={24} weight="fill" />

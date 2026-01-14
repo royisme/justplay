@@ -1,4 +1,5 @@
-import { useLoaderData, redirect } from "react-router";
+import { useState } from "react";
+import { useLoaderData, redirect, Link } from "react-router";
 import { getEnv } from "@server/config/env";
 import { getDb } from "@server/db/client";
 import { createAuth } from "@server/auth/auth";
@@ -7,6 +8,9 @@ import { eq, and, asc } from "drizzle-orm";
 import type { Route } from "./+types/library.$id";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
+import { Button } from "~/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/Card";
+import { ChevronLeft, BookOpen, List } from "lucide-react";
 
 export async function loader({ request, params, context }: Route.LoaderArgs) {
   const env = getEnv(context);

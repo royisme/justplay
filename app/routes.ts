@@ -19,7 +19,7 @@ export default [
     route("game/:id", "routes/_app/game.$id.tsx"),
     route("library", "routes/_app/library.tsx"),
     route("library/:id", "routes/_app/library.$id.tsx"),
-    // route("settings", "routes/_app/settings.tsx"), // Not implemented yet
+    route("settings", "routes/_app/settings.tsx"),
   ]),
 
   // API Routes
@@ -29,6 +29,8 @@ export default [
   layout("routes/admin/layout.tsx", [
     route("admin", "routes/admin/_index.tsx", { index: true }),
     route("admin/scenarios", "routes/admin/scenarios.tsx"),
+    route("admin/scenarios/new", "routes/admin/scenarios.new.tsx"),
+    route("admin/scenarios/:id/edit", "routes/admin/scenarios.$id.edit.tsx"),
     route("admin/users", "routes/admin/users.tsx"),
     route("admin/providers", "routes/admin/providers.tsx"),
     route("admin/audit", "routes/admin/audit.tsx"),

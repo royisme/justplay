@@ -10,83 +10,49 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
+// Import translation modules
+import zhApp from "./locales/zh/app";
+import zhLanding from "./locales/zh/landing";
+import zhHome from "./locales/zh/home";
+import zhLogin from "./locales/zh/login";
+import zhGame from "./locales/zh/game";
+import zhSidebar from "./locales/zh/sidebar";
+import zhAdmin from "./locales/zh/admin";
+import zhCommon from "./locales/zh/common";
+
+import enApp from "./locales/en/app";
+import enLanding from "./locales/en/landing";
+import enHome from "./locales/en/home";
+import enLogin from "./locales/en/login";
+import enGame from "./locales/en/game";
+import enSidebar from "./locales/en/sidebar";
+import enAdmin from "./locales/en/admin";
+import enCommon from "./locales/en/common";
+
 // Inline translation resources for SSR compatibility
 const resources = {
   zh: {
     common: {
-      app: {
-        title: "JustPlay",
-        description: "进入无限可能的世界。你的选择决定故事的走向。",
-      },
-      home: {
-        start_adventure: "开始新的冒险",
-        select_genre: "选择故事类型",
-        generate_story: "生成故事",
-        genres: {
-          xuanhuan: "东方玄幻",
-          magic: "西方魔幻",
-          cyberpunk: "赛博朋克",
-          mystery: "悬疑解谜",
-          scifi: "末世科幻",
-        },
-      },
-      game: {
-        loading: "正在构建命运的脉络...",
-        generating_concept: "正在构思故事核心...",
-        generating_map: "正在构建世界地图...",
-        starting: "故事即将开始...",
-        choices: "选择",
-        back_to_home: "返回首页",
-        toggle_map: "查看故事地图",
-        generating: "AI 正在书写下一章...",
-      },
-      common: {
-        error: "故事生成失败，请稍后再试。",
-        error_title: "哎呀！",
-        error_details: "发生了意外错误。",
-        not_found: "页面未找到。",
-        retry: "重试",
-        powered_by: "基于 AI 和 React Router v7",
-      },
+      app: zhApp,
+      landing: zhLanding,
+      home: zhHome,
+      login: zhLogin,
+      game: zhGame,
+      sidebar: zhSidebar,
+      admin: zhAdmin,
+      common: zhCommon,
     },
   },
   en: {
     common: {
-      app: {
-        title: "JustPlay",
-        description:
-          "Enter a world of infinite possibilities. Your choices shape the story.",
-      },
-      home: {
-        start_adventure: "Start New Adventure",
-        select_genre: "Select Story Genre",
-        generate_story: "Generate Story",
-        genres: {
-          xuanhuan: "Eastern Fantasy",
-          magic: "Western Magic",
-          cyberpunk: "Cyberpunk",
-          mystery: "Mystery",
-          scifi: "Post-Apocalyptic Sci-Fi",
-        },
-      },
-      game: {
-        loading: "Weaving the threads of fate...",
-        generating_concept: "Crafting the story core...",
-        generating_map: "Building the world map...",
-        starting: "The story is about to begin...",
-        choices: "Choices",
-        back_to_home: "Back to Home",
-        toggle_map: "View Story Map",
-        generating: "AI is writing the next chapter...",
-      },
-      common: {
-        error: "Failed to generate story. Please try again later.",
-        error_title: "Oops!",
-        error_details: "An unexpected error occurred.",
-        not_found: "Page not found.",
-        retry: "Retry",
-        powered_by: "Powered by AI and React Router v7",
-      },
+      app: enApp,
+      landing: enLanding,
+      home: enHome,
+      login: enLogin,
+      game: enGame,
+      sidebar: enSidebar,
+      admin: enAdmin,
+      common: enCommon,
     },
   },
 };

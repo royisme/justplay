@@ -7,7 +7,7 @@
 import { useState, useCallback, useRef } from "react";
 
 export interface UseStoryStreamOptions {
-  gameId: number;
+  gameId: string | number;
   language?: string;
   onComplete?: (fullText: string) => void;
   onError?: (error: Error) => void;

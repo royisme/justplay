@@ -6,7 +6,19 @@ import { SidebarFooter } from "./SidebarFooter";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import type { ReactNode } from "react";
 
-export function Sidebar({ children }: { children: ReactNode }) {
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  image?: string | null;
+}
+
+interface SidebarProps {
+  children: ReactNode;
+  user?: UserData | null;
+}
+
+export function Sidebar({ children, user }: SidebarProps) {
   const { isCollapsed } = useSidebar();
 
   return (
@@ -24,7 +36,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
             {children}
         </nav>
       </ScrollArea>
-      <SidebarFooter />
+      <SidebarFooter user={user} />
     </motion.div>
   );
 }

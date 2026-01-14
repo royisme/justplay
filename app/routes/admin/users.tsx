@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const env = getEnv(context);
@@ -23,14 +24,15 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function UsersPage() {
+  const { t } = useTranslation();
   const { users } = useLoaderData<typeof loader>();
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">用户管理</h1>
-          <p className="text-muted-foreground">查看和管理注册用户</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t("admin.users.title")}</h1>
+          <p className="text-muted-foreground">{t("admin.users.subtitle")}</p>
         </div>
       </div>
 
@@ -38,11 +40,11 @@ export default function UsersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Avatar</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Joined</TableHead>
+              <TableHead className="w-[80px]">{t("admin.users.avatar")}</TableHead>
+              <TableHead>{t("admin.users.name")}</TableHead>
+              <TableHead>{t("admin.users.email")}</TableHead>
+              <TableHead>{t("admin.users.role")}</TableHead>
+              <TableHead>{t("admin.users.joined")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -18,7 +18,15 @@ AI Interactive Novel Generator - a full-stack TypeScript application with SSR.
 - **Typecheck**: `bun run typecheck`
 - **Build**: `bun run build`
 - **Deploy**: `bun run deploy`
+## Browser Automation
 
+Use `agent-browser` for web automation. Run `agent-browser --help` for all commands.
+
+Core workflow:
+1. `agent-browser open <url>` - Navigate to page
+2. `agent-browser snapshot -i` - Get interactive elements with refs (@e1, @e2)
+3. `agent-browser click @e1` / `fill @e2 "text"` - Interact using refs
+4. Re-snapshot after page changes
 ## Directory Structure and Code Boundaries
 
 This project uses SSR (Server-Side Rendering). **Strict separation between server and client code is critical** to avoid hydration mismatches and runtime errors.

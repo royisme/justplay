@@ -8,6 +8,7 @@ import { getEnv } from "@server/config/env";
 import { getDb } from "@server/db/client";
 import { gameScenarios } from "@server/db/schema";
 import { desc } from "drizzle-orm";
+import { useTranslation } from "react-i18next";
 import type { Route } from "./+types/scenarios";
 
 export async function loader({ context }: Route.LoaderArgs) {
@@ -33,19 +34,18 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function ScenariosPage() {
+  const { t } = useTranslation();
   const { scenarios } = useLoaderData<typeof loader>();
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">世界构建器</h1>
-          <p className="text-muted-foreground">管理游戏剧本、世界观和 Agent 设定</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t("admin.scenarios.title")}</h1>
+          <p className="text-muted-foreground">{t("admin.scenarios.subtitle")}</p>
         </div>
-        <Button asChild>
-          <Link to="new">
-            <Plus className="mr-2 h-4 w-4" /> 创建新世界
-          </Link>
+        <Button as={Link} to="new">
+          <Plus className="mr-2 h-4 w-4" /> {t("admin.scenarios.create_new")}
         </Button>
       </div>
 
@@ -56,7 +56,7 @@ export default function ScenariosPage() {
               <div className="flex items-start justify-between">
                 <CardTitle className="text-xl">{scenario.name}</CardTitle>
                 <Badge variant={scenario.isActive ? "default" : "secondary"}>
-                  {scenario.isActive ? "Active" : "Draft"}
+                  {scenario.isActive ? t("admin.common.active") : t("admin.common.draft")}
                 </Badge>
               </div>
               <CardDescription className="line-clamp-2">{scenario.description}</CardDescription>
@@ -65,7 +65,7 @@ export default function ScenariosPage() {
               <div className="grid gap-2 text-sm">
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium">类型:</span> {scenario.storyType}
+                  <span className="font-medium">{t("admin.scenarios.type")}:</span> {scenario.storyType}
                 </div>
                 <div className="text-xs text-muted-foreground mt-2">
                   <span className="font-mono bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">
@@ -75,10 +75,8 @@ export default function ScenariosPage() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <Link to={`${scenario.id}/edit`}>
-                  <Pencil className="mr-2 h-3 w-3" /> 编辑
-                </Link>
+              <Button variant="outline" size="sm" as={Link} to={`${scenario.id}/edit`}>
+                <Pencil className="mr-2 h-3 w-3" /> {t("admin.common.edit")}
               </Button>
             </CardFooter>
           </Card>
@@ -87,9 +85,9 @@ export default function ScenariosPage() {
         {scenarios.length === 0 && (
           <div className="col-span-full flex h-40 items-center justify-center rounded-lg border border-dashed bg-zinc-50 dark:bg-zinc-900/50">
             <div className="text-center">
-              <p className="text-sm text-muted-foreground">还没有创建任何世界设定</p>
-              <Button variant="link" asChild>
-                <Link to="new">立即创建</Link>
+              <p className="text-sm text-muted-foreground">{t("admin.scenarios.no_scenarios")}</p>
+              <Button variant="link" as={Link} to="new">
+                {t("admin.scenarios.create_now")}
               </Button>
             </div>
           </div>

@@ -17,7 +17,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   // Verify auth
   const auth = createAuth(db, env);
   const session = await auth.api.getSession({ headers: request.headers });
-  if (!session) return redirect("/auth/login");
+  if (!session) return redirect("/login");
 
   // Fetch active scenarios
   const scenarios = await db.select().from(gameScenarios).where(eq(gameScenarios.isActive, true));
@@ -31,7 +31,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const auth = createAuth(db, env);
 
   const session = await auth.api.getSession({ headers: request.headers });
-  if (!session) return redirect("/auth/login");
+  if (!session) return redirect("/login");
 
   const formData = await request.formData();
   const scenarioId = formData.get("scenario_id") as string;

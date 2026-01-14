@@ -63,7 +63,7 @@ export function GamePage({ game, className = "" }: GamePageProps) {
   const [isClient, setIsClient] = useState(false);
 
   const storyMap = (game.storyMap as StoryMap) || { nodes: [], edges: [] };
-  const theme = genreToTheme[game.storyType] || "default";
+  const theme = genreToTheme[game.storyType || ""] || "default";
   const isLoading = fetcher.state === "submitting";
 
   // Streaming hook
@@ -205,8 +205,8 @@ export function GamePage({ game, className = "" }: GamePageProps) {
         >
           <GameHeader
             title={game.title || "Untitled Story"}
-            author={game.author}
-            storyType={game.storyType}
+            author={game.author ?? null}
+            storyType={game.storyType ?? "Unknown"}
             showMap={showMap}
             onToggleMap={handleToggleMap}
           />

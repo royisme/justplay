@@ -1,0 +1,21 @@
+export default {
+  loading: "正在构建命运的脉络...",
+  generating_concept: "正在构思故事核心...",
+  generating_map: "正在构建世界地图...",
+  starting: "故事即将开始...",
+  choices: "选择",
+  back_to_home: "返回首页",
+  toggle_map: "查看故事地图",
+  generating: "AI 正在书写下一章...",
+  story_map: {
+    title: "故事地图",
+    volume: "第 {{volume}} 卷",
+    chapter: "第 {{chapter}} 章",
+    current: "当前",
+    message_count: "{{count}} 条对话",
+    not_started: "尚未开始",
+    characters: "角色",
+    more: "更多",
+    progress: "故事进度",
+  },
+};

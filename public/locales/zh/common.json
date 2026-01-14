@@ -62,5 +62,28 @@
     "error": "故事生成失败，请稍后再试。",
     "retry": "重试",
     "powered_by": "基于 AI 和 React Router v7"
+  },
+  "dashboard": {
+    "title": "我的冒险",
+    "subtitle": "管理你的活跃游戏和存档 (槽位: {{used}}/{{max}})",
+    "new_game": "新游戏",
+    "continue": "继续冒险",
+    "empty_slot": "空槽位",
+    "empty_slot_desc": "开始一段新的旅程",
+    "create_game": "创建游戏",
+    "library": "藏书阁",
+    "view_all": "查看全部",
+    "no_completed_games": "还没有完成任何冒险。开始你的旅程吧！",
+    "last_played": "上次游玩: {{time}}",
+    "current_progress": "当前进度: V{{volume}}-C{{chapter}}",
+    "game_preview": "游戏预览"
+  },
+  "sidebar": {
+    "my_adventures": "我的冒险",
+    "new_game": "新游戏",
+    "library": "藏书阁",
+    "no_completed_stories": "暂无完成的故事",
+    "settings": "设置",
+    "logout": "退出登录"
   }
 }

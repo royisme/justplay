@@ -1,11 +1,16 @@
 /**
  * @file Button.tsx
  * @description Base UI Button component with variants and sizes.
+ * Supports polymorphic rendering via the `as` prop (BaseUI style).
  * @module app/components/ui/Button
  */
 
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import {
+  forwardRef,
+  type ReactNode,
+  type ElementType,
+  type ComponentPropsWithRef,
+} from "react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -17,16 +22,21 @@ function cn(...inputs: ClassValue[]) {
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "choice" | "outline" | "link";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+// Base props for Button (without element-specific attributes)
+export interface ButtonOwnProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
   icon?: ReactNode;
   iconPosition?: "left" | "right";
   fullWidth?: boolean;
-  asChild?: boolean;
   children?: ReactNode;
+  as?: ElementType;
 }
+
+// Combined props type
+export type ButtonProps<E extends ElementType = "button"> = ButtonOwnProps &
+  Omit<ComponentPropsWithRef<E>, keyof ButtonOwnProps>;
 
 const baseStyles =
   "inline-flex items-center justify-center font-medium rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
@@ -54,79 +64,79 @@ const sizeStyles: Record<ButtonSize, string> = {
   icon: "h-10 w-10",
 };
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      variant = "primary",
-      size = "md",
-      loading = false,
-      icon,
-      iconPosition = "left",
-      fullWidth = false,
-      asChild = false,
-      disabled,
-      className = "",
-      children,
-      ...props
-    },
-    ref
-  ) => {
-    const Comp = asChild ? Slot : "button";
-    const isDisabled = disabled || loading;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Button = forwardRef<any, ButtonProps<any>>(function Button(
+  {
+    as: Component = "button",
+    variant = "primary" as ButtonVariant,
+    size = "md" as ButtonSize,
+    loading = false,
+    icon,
+    iconPosition = "left",
+    fullWidth = false,
+    disabled,
+    className = "",
+    children,
+    ...props
+  },
+  ref
+) {
+  const isDisabled = disabled || loading;
+  const appliedSize = variant === "choice" ? "" : sizeStyles[size as ButtonSize];
 
-    const appliedSize = variant === "choice" ? "" : sizeStyles[size];
+  const classes = cn(
+    baseStyles,
+    variantStyles[variant as ButtonVariant],
+    appliedSize,
+    fullWidth ? "w-full" : "",
+    className
+  );
 
-    const classes = cn(
-      baseStyles,
-      variantStyles[variant],
-      appliedSize,
-      fullWidth ? "w-full" : "",
-      className
-    );
+  // Only pass disabled prop to actual button elements
+  const elementProps = Component === "button" ? { disabled: isDisabled } : {};
 
-    return (
-      <Comp
-        ref={ref}
-        disabled={isDisabled}
-        className={classes}
-        {...props}
-      >
-        {loading && !asChild && (
-          <svg
-            className="animate-spin h-4 w-4 mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-        )}
+  return (
+    <Component
+      ref={ref}
+      className={classes}
+      {...elementProps}
+      {...props}
+    >
+      {loading && (
+        <svg
+          className="animate-spin h-4 w-4 mr-2"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          />
+        </svg>
+      )}
 
-        {!loading && icon && iconPosition === "left" && !asChild && icon}
+      {!loading && icon && iconPosition === "left" && icon}
 
-        {variant === "choice" && !asChild && (
-          <span className="absolute left-0 top-0 bottom-0 w-1 bg-accent opacity-0 transition-opacity group-hover:opacity-100" />
-        )}
+      {variant === "choice" && (
+        <span className="absolute left-0 top-0 bottom-0 w-1 bg-accent opacity-0 transition-opacity group-hover:opacity-100" />
+      )}
 
-        {children}
+      {children}
 
-        {!loading && icon && iconPosition === "right" && !asChild && icon}
-      </Comp>
-    );
-  }
-);
+      {!loading && icon && iconPosition === "right" && icon}
+    </Component>
+  );
+});
 
 Button.displayName = "Button";
 

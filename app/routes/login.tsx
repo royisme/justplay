@@ -7,12 +7,14 @@
 
 import { Form, redirect, useActionData, useNavigation, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import { createAuth } from "@server/auth/auth";
 import { getEnv } from "@server/config/env";
 import { getDb } from "@server/db/client";
 import type { Route } from "./+types/login";
 import { Button } from "~/components/ui/Button";
 import { Card } from "~/components/ui/Card";
+import { Input } from "~/components/ui/Input";
 import { LanguageToggle } from "~/components/ui/LanguageToggle";
 
 interface ActionData {
@@ -28,7 +30,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 
   if (session?.user) {
     const url = new URL(request.url);
-    const returnTo = url.searchParams.get("returnTo") || "/play";
+    const returnTo = url.searchParams.get("returnTo") || "/dashboard";
     return redirect(returnTo);
   }
 
@@ -40,7 +42,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const isSignUp = formData.get("mode") === "signup";
-  const returnTo = formData.get("returnTo") as string || "/play";
+  const returnTo = formData.get("returnTo") as string || "/dashboard";
 
   if (!email || !password) {
     return { error: "Email and password are required" };
@@ -102,8 +104,10 @@ export default function LoginPage() {
   const actionData = useActionData<ActionData>();
   const navigation = useNavigation();
   const [searchParams] = useSearchParams();
+  const [isSignUp, setIsSignUp] = useState(false);
+
   const isSubmitting = navigation.state === "submitting";
-  const returnTo = searchParams.get("returnTo") || "/play";
+  const returnTo = searchParams.get("returnTo") || "/dashboard";
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background-primary p-4">
@@ -115,14 +119,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <Card padding="lg">
           <h1 className="text-2xl font-bold text-text-primary mb-2">
-            {t("login.title")}
+            {isSignUp ? t("login.create_account") : t("login.title")}
           </h1>
           <p className="text-text-secondary mb-6">
-            {t("login.subtitle")}
+            {isSignUp ? t("login.signup_subtitle", "Create an account to get started") : t("login.subtitle")}
           </p>
 
           <Form method="post" className="space-y-4">
-            <input type="hidden" name="mode" value="signin" />
+            <input type="hidden" name="mode" value={isSignUp ? "signup" : "signin"} />
             <input type="hidden" name="returnTo" value={returnTo} />
 
             <div>
@@ -132,13 +136,12 @@ export default function LoginPage() {
               >
                 {t("login.email")}
               </label>
-              <input
+              <Input
                 id="email"
                 name="email"
                 type="email"
                 required
                 autoComplete="email"
-                className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-text-primary"
                 placeholder={t("login.email_placeholder")}
               />
             </div>
@@ -150,14 +153,13 @@ export default function LoginPage() {
               >
                 {t("login.password")}
               </label>
-              <input
+              <Input
                 id="password"
                 name="password"
                 type="password"
                 required
-                autoComplete="current-password"
+                autoComplete={isSignUp ? "new-password" : "current-password"}
                 minLength={8}
-                className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all text-text-primary"
                 placeholder={t("login.password_placeholder")}
               />
             </div>
@@ -175,50 +177,23 @@ export default function LoginPage() {
               fullWidth
               disabled={isSubmitting}
             >
-              {isSubmitting ? t("login.signing_in") : t("login.sign_in")}
+              {isSubmitting
+                ? (isSignUp ? t("login.signing_up", "Signing up...") : t("login.signing_in"))
+                : (isSignUp ? t("login.sign_up", "Sign up") : t("login.sign_in"))}
             </Button>
           </Form>
 
           <div className="mt-4 pt-4 border-t border-border">
-            <Form method="post" className="space-y-4">
-              <input type="hidden" name="mode" value="signup" />
-              <input type="hidden" name="returnTo" value={returnTo} />
-              <input type="hidden" name="email" id="signup-email" />
-              <input type="hidden" name="password" id="signup-password" />
-              <p className="text-sm text-text-secondary text-center">
-                {t("login.no_account")}{" "}
-                <button
-                  type="submit"
-                  onClick={(e) => {
-                    const mainForm = document.querySelector(
-                      'form input[name="mode"][value="signin"]'
-                    )?.closest("form");
-                    const thisForm = e.currentTarget.closest("form");
-                    if (mainForm && thisForm) {
-                      const mainEmail = mainForm.querySelector(
-                        'input[name="email"]'
-                      ) as HTMLInputElement;
-                      const mainPassword = mainForm.querySelector(
-                        'input[name="password"]'
-                      ) as HTMLInputElement;
-                      const signupEmail = thisForm.querySelector(
-                        "#signup-email"
-                      ) as HTMLInputElement;
-                      const signupPassword = thisForm.querySelector(
-                        "#signup-password"
-                      ) as HTMLInputElement;
-                      if (signupEmail && mainEmail)
-                        signupEmail.value = mainEmail.value;
-                      if (signupPassword && mainPassword)
-                        signupPassword.value = mainPassword.value;
-                    }
-                  }}
-                  className="text-accent hover:underline"
-                >
-                  {t("login.create_account")}
-                </button>
-              </p>
-            </Form>
+            <p className="text-sm text-text-secondary text-center">
+              {isSignUp ? t("login.already_have_account", "Already have an account?") : t("login.no_account")}{" "}
+              <button
+                type="button"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="text-accent hover:underline focus:outline-none"
+              >
+                {isSignUp ? t("login.sign_in") : t("login.create_account")}
+              </button>
+            </p>
           </div>
         </Card>
 

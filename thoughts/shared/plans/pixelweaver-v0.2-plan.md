@@ -3,11 +3,21 @@
 ## Overview
 
 AI 交互式小说游戏产品，核心特性:
+
 - 强制登录，访客只能看 Landing Page
 - Trinity Slots: 每用户最多 3 个活跃游戏
 - 生命周期: ACTIVE (游戏) -> COMPLETED (故事书) / ABANDONED (放弃)
 - 多 Agent 自动化: DM, Writer, Scribe, Renderer
 - PixiJS 像素风格渲染
+
+> [!IMPORTANT]
+> **Architecture Adjustment (Jan 2026)**
+> The implementation of the **Narrative Engine** has shifted to a **Hybrid Model**:
+>
+> - **Core Logic**: Ink Engine (`inkjs`)
+> - **Prose Generation**: AI Agents (Writer/DM)
+>
+> Please refer to `server/runtime/ink-runner.ts` for the actual runtime implementation.
 
 ---
 
@@ -15,37 +25,42 @@ AI 交互式小说游戏产品，核心特性:
 
 ### 1.1 games (游戏表)
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | TEXT PK | UUID |
-| user_id | TEXT FK | 用户ID |
-| scenario_id | TEXT FK | 世界设定ID |
-| title | TEXT | 游戏标题 |
-| status | TEXT | active / completed / abandoned |
-| slot_index | INTEGER | 1-3 (active时必填) |
-| current_chapter | INTEGER | 当前章节 (1-100) |
-| current_volume | INTEGER | 当前卷 (1-5) |
-| story_metadata | JSON | Agent维护的后台数据 |
-| book_metadata | JSON | 故事书元数据 (完结后) |
-| created_at | TIMESTAMP | 创建时间 |
-| completed_at | TIMESTAMP | 完结时间 |
+| Column          | Type      | Description                    |
+| --------------- | --------- | ------------------------------ |
+| id              | TEXT PK   | UUID                           |
+| user_id         | TEXT FK   | 用户ID                         |
+| scenario_id     | TEXT FK   | 世界设定ID                     |
+| title           | TEXT      | 游戏标题                       |
+| status          | TEXT      | active / completed / abandoned |
+| slot_index      | INTEGER   | 1-3 (active时必填)             |
+| current_chapter | INTEGER   | 当前章节 (1-100)               |
+| current_volume  | INTEGER   | 当前卷 (1-5)                   |
+| story_metadata  | JSON      | Agent维护的后台数据            |
+| book_metadata   | JSON      | 故事书元数据 (完结后)          |
+| created_at      | TIMESTAMP | 创建时间                       |
+| completed_at    | TIMESTAMP | 完结时间                       |
 
 **story_metadata 结构:**
+
 ```json
 {
   "outline": "故事大纲...",
   "characters": [
-    { "id": "char_01", "name": "艾琳", "role": "protagonist", "traits": ["勇敢", "善良"] }
+    {
+      "id": "char_01",
+      "name": "艾琳",
+      "role": "protagonist",
+      "traits": ["勇敢", "善良"]
+    }
   ],
-  "relationships": [
-    { "from": "char_01", "to": "char_02", "type": "ally" }
-  ],
+  "relationships": [{ "from": "char_01", "to": "char_02", "type": "ally" }],
   "inventory": { "revolver": 1, "keycard": 1 },
   "plotSummary": ["第一章: 主角醒来...", "第二章: 遇到仿生人..."]
 }
 ```
 
 **book_metadata 结构:**
+
 ```json
 {
   "coverImage": "https://...",
@@ -56,40 +71,42 @@ AI 交互式小说游戏产品，核心特性:
 
 ### 1.2 messages (消息表 - 树形)
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | TEXT PK | 格式: {game_id}--{role}-{timestamp} |
-| game_id | TEXT FK | 所属游戏 |
-| parent_id | TEXT | 父消息ID (树形结构) |
-| role | TEXT | system / user / assistant |
-| content | TEXT | 消息内容 |
-| depth | INTEGER | 树深度 (0=root) |
-| slot_id | INTEGER | 分支编号 (默认0) |
-| is_active_path | BOOLEAN | 当前活跃路径 |
-| chapter_number | INTEGER | 所属章节 |
-| render_data | JSON | PixiJS 渲染指令 |
-| created_at | TIMESTAMP | 创建时间 |
+| Column         | Type      | Description                         |
+| -------------- | --------- | ----------------------------------- |
+| id             | TEXT PK   | 格式: {game_id}--{role}-{timestamp} |
+| game_id        | TEXT FK   | 所属游戏                            |
+| parent_id      | TEXT      | 父消息ID (树形结构)                 |
+| role           | TEXT      | system / user / assistant           |
+| content        | TEXT      | 消息内容                            |
+| depth          | INTEGER   | 树深度 (0=root)                     |
+| slot_id        | INTEGER   | 分支编号 (默认0)                    |
+| is_active_path | BOOLEAN   | 当前活跃路径                        |
+| chapter_number | INTEGER   | 所属章节                            |
+| render_data    | JSON      | PixiJS 渲染指令                     |
+| created_at     | TIMESTAMP | 创建时间                            |
 
 **Indexes:**
+
 - `game_path_idx`: (game_id, is_active_path) - 快速获取活跃路径
 - `parent_idx`: (parent_id) - 树遍历
 
 ### 1.3 game_scenarios (世界设定表 - Admin Only)
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | TEXT PK | UUID |
-| name | TEXT | "赛博朋克 2077 风格" |
-| description | TEXT | 描述 |
-| story_type | TEXT | 东方玄幻 / 赛博朋克 / ... |
-| dm_system_prompt | TEXT | DM Agent 提示词 |
-| writer_system_prompt | TEXT | Writer Agent 提示词 |
-| visual_style_prompt | TEXT | "pixel art, neon colors" |
-| model_config | JSON | 模型路由配置 |
-| is_active | BOOLEAN | 是否启用 |
-| created_at | TIMESTAMP | 创建时间 |
+| Column               | Type      | Description               |
+| -------------------- | --------- | ------------------------- |
+| id                   | TEXT PK   | UUID                      |
+| name                 | TEXT      | "赛博朋克 2077 风格"      |
+| description          | TEXT      | 描述                      |
+| story_type           | TEXT      | 东方玄幻 / 赛博朋克 / ... |
+| dm_system_prompt     | TEXT      | DM Agent 提示词           |
+| writer_system_prompt | TEXT      | Writer Agent 提示词       |
+| visual_style_prompt  | TEXT      | "pixel art, neon colors"  |
+| model_config         | JSON      | 模型路由配置              |
+| is_active            | BOOLEAN   | 是否启用                  |
+| created_at           | TIMESTAMP | 创建时间                  |
 
 **model_config 结构:**
+
 ```json
 {
   "dmModel": "claude-3-opus",
@@ -214,57 +231,57 @@ app/components/layout/
 
 ### Phase A: UI Foundation (Priority 1)
 
-| Step | Task | Files |
-|------|------|-------|
-| A1 | 创建 Sidebar 组件库 | `app/components/layout/*` |
-| A2 | 创建用户布局 | `app/routes/_app/layout.tsx` |
-| A3 | Dashboard 页面 (3槽位) | `app/routes/_app/dashboard.tsx` |
-| A4 | 重构管理员布局 | `app/routes/admin/layout.tsx` |
-| A5 | 更新路由配置 | `app/routes.ts` |
+| Step | Task                   | Files                           |
+| ---- | ---------------------- | ------------------------------- |
+| A1   | 创建 Sidebar 组件库    | `app/components/layout/*`       |
+| A2   | 创建用户布局           | `app/routes/_app/layout.tsx`    |
+| A3   | Dashboard 页面 (3槽位) | `app/routes/_app/dashboard.tsx` |
+| A4   | 重构管理员布局         | `app/routes/admin/layout.tsx`   |
+| A5   | 更新路由配置           | `app/routes.ts`                 |
 
 ### Phase B: Data Model (Priority 2)
 
-| Step | Task | Files |
-|------|------|-------|
-| B1 | 更新 Schema | `server/db/schema.ts` |
-| B2 | 生成迁移 | `drizzle/` |
-| B3 | GameService 更新 | `server/services/game.server.ts` |
-| B4 | Trinity Slots 逻辑 | 创建/删除/完结游戏 |
+| Step | Task               | Files                            |
+| ---- | ------------------ | -------------------------------- |
+| B1   | 更新 Schema        | `server/db/schema.ts`            |
+| B2   | 生成迁移           | `drizzle/`                       |
+| B3   | GameService 更新   | `server/services/game.server.ts` |
+| B4   | Trinity Slots 逻辑 | 创建/删除/完结游戏               |
 
 ### Phase C: Game Flow (Priority 3)
 
-| Step | Task | Files |
-|------|------|-------|
-| C1 | 新建游戏向导 | `app/routes/_app/game.new.tsx` |
-| C2 | 游戏页面重构 | `app/routes/_app/game.$id.tsx` |
-| C3 | 藏书阁列表 | `app/routes/_app/library.tsx` |
-| C4 | 阅读模式 | `app/routes/_app/library.$id.tsx` |
-| C5 | Flattening 逻辑 | 完结时生成故事书 |
+| Step | Task            | Files                             |
+| ---- | --------------- | --------------------------------- |
+| C1   | 新建游戏向导    | `app/routes/_app/game.new.tsx`    |
+| C2   | 游戏页面重构    | `app/routes/_app/game.$id.tsx`    |
+| C3   | 藏书阁列表      | `app/routes/_app/library.tsx`     |
+| C4   | 阅读模式        | `app/routes/_app/library.$id.tsx` |
+| C5   | Flattening 逻辑 | 完结时生成故事书                  |
 
 ### Phase D: Admin Features (Priority 4)
 
-| Step | Task | Files |
-|------|------|-------|
-| D1 | 世界构建器 | `app/routes/admin/scenarios.tsx` |
-| D2 | 用户管理 | `app/routes/admin/users.tsx` |
-| D3 | 内容审计 | `app/routes/admin/audit.tsx` |
+| Step | Task       | Files                            |
+| ---- | ---------- | -------------------------------- |
+| D1   | 世界构建器 | `app/routes/admin/scenarios.tsx` |
+| D2   | 用户管理   | `app/routes/admin/users.tsx`     |
+| D3   | 内容审计   | `app/routes/admin/audit.tsx`     |
 
 ### Phase E: Agent System (Priority 5)
 
-| Step | Task | Files |
-|------|------|-------|
-| E1 | DM Agent 集成 | `server/agents/dm.agent.ts` |
-| E2 | Writer Agent | `server/agents/writer.agent.ts` |
-| E3 | Scribe Agent (数据维护) | `server/agents/scribe.agent.ts` |
-| E4 | Renderer Agent (PixiJS) | `server/agents/renderer.agent.ts` |
+| Step | Task                    | Files                             |
+| ---- | ----------------------- | --------------------------------- |
+| E1   | DM Agent 集成           | `server/agents/dm.agent.ts`       |
+| E2   | Writer Agent            | `server/agents/writer.agent.ts`   |
+| E3   | Scribe Agent (数据维护) | `server/agents/scribe.agent.ts`   |
+| E4   | Renderer Agent (PixiJS) | `server/agents/renderer.agent.ts` |
 
 ### Phase F: PixiJS Enhancement (Priority 6)
 
-| Step | Task | Files |
-|------|------|-------|
-| F1 | 像素素材库集成 | `app/assets/sprites/` |
-| F2 | 场景渲染引擎 | `app/components/engine/` |
-| F3 | 角色动画系统 | AI 驱动的动画选择 |
+| Step | Task           | Files                    |
+| ---- | -------------- | ------------------------ |
+| F1   | 像素素材库集成 | `app/assets/sprites/`    |
+| F2   | 场景渲染引擎   | `app/components/engine/` |
+| F3   | 角色动画系统   | AI 驱动的动画选择        |
 
 ---
 
@@ -283,6 +300,7 @@ app/components/layout/
 ## 6. Dependencies
 
 ### 现有
+
 - React Router v7
 - Tailwind CSS v4
 - Framer Motion
@@ -292,6 +310,7 @@ app/components/layout/
 - PixiJS
 
 ### 新增 (可能)
+
 - nanoid (UUID 生成)
 - 像素素材库 (待定)
 

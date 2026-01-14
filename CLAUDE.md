@@ -12,21 +12,32 @@ AI Interactive Novel Generator - a full-stack TypeScript application with SSR.
 - **Runtime**: Bun
 - **Deployment**: Cloudflare Pages/Workers
 
+## Architecture Awareness (Critical)
+
+**Hybrid Narrative Engine**:
+
+- **Structure/State**: Controlled by **Ink** (`inkjs`). Deterministic and authoritative.
+- **Prose/Flavor**: Augmented by **AI Agents** (Vercel AI SDK).
+- **Golden Rule**: Logic and state changes happen in Ink (or `system-fns.ts` called by Ink). AI should _describe_ what happened, not _decide_ what happens (unless specifically delegating to a DM agent within the Ink flow).
+
 ## Common Commands
 
 - **Development**: `bun run dev`
 - **Typecheck**: `bun run typecheck`
 - **Build**: `bun run build`
 - **Deploy**: `bun run deploy`
+
 ## Browser Automation
 
 Use `agent-browser` for web automation. Run `agent-browser --help` for all commands.
 
 Core workflow:
+
 1. `agent-browser open <url>` - Navigate to page
 2. `agent-browser snapshot -i` - Get interactive elements with refs (@e1, @e2)
 3. `agent-browser click @e1` / `fill @e2 "text"` - Interact using refs
 4. Re-snapshot after page changes
+
 ## Directory Structure and Code Boundaries
 
 This project uses SSR (Server-Side Rendering). **Strict separation between server and client code is critical** to avoid hydration mismatches and runtime errors.
@@ -59,27 +70,30 @@ justplay/
 
 ### CRITICAL: Import Boundaries
 
-| From | Can Import | CANNOT Import |
-|------|------------|---------------|
-| `app/routes/*.tsx` | `~/`, `@server/` (in loader/action only), `@shared/` | - |
-| `app/pages/*.tsx` | `~/`, `@shared/` | `@server/` |
-| `app/components/*` | `~/`, `@shared/` | `@server/` |
-| `server/*` | `@server/`, `@shared/` | `~/` (app code) |
+| From               | Can Import                                           | CANNOT Import   |
+| ------------------ | ---------------------------------------------------- | --------------- |
+| `app/routes/*.tsx` | `~/`, `@server/` (in loader/action only), `@shared/` | -               |
+| `app/pages/*.tsx`  | `~/`, `@shared/`                                     | `@server/`      |
+| `app/components/*` | `~/`, `@shared/`                                     | `@server/`      |
+| `server/*`         | `@server/`, `@shared/`                               | `~/` (app code) |
 
 ### Server vs Client Code
 
 **Server-only** (runs in loader/action, Node/Edge runtime):
+
 - Database access (`@server/db/*`)
 - Environment variables (`@server/config/env`)
 - AI service calls (`@server/services/*`)
 - Cookie extraction (`@server/i18n.server`)
 
 **Client-only** (runs in browser after hydration):
+
 - `document`, `window`, `localStorage`
 - Browser APIs
 - Event handlers, React state
 
 **Isomorphic** (runs on both server and client):
+
 - React components in `app/`
 - Shared types from `@shared/`
 - i18n `useTranslation()` hook

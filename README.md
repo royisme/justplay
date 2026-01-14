@@ -2,35 +2,35 @@
 
 This is a dynamic interactive novel game powered by large language models (LLMs). It generates unique story plots, characters, and a visualized story development map in real-time based on the player's chosen story type, offering an immersive reading experience filled with unknowns and choices.
 
-This project is migrating to a full-stack TypeScript architecture, utilizing React Router v7 for SSR/SPA hybrid mode, deployed on Cloudflare Workers.
+This project is migrating to a full-stack TypeScript architecture, utilizing React Router v7 for SSR/SPA hybrid mode, deployed on Cloudflare Workers. It uses a **Hybrid Architecture** combining the **Ink Engine** for structured narrative control and **AI Agents** for dynamic prose generation.
 
 ---
 
 ## ✨ Core Features
 
-*   **🤖 Dynamic Story Generation**: The game's core is AI-driven, capable of dynamically creating story beginnings, developments, and multiple endings based on preset literary styles (e.g., "Eastern Fantasy," "Western Fantasy").
-*   **🎲 Randomized Authors and Works**: Each new game randomly generates an "author" and "title" that fit the selected type, enhancing the game's fun and immersion.
-*   **🗺️ Visualized Story Map**: At the start of the game, the backend pre-generates the entire story structure map (Story Map), rendered on the frontend via [Mermaid.js](https://mermaid-js.github.io/mermaid/#/), allowing players to visually see potential branches and endings.
-*   **🌿 Branching Narrative**: Each player choice influences the story's direction, leading to different plot branches and endings.
-*   **🎨 Dynamic Writing Style**: The AI generates unique writing style descriptions based on the story type and applies them to the entire narrative, enhancing immersion.
-*   **🌐 SSR and Client Hydration**: Supports server-side rendering (SSR) and client hydration for fast loading and consistent user experience.
-*   **🔒 Frontend-Backend Separation**: Strictly separates server-only, shared, and client code to prevent sensitive information leaks.
+- **🤖 AI-Augmented Narrative**: The core narrative structure is driven by the industry-standard **Ink Engine**, enabling complex branching logic and state management. AI Agents (DM, Writer) are layered on top to generate rich, dynamic prose and immersive descriptions.
+- **🎭 Hybrid Architecture (Ink + AI)**: Combines the stability and control of handwritten/generated Ink scripts with the infinite creativity of LLMs.
+- **🗺️ Visualized Attributes**: Real-time tracking of character stats, inventory, and world state, visualized via the frontend.
+- **🌿 Branching Narrative**: Deep branching story paths managed by the Ink runtime, ensuring logical consistency while allowing for player agency.
+- **🎨 Dynamic Writing Style**: The AI generates unique writing style descriptions based on the story type and applies them to the entire narrative, enhancing immersion.
+- **🌐 SSR and Client Hydration**: Supports server-side rendering (SSR) and client hydration for fast loading and consistent user experience.
+- **🔒 Frontend-Backend Separation**: Strictly separates server-only, shared, and client code to prevent sensitive information leaks.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category      | Technology                                                                 |
-| :------------ | :------------------------------------------------------------------------- |
-| **Framework** | [**React Router v7**](https://reactrouter.com/) - Isomorphic routing with SSR/SPA support. |
-| **Build Tool**| [**Vite 7**](https://vitejs.dev/) - Fast build tool supporting SSR and client bundling. |
-| **Styling**   | [**Tailwind CSS v4**](https://tailwindcss.com/) - Utility-first CSS framework. |
-| **Runtime**   | [**Bun**](https://bun.sh/) - Fast JavaScript runtime and package manager. |
-| **Database**  | [**Drizzle ORM**](https://orm.drizzle.team/) - Type-safe ORM for Cloudflare D1. |
-| **Deployment**| [**Cloudflare Workers**](https://workers.cloudflare.com/) - Edge computing platform with D1 database support. |
-| **AI**        | [**OpenAI GPT**](https://openai.com/) - Core engine for story generation. |
-| **i18n**      | [**i18next**](https://www.i18next.com/) - Supports multi-language switching. |
-| **Charts**    | [**Mermaid.js**](https://mermaid-js.github.io/mermaid/#/) - For rendering story maps. |
+| Category       | Technology                                                                                                               |
+| :------------- | :----------------------------------------------------------------------------------------------------------------------- |
+| **Framework**  | [**React Router v7**](https://reactrouter.com/) - Isomorphic routing with SSR/SPA support.                               |
+| **Build Tool** | [**Vite 7**](https://vitejs.dev/) - Fast build tool supporting SSR and client bundling.                                  |
+| **Styling**    | [**Tailwind CSS v4**](https://tailwindcss.com/) - Utility-first CSS framework.                                           |
+| **Runtime**    | [**Bun**](https://bun.sh/) - Fast JavaScript runtime and package manager.                                                |
+| **Database**   | [**Drizzle ORM**](https://orm.drizzle.team/) - Type-safe ORM for Cloudflare D1.                                          |
+| **Deployment** | [**Cloudflare Workers**](https://workers.cloudflare.com/) - Edge computing platform with D1 database support.            |
+| **Engine**     | [**Ink**](https://www.inklestudios.com/ink/) + [**inkjs**](https://github.com/y-lohse/inkjs) - Narrative runtime engine. |
+| **AI**         | [**Vercel AI SDK**](https://sdk.vercel.ai/) + OpenAI/Anthropic - For prose generation and DM logic.                      |
+| **i18n**       | [**i18next**](https://www.i18next.com/) - Supports multi-language switching.                                             |
 
 ---
 
@@ -72,17 +72,20 @@ This project is migrating to a full-stack TypeScript architecture, utilizing Rea
 Using Bun as the runtime and package manager, you can easily run this project locally.
 
 **Prerequisites**:
-*   [Bun](https://bun.sh/docs/installation) installed.
+
+- [Bun](https://bun.sh/docs/installation) installed.
 
 **Configuration**:
 
 1.  **Install dependencies**:
+
     ```bash
     bun install
     ```
 
 2.  **Create environment variables file**:
     The project uses `.env` files to manage sensitive configurations. We provide an example file `.env.example`; copy it to create your own config file:
+
     ```bash
     cp .env.example .env
     ```
@@ -93,17 +96,21 @@ Using Bun as the runtime and package manager, you can easily run this project lo
 **Launch Steps**:
 
 1.  **Local development**:
+
     ```bash
     bun run dev
     ```
+
     This starts the development server with hot reloading.
 
 2.  **Build the project**:
+
     ```bash
     bun run build
     ```
 
 3.  **Preview build results**:
+
     ```bash
     bun run preview
     ```
@@ -139,6 +146,7 @@ All changes to main MUST go through pull requests and code review process.
 ### Workflow
 
 1. **Create a feature branch**:
+
    ```bash
    git checkout main
    git pull origin main
@@ -146,6 +154,7 @@ All changes to main MUST go through pull requests and code review process.
    ```
 
 2. **Make your changes and commit**:
+
    ```bash
    git add .
    git commit -m "feat: your commit message"
@@ -156,18 +165,23 @@ All changes to main MUST go through pull requests and code review process.
    **NEVER use `git commit --amend` or `git push --force` unless explicitly asked by the user.**
 
 3. **Lint**:
+
    ```bash
    bun run lint
    ```
+
    If there are lint errors, fix them.
 
 4. **Format**:
+
    ```bash
    bun run format
    ```
+
    If there are formatting errors, fix them.
 
 5. **Push and create PR**:
+
    ```bash
    git push -u origin feature/your-branch-name
    gh pr create --title "Your PR Title" --body "PR description"

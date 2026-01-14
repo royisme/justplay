@@ -10,35 +10,35 @@ Create Chinese version of README as README_zh.md
 
 这是一个基于大型语言模型（LLM）的动态互动小说游戏。它能够根据玩家选择的故事类型，实时生成独特的故事情节、人物、以及一个可视化的故事发展线路图，为玩家提供一个充满未知和选择的沉浸式阅读体验。
 
-本项目正在迁移到全栈 TypeScript 架构，使用 React Router v7 实现 SSR/SPA 混合模式，部署至 Cloudflare Workers。
+本项目正在迁移到全栈 TypeScript 架构，使用 React Router v7 实现 SSR/SPA 混合模式，部署至 Cloudflare Workers。采用 **混合架构（Hybrid Architecture）**：利用 **Ink 引擎** 进行结构化的叙事控制，结合 **AI Agents** 进行动态的文本生成。
 
 ---
 
 ## ✨ 核心功能
 
-*   **🤖 动态故事生成**: 游戏的核心由 AI 驱动，能够根据预设的文学风格（如“东方玄幻”、“西方魔幻”）动态创作故事的开篇、发展和多重结局。
-*   **🎲 随机化作家与作品**: 每次开启新游戏，系统都会随机生成符合所选类型的“作家”和“书名”，增加游戏的趣味性和代入感。
-*   **🗺️ 可视化故事线路图**: 在游戏开始时，后端会预先生成整个故事的结构图（Story Map），并通过 [Mermaid.js](https://mermaid-js.github.io/mermaid/#/) 在前端渲染，让玩家可以直观地看到故事的潜在分支和结局。
-*   **🌿 分支叙事**: 玩家的每一个选择都会影响故事的走向，导向不同的情节分支和最终结局。
-*   **🎨 动态写作风格**: AI 会根据故事类型生成独特的写作风格描述，并应用于整个故事的叙述中，增强沉浸感。
-*   **🌐 SSR 与客户端水合**: 支持服务端渲染（SSR）与客户端水合，确保快速加载和一致的用户体验。
-*   **🔒 前后端分离**: 严格分离 server-only、shared 和 client 代码，避免泄露敏感信息。
+- **🤖 AI 增强叙事**: 核心叙事结构由业界标准的 **Ink 引擎** 驱动，支持复杂的分支逻辑和状态管理。AI Agents (DM, Writer) 叠加其上，生成丰富、动态的散文和沉浸式描述。
+- **🎭 混合架构 (Ink + AI)**: 结合了手写/生成 Ink 脚本的稳定性与控制力，以及 LLM 的无限创造力。
+- **🗺️ 可视化属性追踪**: 实时追踪并可视化角色属性、背包物品和世界状态。
+- **🌿 分支叙事**: 由 Ink 运行时管理的深度分支故事路径，在确保逻辑一致性的同时赋予玩家选择权。
+- **🎨 动态写作风格**: AI 会根据故事类型生成独特的写作风格描述，并应用于整个故事的叙述中，增强沉浸感。
+- **🌐 SSR 与客户端水合**: 支持服务端渲染（SSR）与客户端水合，确保快速加载和一致的用户体验。
+- **🔒 前后端分离**: 严格分离 server-only、shared 和 client 代码，避免泄露敏感信息。
 
 ---
 
 ## 🛠️ 技术栈
 
-| 分类          | 技术                                                                 |
-| :------------ | :------------------------------------------------------------------- |
-| **框架**      | [**React Router v7**](https://reactrouter.com/) - 同构路由，支持 SSR/SPA。 |
-| **构建工具**  | [**Vite 7**](https://vitejs.dev/) - 快速构建工具，支持 SSR 和客户端打包。 |
-| **样式**      | [**Tailwind CSS v4**](https://tailwindcss.com/) - 功能类优先的 CSS 框架。 |
-| **运行时**    | [**Bun**](https://bun.sh/) - 快速的 JavaScript 运行时和包管理器。     |
-| **数据库**    | [**Drizzle ORM**](https://orm.drizzle.team/) - 类型安全的 ORM，用于 Cloudflare D1。 |
-| **部署**      | [**Cloudflare Workers**](https://workers.cloudflare.com/) - 边缘计算平台，支持 D1 数据库。 |
-| **AI**        | [**OpenAI GPT**](https://openai.com/) - 作为故事生成的核心引擎。     |
-| **国际化**    | [**i18next**](https://www.i18next.com/) - 支持多语言切换。           |
-| **图表**      | [**Mermaid.js**](https://mermaid-js.github.io/mermaid/#/) - 用于渲染故事线路图。 |
+| 分类         | 技术                                                                                                            |
+| :----------- | :-------------------------------------------------------------------------------------------------------------- |
+| **框架**     | [**React Router v7**](https://reactrouter.com/) - 同构路由，支持 SSR/SPA。                                      |
+| **构建工具** | [**Vite 7**](https://vitejs.dev/) - 快速构建工具，支持 SSR 和客户端打包。                                       |
+| **样式**     | [**Tailwind CSS v4**](https://tailwindcss.com/) - 功能类优先的 CSS 框架。                                       |
+| **运行时**   | [**Bun**](https://bun.sh/) - 快速的 JavaScript 运行时和包管理器。                                               |
+| **数据库**   | [**Drizzle ORM**](https://orm.drizzle.team/) - 类型安全的 ORM，用于 Cloudflare D1。                             |
+| **部署**     | [**Cloudflare Workers**](https://workers.cloudflare.com/) - 边缘计算平台，支持 D1 数据库。                      |
+| **引擎**     | [**Ink**](https://www.inklestudios.com/ink/) + [**inkjs**](https://github.com/y-lohse/inkjs) - 叙事运行时引擎。 |
+| **AI**       | [**Vercel AI SDK**](https://sdk.vercel.ai/) + OpenAI - 用于文本生成和 DM 逻辑。                                 |
+| **国际化**   | [**i18next**](https://www.i18next.com/) - 支持多语言切换。                                                      |
 
 ---
 
@@ -80,17 +80,20 @@ Create Chinese version of README as README_zh.md
 使用 Bun 作为运行时和包管理器，你可以轻松地在本地运行本项目。
 
 **先决条件**:
-*   已安装 [Bun](https://bun.sh/docs/installation)。
+
+- 已安装 [Bun](https://bun.sh/docs/installation)。
 
 **配置**:
 
 1.  **安装依赖**:
+
     ```bash
     bun install
     ```
 
 2.  **创建环境变量文件**:
     项目使用 `.env` 文件来管理敏感配置。我们提供了一个示例文件 `.env.example`，您可以复制它来创建自己的配置文件：
+
     ```bash
     cp .env.example .env
     ```
@@ -101,17 +104,21 @@ Create Chinese version of README as README_zh.md
 **启动步骤**:
 
 1.  **本地开发**:
+
     ```bash
     bun run dev
     ```
+
     这将启动开发服务器，支持热重载。
 
 2.  **构建项目**:
+
     ```bash
     bun run build
     ```
 
 3.  **预览构建结果**:
+
     ```bash
     bun run preview
     ```
@@ -147,6 +154,7 @@ Create Chinese version of README as README_zh.md
 ### 工作流程
 
 1. **创建功能分支**:
+
    ```bash
    git checkout main
    git pull origin main
@@ -154,6 +162,7 @@ Create Chinese version of README as README_zh.md
    ```
 
 2. **进行更改并提交**:
+
    ```bash
    git add .
    git commit -m "feat: your commit message"
@@ -164,18 +173,23 @@ Create Chinese version of README as README_zh.md
    **禁止**：`git commit --amend` 或 `git push --force`（除非明确要求）。
 
 3. **Lint**:
+
    ```bash
    bun run lint
    ```
+
    如有错误，修复它们。
 
 4. **Format**:
+
    ```bash
    bun run format
    ```
+
    如有格式错误，修复它们。
 
 5. **推送并创建 PR**:
+
    ```bash
    git push -u origin feature/your-branch-name
    gh pr create --title "Your PR Title" --body "PR description"
@@ -192,6 +206,7 @@ Create Chinese version of README as README_zh.md
 **重要**：所有合并的 PR 必须记录在 changelog 中。
 
 更新每个 PR，包括：
+
 - 新功能
 - 错误修复
 - 重大更改
@@ -208,6 +223,7 @@ Create Chinese version of README as README_zh.md
 #### 绕过标签
 
 PR 可以使用以下标签绕过 changelog 要求：
+
 1. `no-changelog` - 适用于特殊情况（自动机器人 PR、未合并更改的还原）
 2. `dependencies` - 适用于自动依赖更新（Dependabot、Renovate 等）
 
@@ -258,6 +274,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### 条目格式
 
 每个条目应：
+
 1. **包含引用**：添加 PR 编号 `(#1234)`（可用时）；仅在无 PR 时使用短提交哈希 `(abc1234)`
 2. **使用传统提交前缀**：`feat:`、`fix:`、`chore:`、`docs:`、`test:`、`refactor:`
 3. **对重大更改使用 `!`**：在范围后添加 `!`：`feat(api)!:`、`chore(cli)!:`
@@ -268,6 +285,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### 推荐范围
 
 使用这些标准化范围以保持一致性（基于 git 历史分析）：
+
 - **providers** - 提供商实现（OpenAI、Anthropic、LocalAI 等）
 - **webui** - Web 界面和查看器
 - **cli** - 命令行界面
@@ -294,6 +312,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### 示例
 
 良好条目：
+
 ```markdown
 ### Added
 
@@ -316,6 +335,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ```
 
 不良条目（缺少引用、过于模糊、不一致格式）：
+
 ```markdown
 ### Added
 
@@ -333,6 +353,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 5. **每更改一行**：简短且描述性
 
 示例工作流程：
+
 ```bash
 # 1. 进行更改
 # 2. 创建 PR 前，更新 CHANGELOG.md

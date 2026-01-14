@@ -1,0 +1,17 @@
+export default {
+  title: "仪表盘",
+  subtitle: "已使用 {{used}}/{{max}} 个存档位",
+  new_game: "开始新游戏",
+  current_progress: "第 {{volume}} 卷 · 第 {{chapter}} 章",
+  game_preview: "游戏预览",
+  last_played: "最后游玩: {{time}}",
+  continue: "继续冒险",
+  continue_game: "继续冒险",
+  empty_slot: "空闲存档位",
+  empty_slot_desc: "开始一段新的冒险故事",
+  create_game: "创建新游戏",
+  library: "我的书架",
+  view_all: "查看全部",
+  no_completed_games: "还没有已完成的故事",
+  view_story: "查看故事",
+};

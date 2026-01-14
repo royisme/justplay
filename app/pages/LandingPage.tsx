@@ -14,11 +14,16 @@ import {
 import { useTranslation } from "react-i18next";
 import { Card } from "~/components/ui/Card";
 import { LanguageToggle } from "~/components/ui/LanguageToggle";
+import type { TranslationKey } from "~/types/i18next";
 
 export function LandingPage() {
   const { t } = useTranslation();
 
-  const features = [
+  const features: Array<{
+    icon: React.ReactNode;
+    titleKey: TranslationKey;
+    descKey: TranslationKey;
+  }> = [
     {
       icon: <SparkleIcon size={32} weight="duotone" className="text-accent" />,
       titleKey: "landing.features.ai.title",

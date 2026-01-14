@@ -6,9 +6,10 @@
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import type { TranslationKey } from "~/types/i18next";
 
 export interface LoadingPhase {
-  key: string;
+  key: TranslationKey;
   duration: number; // minimum duration in ms
 }
 

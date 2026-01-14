@@ -58,11 +58,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const language = loaderData?.language ?? DEFAULT_LANGUAGE;
   const { i18n: i18nInstance } = useTranslation();
 
-  // ⚠️ CRITICAL: Sync language BEFORE render to prevent hydration mismatch
-  // This runs synchronously on both server and client before any content renders
-  if (i18nInstance.language !== language) {
-    i18nInstance.changeLanguage(language);
-  }
+
 
   // Client-side only: persist language preference to cookie
   useEffect(() => {

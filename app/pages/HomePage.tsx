@@ -13,6 +13,7 @@ import { Select } from "~/components/ui/Select";
 import { LanguageToggle } from "~/components/ui/LanguageToggle";
 import { LoadingOverlay } from "~/components/ui/LoadingOverlay";
 import { GENRE_THEME_MAP, type StoryGenre } from "@shared/types/game";
+import type { TranslationKey } from "~/types/i18next";
 
 export interface HomePageProps {
   className?: string;
@@ -20,7 +21,7 @@ export interface HomePageProps {
 
 const GENRE_OPTIONS: Array<{
   value: StoryGenre;
-  labelKey: string;
+  labelKey: TranslationKey;
   icon: string;
 }> = [
   { value: "东方玄幻", labelKey: "home.genres.xuanhuan", icon: "玄" },
@@ -142,7 +143,7 @@ export function HomePage({ className = "" }: HomePageProps) {
                       {t("home.genre_preview", "即将进入...")}
                     </p>
                     <p className="font-medium text-text-primary">
-                      {t(selectedOption?.labelKey || "")}
+                      {selectedOption && t(selectedOption.labelKey)}
                     </p>
                   </div>
                 </div>

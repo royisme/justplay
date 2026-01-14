@@ -19,6 +19,8 @@ import zhGame from "./locales/zh/game";
 import zhSidebar from "./locales/zh/sidebar";
 import zhAdmin from "./locales/zh/admin";
 import zhCommon from "./locales/zh/common";
+import zhDashboard from "./locales/zh/dashboard";
+import zhSettings from "./locales/zh/settings";
 
 import enApp from "./locales/en/app";
 import enLanding from "./locales/en/landing";
@@ -28,6 +30,8 @@ import enGame from "./locales/en/game";
 import enSidebar from "./locales/en/sidebar";
 import enAdmin from "./locales/en/admin";
 import enCommon from "./locales/en/common";
+import enDashboard from "./locales/en/dashboard";
+import enSettings from "./locales/en/settings";
 
 // Inline translation resources for SSR compatibility
 const resources = {
@@ -41,6 +45,8 @@ const resources = {
       sidebar: zhSidebar,
       admin: zhAdmin,
       common: zhCommon,
+      dashboard: zhDashboard,
+      settings: zhSettings,
     },
   },
   en: {
@@ -53,6 +59,8 @@ const resources = {
       sidebar: enSidebar,
       admin: enAdmin,
       common: enCommon,
+      dashboard: enDashboard,
+      settings: enSettings,
     },
   },
 };
@@ -62,7 +70,11 @@ if (!i18n.isInitialized) {
   i18n.use(initReactI18next).init({
     resources,
     fallbackLng: "zh",
-    lng: "zh", // Default, will be overridden by Loader context
+    // On client, prioritize cookie language to match server render
+    lng:
+      typeof document !== "undefined"
+        ? document.cookie.match(/i18next=([^;]+)/)?.[1] || "zh"
+        : "zh", // Default for server (will be overridden)
     supportedLngs: ["zh", "en"],
     defaultNS: "common",
     ns: ["common"],
@@ -93,19 +105,6 @@ export function setLanguageCookie(lng: string) {
   if (typeof document === "undefined") return; // SSR guard
   // Set cookie for 1 year, path=/, so all routes can access it
   document.cookie = `i18next=${lng}; max-age=31536000; path=/; SameSite=Lax`;
-}
-
-/**
- * Extract language from Cookie string (used in Loader)
- * @param cookieHeader Request cookie header
- * @returns Language code or null
- */
-export function extractLanguageFromCookie(
-  cookieHeader: string | null,
-): string | null {
-  if (!cookieHeader) return null;
-  const match = cookieHeader.match(/i18next=([^;]+)/);
-  return match ? match[1] : null;
 }
 
 /**

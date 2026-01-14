@@ -1,0 +1,17 @@
+export default {
+  title: "Dashboard",
+  subtitle: "{{used}}/{{max}} save slots used",
+  new_game: "Start New Game",
+  current_progress: "Volume {{volume}} · Chapter {{chapter}}",
+  game_preview: "Game Preview",
+  last_played: "Last played: {{time}}",
+  continue: "Continue",
+  continue_game: "Continue",
+  empty_slot: "Empty Slot",
+  empty_slot_desc: "Start a new adventure story",
+  create_game: "Create New Game",
+  library: "My Library",
+  view_all: "View All",
+  no_completed_games: "No completed stories yet",
+  view_story: "View Story",
+};

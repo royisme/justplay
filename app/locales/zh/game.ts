@@ -7,6 +7,10 @@ export default {
   back_to_home: "返回首页",
   toggle_map: "查看故事地图",
   generating: "AI 正在书写下一章...",
+  input_placeholder: "你想做什么？",
+  complete_story: "完结故事",
+  abandon_game: "放弃游戏",
+  abandon_confirm: "确定要放弃这个游戏吗？你可以释放槽位开始新的冒险。",
   story_map: {
     title: "故事地图",
     volume: "第 {{volume}} 卷",

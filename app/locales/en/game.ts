@@ -7,6 +7,10 @@ export default {
   back_to_home: "Back to Home",
   toggle_map: "View Story Map",
   generating: "AI is writing the next chapter...",
+  input_placeholder: "What do you want to do?",
+  complete_story: "Complete Story",
+  abandon_game: "Abandon Game",
+  abandon_confirm: "Are you sure you want to abandon this game? You can release the slot to start a new adventure.",
   story_map: {
     title: "Story Map",
     volume: "Volume {{volume}}",

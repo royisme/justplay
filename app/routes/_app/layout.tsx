@@ -32,7 +32,7 @@ export default function AppLayout() {
   const { activeGames, completedGames, user } = useLoaderData<typeof loader>();
 
   return (
-    <SidebarLayout sidebar={<UserSidebar activeGames={activeGames} completedGames={completedGames} user={user} />}>
+    <SidebarLayout sidebar={<UserSidebar activeGames={activeGames} completedGames={completedGames} />} user={user}>
       <Outlet />
     </SidebarLayout>
   );

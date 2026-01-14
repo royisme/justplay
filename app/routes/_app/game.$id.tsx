@@ -181,7 +181,7 @@ export default function GamePage() {
                       onClick={() => setShowSettings(false)}
                     >
                       <Flag className="h-4 w-4 text-green-600" />
-                      完结故事
+                      {t("game.complete_story")}
                     </button>
                   </Form>
                   <Form method="post" className="p-1">
@@ -191,13 +191,13 @@ export default function GamePage() {
                       className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded text-left text-red-600"
                       onClick={() => {
                         setShowSettings(false);
-                        if (!confirm("确定要放弃这个游戏吗？你可以释放槽位开始新的冒险。")) {
+                        if (!confirm(t("game.abandon_confirm"))) {
                           return false;
                         }
                       }}
                     >
                       <XCircle className="h-4 w-4" />
-                      放弃游戏
+                      {t("game.abandon_game")}
                     </button>
                   </Form>
                 </div>
@@ -239,7 +239,7 @@ export default function GamePage() {
                 <input type="hidden" name="intent" value="advance" />
                 <Input
                     name="input"
-                    placeholder="What do you want to do?"
+                    placeholder={t("game.input_placeholder")}
                     autoComplete="off"
                     className="flex-1"
                     disabled={isSubmitting}

@@ -54,12 +54,33 @@ export class GameService {
 
     const gameId = nanoid();
 
-    // 4. Create Game Record
+    // 4. Initialize DM Agent first to generate title
+    const dmAgent = new DMAgent({
+      game: { id: gameId, title: "", currentChapter: 1, storyMetadata: null } as any,
+      scenario,
+      history: [],
+      providerConfig: {
+        baseUrl: this.env.CUSTOM_BASE_URL || "",
+        apiKey: this.env.CUSTOM_API_KEY || "",
+      },
+    });
+
+    // 5. Generate dynamic title
+    let title = "New Adventure";
+    try {
+      title = await dmAgent.generateTitle();
+    } catch (error) {
+      console.error("Failed to generate title:", error);
+      // Use scenario name as fallback
+      title = `${scenario.name} Adventure`;
+    }
+
+    // 6. Create Game Record with dynamic title
     const newGame: NewGame = {
       id: gameId,
       userId,
       scenarioId,
-      title: "New Adventure", // Temporary title
+      title,
       status: "active",
       slotIndex,
       currentChapter: 1,
@@ -76,17 +97,7 @@ export class GameService {
 
     await db.insert(games).values(newGame);
 
-    // 5. Initialize DM Agent (Start the interview/intro)
-    // We don't generate the first message here synchronously to keep response fast?
-    // Or we do it to return something immediately?
-    // Let's create the root system message.
-
-    /*
-       Actually, `messages` table needs to be populated with the initial system prompt
-       so the history context is set for the DM.
-    */
-
-    // Root system message (DM Prompt)
+    // 7. Root system message (DM Prompt)
     await db.insert(messages).values({
         id: `${gameId}--system-${Date.now()}`,
         gameId,
@@ -97,17 +108,7 @@ export class GameService {
         chapterNumber: 0
     });
 
-    // 6. Generate Opening Narrative
-    const dmAgent = new DMAgent({
-      game: newGame,
-      scenario,
-      history: [], // No history yet
-      providerConfig: {
-        baseUrl: this.env.CUSTOM_BASE_URL,
-        apiKey: this.env.CUSTOM_API_KEY,
-      },
-    });
-
+    // 8. Generate Opening Narrative
     try {
       const openingContent = await dmAgent.generateOpening();
 
@@ -296,8 +297,8 @@ export class GameService {
       scenario,
       history,
       providerConfig: {
-        baseUrl: this.env.CUSTOM_BASE_URL,
-        apiKey: this.env.CUSTOM_API_KEY,
+        baseUrl: this.env.CUSTOM_BASE_URL || "",
+        apiKey: this.env.CUSTOM_API_KEY || "",
       },
     });
 
@@ -322,6 +323,64 @@ export class GameService {
       chapterNumber: game.currentChapter,
     });
 
+    // 9. Update story metadata (async, non-blocking for response)
+    // We'll update in background to not slow down the response
+    this.updateStoryMetadata(gameId, dmAgent).catch(err => {
+      console.error("Failed to update story metadata:", err);
+    });
+
     return { userMessageId, assistantMessageId };
+  }
+
+  /**
+   * Update story metadata by extracting from recent conversation.
+   * Called asynchronously after each AI response.
+   */
+  private async updateStoryMetadata(gameId: string, dmAgent: DMAgent): Promise<void> {
+    const db = getDb(this.env);
+
+    try {
+      const metadata = await dmAgent.extractMetadata();
+
+      // Merge with existing metadata
+      const game = await db.query.games.findFirst({
+        where: eq(games.id, gameId),
+      });
+
+      if (!game) return;
+
+      const existingMetadata = game.storyMetadata || {
+        outline: "",
+        characters: [],
+        relationships: [],
+        inventory: {},
+        plotSummary: [],
+      };
+
+      // Merge characters (by name to avoid duplicates)
+      const existingNames = new Set(existingMetadata.characters.map(c => c.name));
+      const newCharacters = metadata.characters.filter(c => !existingNames.has(c.name));
+
+      // Merge inventory
+      const mergedInventory = { ...existingMetadata.inventory };
+      for (const [item, count] of Object.entries(metadata.inventory)) {
+        mergedInventory[item] = (mergedInventory[item] || 0) + count;
+      }
+
+      // Append new plot points
+      const updatedMetadata = {
+        outline: existingMetadata.outline,
+        characters: [...existingMetadata.characters, ...newCharacters],
+        relationships: [...existingMetadata.relationships, ...metadata.relationships],
+        inventory: mergedInventory,
+        plotSummary: [...existingMetadata.plotSummary, ...metadata.plotSummary].slice(-10), // Keep last 10
+      };
+
+      await db.update(games)
+        .set({ storyMetadata: updatedMetadata })
+        .where(eq(games.id, gameId));
+    } catch (error) {
+      console.error("Metadata extraction failed:", error);
+    }
   }
 }

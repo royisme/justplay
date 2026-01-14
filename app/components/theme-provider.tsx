@@ -27,18 +27,25 @@ export function ThemeProvider({
   defaultTheme = "system",
   storageKey = "vite-ui-theme",
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
-    }
-    return defaultTheme;
-  });
+  // ⚠️ CRITICAL: Always start with defaultTheme for SSR/client consistency
+  // localStorage is read in useEffect to prevent hydration mismatch
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  const [mounted, setMounted] = useState(false);
 
+  // Read from localStorage AFTER hydration to prevent mismatch
+  useEffect(() => {
+    const stored = localStorage.getItem(storageKey) as Theme | null;
+    if (stored) {
+      setTheme(stored);
+    }
+    setMounted(true);
+  }, [storageKey]);
+
+  // Apply theme to document
   useEffect(() => {
     const root = window.document.documentElement;
 
     root.classList.remove("light", "dark");
-    // Remove custom theme attributes if any
     root.removeAttribute("data-theme");
 
     if (theme === "system") {
@@ -58,21 +65,18 @@ export function ThemeProvider({
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
+    setTheme: (newTheme: Theme) => {
+      localStorage.setItem(storageKey, newTheme);
+      setTheme(newTheme);
     },
   };
 
   return (
-    <ThemeProviderContext.Provider value={value} {...props}>
+    <ThemeProviderContext.Provider value={value}>
       {children}
     </ThemeProviderContext.Provider>
   );
 }
-
-// Fix for spreading props implicit any issue
-const props = {};
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);

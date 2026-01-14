@@ -34,6 +34,11 @@ type Pages = {
       "id": string;
     };
   };
+  "/ink-game/:id": {
+    params: {
+      "id": string;
+    };
+  };
   "/library": {
     params: {};
   };
@@ -48,6 +53,24 @@ type Pages = {
   "/api/auth/*": {
     params: {
       "*": string;
+    };
+  };
+  "/api/ink-games": {
+    params: {};
+  };
+  "/api/ink-games/:id": {
+    params: {
+      "id": string;
+    };
+  };
+  "/api/ink-games/:id/continue": {
+    params: {
+      "id": string;
+    };
+  };
+  "/api/ink-games/:id/choose": {
+    params: {
+      "id": string;
     };
   };
   "/admin": {
@@ -78,7 +101,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login" | "/auth/login" | "/auth/logout" | "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id" | "/settings" | "/api/auth/*" | "/admin" | "/admin/scenarios" | "/admin/scenarios/new" | "/admin/scenarios/:id/edit" | "/admin/users" | "/admin/providers" | "/admin/audit";
+    page: "/" | "/login" | "/auth/login" | "/auth/logout" | "/dashboard" | "/game/new" | "/game/:id" | "/ink-game/:id" | "/library" | "/library/:id" | "/settings" | "/api/auth/*" | "/api/ink-games" | "/api/ink-games/:id" | "/api/ink-games/:id/continue" | "/api/ink-games/:id/choose" | "/admin" | "/admin/scenarios" | "/admin/scenarios/new" | "/admin/scenarios/:id/edit" | "/admin/users" | "/admin/providers" | "/admin/audit";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
@@ -98,7 +121,7 @@ type RouteFiles = {
   };
   "routes/_app/layout.tsx": {
     id: "routes/_app/layout";
-    page: "/dashboard" | "/game/new" | "/game/:id" | "/library" | "/library/:id" | "/settings";
+    page: "/dashboard" | "/game/new" | "/game/:id" | "/ink-game/:id" | "/library" | "/library/:id" | "/settings";
   };
   "routes/_app/dashboard.tsx": {
     id: "routes/_app/dashboard";
@@ -111,6 +134,10 @@ type RouteFiles = {
   "routes/_app/game.$id.tsx": {
     id: "routes/_app/game.$id";
     page: "/game/:id";
+  };
+  "routes/_app/ink-game.$id.tsx": {
+    id: "routes/_app/ink-game.$id";
+    page: "/ink-game/:id";
   };
   "routes/_app/library.tsx": {
     id: "routes/_app/library";
@@ -127,6 +154,22 @@ type RouteFiles = {
   "routes/api.auth.$.ts": {
     id: "routes/api.auth.$";
     page: "/api/auth/*";
+  };
+  "routes/api.ink-games.ts": {
+    id: "routes/api.ink-games";
+    page: "/api/ink-games";
+  };
+  "routes/api.ink-games.$id.ts": {
+    id: "routes/api.ink-games.$id";
+    page: "/api/ink-games/:id";
+  };
+  "routes/api.ink-games.$id.continue.ts": {
+    id: "routes/api.ink-games.$id.continue";
+    page: "/api/ink-games/:id/continue";
+  };
+  "routes/api.ink-games.$id.choose.ts": {
+    id: "routes/api.ink-games.$id.choose";
+    page: "/api/ink-games/:id/choose";
   };
   "routes/admin/layout.tsx": {
     id: "routes/admin/layout";
@@ -172,10 +215,15 @@ type RouteModules = {
   "routes/_app/dashboard": typeof import("./app/routes/_app/dashboard.tsx");
   "routes/_app/game.new": typeof import("./app/routes/_app/game.new.tsx");
   "routes/_app/game.$id": typeof import("./app/routes/_app/game.$id.tsx");
+  "routes/_app/ink-game.$id": typeof import("./app/routes/_app/ink-game.$id.tsx");
   "routes/_app/library": typeof import("./app/routes/_app/library.tsx");
   "routes/_app/library.$id": typeof import("./app/routes/_app/library.$id.tsx");
   "routes/_app/settings": typeof import("./app/routes/_app/settings.tsx");
   "routes/api.auth.$": typeof import("./app/routes/api.auth.$.ts");
+  "routes/api.ink-games": typeof import("./app/routes/api.ink-games.ts");
+  "routes/api.ink-games.$id": typeof import("./app/routes/api.ink-games.$id.ts");
+  "routes/api.ink-games.$id.continue": typeof import("./app/routes/api.ink-games.$id.continue.ts");
+  "routes/api.ink-games.$id.choose": typeof import("./app/routes/api.ink-games.$id.choose.ts");
   "routes/admin/layout": typeof import("./app/routes/admin/layout.tsx");
   "routes/admin/_index": typeof import("./app/routes/admin/_index.tsx");
   "routes/admin/scenarios": typeof import("./app/routes/admin/scenarios.tsx");

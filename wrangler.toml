@@ -2,7 +2,7 @@ name = "just-play-game"
 main = "./worker.ts"
 compatibility_date = "2025-11-01"
 compatibility_flags = ["nodejs_compat"]
-assets = { directory = "./build/client" }
+assets = { directory = "./build/client", binding = "ASSETS" }
 
 [vars]
 # OpenRouter configuration (supports multiple LLM providers)

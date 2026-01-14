@@ -11,6 +11,12 @@ export * from "./config/env";
 // --- Database ---
 export * from "./db";
 
+// --- Runtime (Ink Narrative Engine) ---
+export * from "./runtime";
+
+// --- Routes ---
+// (Ink API routes are now handled by React Router in app/routes/api.ink-games.*.ts)
+
 // --- Services ---
 export { AIService } from "./services/ai.server";
 export { GameService } from "./services/game.server";

@@ -35,6 +35,20 @@ export const gameScenarios = sqliteTable("game_scenarios", {
     .default(sql`(unixepoch())`),
 });
 
+// --- Ink Scenarios Table (Narrative Runtime) ---
+
+export const inkScenarios = sqliteTable("ink_scenarios", {
+  id: text("id").primaryKey(), // UUID
+  key: text("key").notNull().unique(), // e.g., "cyberpunk-heist-v1"
+  title: text("title").notNull(),
+  inkJsonPath: text("ink_json_path").notNull(), // Path to compiled .json
+  defaultSystemStateJson: text("default_system_state_json").notNull(),
+  isActive: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 // --- Games Table ---
 
 export const games = sqliteTable("games", {
@@ -79,6 +93,67 @@ export const games = sqliteTable("games", {
     .default(sql`(unixepoch())`),
   completedAt: integer("completed_at", { mode: "timestamp" }),
 });
+
+// --- Ink Games Table (Narrative Runtime Games) ---
+
+export const inkGames = sqliteTable("ink_games", {
+  id: text("id").primaryKey(), // UUID
+  userId: text("user_id")
+    .references(() => user.id)
+    .notNull(),
+  scenarioId: text("scenario_id")
+    .references(() => inkScenarios.id)
+    .notNull(),
+
+  status: text("status").notNull().default("active"), // 'active', 'completed', 'abandoned'
+  slotIndex: integer("slot_index"), // Optional slot for save slots
+
+  // Locale
+  locale: text("locale").notNull().default("zh-CN"),
+
+  // Ink Runtime State
+  rngSeed: integer("rng_seed").notNull(),
+  inkStateJson: text("ink_state_json").notNull(),
+  systemStateJson: text("system_state_json").notNull(),
+  turnIndex: integer("turn_index").notNull().default(0),
+
+  // Timestamps
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+// --- Ink Turns Table (Turn-by-turn log for replay/storybook) ---
+
+export const inkTurns = sqliteTable("ink_turns", {
+  id: text("id").primaryKey(), // UUID
+  gameId: text("game_id")
+    .references(() => inkGames.id, { onDelete: "cascade" })
+    .notNull(),
+  turnIndex: integer("turn_index").notNull(),
+
+  // Input
+  inputChoiceId: text("input_choice_id"), // null for initial continue
+
+  // Output (JSON serialized)
+  blocksJson: text("blocks_json").notNull(),
+  choicesJson: text("choices_json").notNull(),
+  tagsJson: text("tags_json").notNull(),
+  eventsJson: text("events_json").notNull(),
+
+  // Snapshot for replay
+  inkStateJson: text("ink_state_json").notNull(),
+  systemStateJson: text("system_state_json").notNull(),
+
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+}, (table) => ({
+  gameTurnIdx: index("ink_game_turn_idx").on(table.gameId, table.turnIndex),
+}));
 
 // --- Messages Table (Tree Structure) ---
 
@@ -244,3 +319,14 @@ export type NewPromptTemplate = typeof promptTemplates.$inferInsert;
 
 export type PromptVersion = typeof promptVersions.$inferSelect;
 export type NewPromptVersion = typeof promptVersions.$inferInsert;
+
+// --- Ink Runtime Types ---
+
+export type InkScenario = typeof inkScenarios.$inferSelect;
+export type NewInkScenario = typeof inkScenarios.$inferInsert;
+
+export type InkGame = typeof inkGames.$inferSelect;
+export type NewInkGame = typeof inkGames.$inferInsert;
+
+export type InkTurn = typeof inkTurns.$inferSelect;
+export type NewInkTurn = typeof inkTurns.$inferInsert;

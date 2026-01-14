@@ -17,6 +17,7 @@ export default [
     route("dashboard", "routes/_app/dashboard.tsx"),
     route("game/new", "routes/_app/game.new.tsx"),
     route("game/:id", "routes/_app/game.$id.tsx"),
+    route("ink-game/:id", "routes/_app/ink-game.$id.tsx"),
     route("library", "routes/_app/library.tsx"),
     route("library/:id", "routes/_app/library.$id.tsx"),
     route("settings", "routes/_app/settings.tsx"),
@@ -24,6 +25,10 @@ export default [
 
   // API Routes
   route("api/auth/*", "routes/api.auth.$.ts"),
+  route("api/ink-games", "routes/api.ink-games.ts"),
+  route("api/ink-games/:id", "routes/api.ink-games.$id.ts"),
+  route("api/ink-games/:id/continue", "routes/api.ink-games.$id.continue.ts"),
+  route("api/ink-games/:id/choose", "routes/api.ink-games.$id.choose.ts"),
 
   // Admin Routes
   layout("routes/admin/layout.tsx", [

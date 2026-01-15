@@ -69,6 +69,7 @@
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "drizzle-kit": "^0.31.8",
+    "inklecate": "^1.8.1",
     "lucide-react": "^0.562.0",
     "oxlint": "^1.39.0",
     "tailwind-scrollbar": "^4.0.2",

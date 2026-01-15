@@ -7,7 +7,7 @@
     "paths": {
       "~/*": ["./app/*"],
       "@server/*": ["./server/*"],
-      "@shared/*": ["./shared/*"],
+      "@shared/*": ["./shared/*"]
     },
     "resolveJsonModule": true,
     "checkJs": false,
@@ -17,16 +17,18 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
-    "rootDirs": [".", "./.react-router/types"],
+    "rootDirs": [".", "./.react-router/types"]
   },
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
     "server/**/*.ts",
     "shared/**/*.ts",
+    "scripts/**/*.ts",
+    "tests/**/*.ts",
     ".react-router/types/**/*.ts",
     "worker-configuration.d.ts",
     "worker.ts"
   ],
-  "exclude": ["node_modules", "build", ".wrangler"],
+  "exclude": ["node_modules", "build", ".wrangler"]
 }
